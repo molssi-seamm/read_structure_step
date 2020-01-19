@@ -2,4 +2,4 @@ Pmw==2.0.1
 seamm==0.2.0
 seamm-util==0.2.1
 seamm-widgets==0.2.1
-configargparse
+configargparse==1.0
