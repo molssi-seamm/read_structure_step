@@ -7,5 +7,5 @@ coverage
 Sphinx
 cryptography
 PyYAML>5.1
-pytest
+pytest==5.3.3
 pytest-runner
