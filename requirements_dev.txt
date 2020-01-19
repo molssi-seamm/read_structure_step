@@ -2,7 +2,7 @@ pip
 wheel
 watchdog
 flake8
-tox
+tox==3.14.3
 coverage
 Sphinx
 cryptography
