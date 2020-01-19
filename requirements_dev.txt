@@ -8,4 +8,4 @@ Sphinx
 cryptography
 PyYAML>5.1
 pytest
-pytest-runner
+pytest-runner==5.2
