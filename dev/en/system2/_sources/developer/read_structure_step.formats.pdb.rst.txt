@@ -1,0 +1,21 @@
+read\_structure\_step.formats.pdb package
+=========================================
+
+Submodules
+----------
+
+read\_structure\_step.formats.pdb.obabel module
+-----------------------------------------------
+
+.. automodule:: read_structure_step.formats.pdb.obabel
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: read_structure_step.formats.pdb
+   :members:
+   :undoc-members:
+   :show-inheritance:
