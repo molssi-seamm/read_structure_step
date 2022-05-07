@@ -138,19 +138,26 @@ def load_mmcif(
                     block_name = line[5:].strip()
                 else:
                     structure_no += 1
-                    if structure_no > 1:
-                        if subsequent_as_configurations:
-                            configuration = system.create_configuration()
-                        else:
-                            system = system_db.create_system()
-                            configuration = system.create_configuration()
+                    # Check for NMR ensemble
+                    text = "\n".join(lines)
+                    if "_pdbx_nmr_ensemble.conformers_submitted_total_number" in text:
+                        system = system_db.create_system()
+                        system.from_mmcif_text(text)
+                    else:
+                        if structure_no > 1:
+                            if subsequent_as_configurations:
+                                configuration = system.create_configuration()
+                            else:
+                                system = system_db.create_system()
+                                configuration = system.create_configuration()
 
-                    configuration.from_mmcif_text("\n".join(lines))
+                            configuration.from_mmcif_text(text)
+
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
                     # Set the system name
                     if system_name is not None and system_name != "":
-                        lower_name = system_name.lower()
+                        lower_name = str(system_name).lower()
                         if "from file" in lower_name:
                             system.name = block_name
                         elif "file name" in lower_name:
@@ -160,11 +167,11 @@ def load_mmcif(
                         elif "empirical formula" in lower_name:
                             system.name = configuration.formula()[1]
                         else:
-                            system.name = system_name
+                            system.name = str(system_name)
 
                     # And the configuration name
                     if configuration_name is not None and configuration_name != "":
-                        lower_name = configuration_name.lower()
+                        lower_name = str(configuration_name).lower()
                         if "from file" in lower_name:
                             configuration.name = block_name
                         elif "file name" in lower_name:
@@ -174,7 +181,7 @@ def load_mmcif(
                         elif "empirical formula" in lower_name:
                             configuration.name = configuration.formula()[1]
                         else:
-                            configuration.name = configuration_name
+                            configuration.name = str(configuration_name)
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
                 block_name = line[5:].strip()
                 lines = []
@@ -183,19 +190,26 @@ def load_mmcif(
         if len(lines) > 0:
             # The last block just ends at the end of the file
             structure_no += 1
-            if structure_no > 1:
-                if subsequent_as_configurations:
-                    configuration = system.create_configuration()
-                else:
-                    system = system_db.create_system()
-                    configuration = system.create_configuration()
+            # Check for NMR ensemble
+            text = "\n".join(lines)
+            if "_pdbx_nmr_ensemble.conformers_submitted_total_number" in text:
+                system = system_db.create_system()
+                system.from_mmcif_text(text)
+            else:
+                if structure_no > 1:
+                    if subsequent_as_configurations:
+                        configuration = system.create_configuration()
+                    else:
+                        system = system_db.create_system()
+                        configuration = system.create_configuration()
 
-            configuration.from_mmcif_text("\n".join(lines))
+                    configuration.from_mmcif_text(text)
+
             logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
             # Set the system name
             if system_name is not None and system_name != "":
-                lower_name = system_name.lower()
+                lower_name = str(system_name).lower()
                 if "from file" in lower_name:
                     system.name = block_name
                 elif "file name" in lower_name:
@@ -205,11 +219,11 @@ def load_mmcif(
                 elif "empirical formula" in lower_name:
                     system.name = configuration.formula()[1]
                 else:
-                    system.name = system_name
+                    system.name = str(system_name)
 
             # And the configuration name
             if configuration_name is not None and configuration_name != "":
-                lower_name = configuration_name.lower()
+                lower_name = str(configuration_name).lower()
                 if "from file" in lower_name:
                     configuration.name = block_name
                 elif "file name" in lower_name:
@@ -219,4 +233,4 @@ def load_mmcif(
                 elif "empirical formula" in lower_name:
                     configuration.name = configuration.formula()[1]
                 else:
-                    configuration.name = configuration_name
+                    configuration.name = str(configuration_name)

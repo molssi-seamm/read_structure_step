@@ -149,7 +149,7 @@ def load_cif(
 
                     # Set the system name
                     if system_name is not None and system_name != "":
-                        lower_name = system_name.lower()
+                        lower_name = str(system_name).lower()
                         if "from file" in lower_name:
                             system.name = block_name
                         elif "file name" in lower_name:
@@ -159,11 +159,11 @@ def load_cif(
                         elif "empirical formula" in lower_name:
                             system.name = configuration.formula()[1]
                         else:
-                            system.name = system_name
+                            system.name = str(system_name)
 
                     # And the configuration name
                     if configuration_name is not None and configuration_name != "":
-                        lower_name = configuration_name.lower()
+                        lower_name = str(configuration_name).lower()
                         if "from file" in lower_name:
                             configuration.name = block_name
                         elif "file name" in lower_name:
@@ -173,7 +173,7 @@ def load_cif(
                         elif "empirical formula" in lower_name:
                             configuration.name = configuration.formula()[1]
                         else:
-                            configuration.name = configuration_name
+                            configuration.name = str(configuration_name)
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
                 block_name = line[5:].strip()
                 lines = []
@@ -194,7 +194,7 @@ def load_cif(
 
             # Set the system name
             if system_name is not None and system_name != "":
-                lower_name = system_name.lower()
+                lower_name = str(system_name).lower()
                 if "from file" in lower_name:
                     system.name = block_name
                 elif "file name" in lower_name:
@@ -204,11 +204,11 @@ def load_cif(
                 elif "empirical formula" in lower_name:
                     system.name = configuration.formula()[1]
                 else:
-                    system.name = system_name
+                    system.name = str(system_name)
 
             # And the configuration name
             if configuration_name is not None and configuration_name != "":
-                lower_name = configuration_name.lower()
+                lower_name = str(configuration_name).lower()
                 if "from file" in lower_name:
                     configuration.name = block_name
                 elif "file name" in lower_name:
@@ -218,4 +218,4 @@ def load_cif(
                 elif "empirical formula" in lower_name:
                     configuration.name = configuration.formula()[1]
                 else:
-                    configuration.name = configuration_name
+                    configuration.name = str(configuration_name)
