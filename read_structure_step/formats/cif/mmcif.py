@@ -151,7 +151,7 @@ def load_mmcif(
                                 system = system_db.create_system()
                                 configuration = system.create_configuration()
 
-                            configuration.from_mmcif_text(text)
+                        configuration.from_mmcif_text(text)
 
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
@@ -203,7 +203,7 @@ def load_mmcif(
                         system = system_db.create_system()
                         configuration = system.create_configuration()
 
-                    configuration.from_mmcif_text(text)
+                configuration.from_mmcif_text(text)
 
             logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
