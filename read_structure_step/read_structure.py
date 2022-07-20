@@ -126,25 +126,21 @@ class ReadStructure(seamm.Node):
 
         # Check for tar files, potentially compressed
         if isinstance(P["file"], Path):
-            path = P["file"]
+            path = P["file"].expanduser().resolve()
         else:
-            path = Path(["file"].strip())
+            path = Path(P["file"].strip()).expanduser().resolve()
 
         extensions = path.suffixes
         if ".tar" in extensions or ".tgz" in extensions:
             self.read_tarfile(path, P)
         else:
             # What type of file?
-            if isinstance(P["file"], Path):
-                filename = str(P["file"])
-            else:
-                filename = ["file"].strip()
+            filename = str(path)
             file_type = P["file type"]
 
             if file_type != "from extension":
                 extension = file_type.split()[0]
             else:
-                path = PurePath(filename)
                 extension = path.suffix
                 if extension == ".gz":
                     extension = path.stem.suffix
