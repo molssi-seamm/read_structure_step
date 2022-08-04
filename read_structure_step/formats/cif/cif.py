@@ -8,6 +8,7 @@ from pathlib import Path
 from ..registries import register_format_checker
 from ..registries import register_reader
 from ..registries import set_format_metadata
+from seamm_util.printing import FormattedText as __
 
 logger = logging.getLogger(__name__)
 
@@ -144,7 +145,11 @@ def load_cif(
                             system = system_db.create_system()
                             configuration = system.create_configuration()
 
-                    configuration.from_cif_text("\n".join(lines))
+                    text = configuration.from_cif_text("\n".join(lines))
+                    if text != "":
+                        printer("\n")
+                        printer(__(text, indent=4 * " "))
+
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
                     # Set the system name
@@ -189,8 +194,11 @@ def load_cif(
                     system = system_db.create_system()
                     configuration = system.create_configuration()
 
-            configuration.from_cif_text("\n".join(lines))
+            text = configuration.from_cif_text("\n".join(lines))
             logger.debug(f"   added system {system_db.n_systems}: {block_name}")
+            if text != "":
+                printer("\n")
+                printer(__(text, indent=4 * " "))
 
             # Set the system name
             if system_name is not None and system_name != "":
