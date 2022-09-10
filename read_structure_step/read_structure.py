@@ -22,6 +22,7 @@ import read_structure_step
 from .read import read
 import seamm
 from seamm_util import ureg, Q_  # noqa: F401
+from seamm_util import getParser
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 from .utils import guess_extension
@@ -68,6 +69,62 @@ class ReadStructure(seamm.Node):
     def git_revision(self):
         """The git version of this module."""
         return read_structure_step.__git_revision__
+
+    def create_parser(self):
+        """Setup the command-line / config file parser"""
+        # Need to mimic MOPAC step to find the MOPAC executable
+        parser_name = "mopac-step"
+        print(f"Parser {parser_name}, {self.step_type=}")
+        parser = getParser()
+
+        # Remember if the parser exists ... this type of step may have been
+        # found before
+        parser_exists = parser.exists(parser_name)
+        print(f"{parser_exists=}")
+
+        # Create the standard options, e.g. log-level
+        result = super().create_parser(name=parser_name)
+
+        if parser_exists:
+            return result
+
+        # Options for Mopac
+        parser.add_argument(
+            parser_name,
+            "--mopac-exe",
+            default="MOPAC2016.exe",
+            help="the name of the MOPAC executable",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--mopac-path",
+            default="",
+            help="the path to the MOPAC executable",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--ncores",
+            default="default",
+            help="How many threads to use in MOPAC",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--mkl-num-threads",
+            default="default",
+            help="How many threads to use with MKL in MOPAC",
+        )
+
+        parser.add_argument(
+            parser_name,
+            "--max-atoms-to-print",
+            default=25,
+            help="Maximum number of atoms to print charges, etc.",
+        )
+
+        return result
 
     def description_text(self, P=None):
         """Create the text description of what this step will do.
