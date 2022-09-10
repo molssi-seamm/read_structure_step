@@ -23,16 +23,16 @@ metadata = {
     "CP": "constant pressure heat capacity",
     "CPR": "reference.constant pressure heat capacity",
     "D": "dipole moment",
-    "DR": "reference.dipole moment",
+    "DR": "dipole moment.reference",
     "H": "enthalpy of formation",
-    "HR": "reference.enthalpy of formation",
+    "HR": "enthalpy of formation.reference",
     "S": "entropy",
-    "SR": "reference.entropy",
+    "SR": "entropy.reference",
     "I": "ionization energy",
     "IE": "ionization energy",
     "IA": "ionization energy",
-    "IR": "reference.ionization energy",
-    "GR": "reference.geometry",
+    "IR": "ionization energy.reference",
+    "GR": "geometry.reference",
 }
 multiplicities = {
     "SINGLET": 1,
@@ -494,7 +494,7 @@ def load_mop(
     # Save keywords, description and any data encoded in the file to the database
     if save_data:
         properties = configuration.properties
-        if len("keywords") != 0:
+        if len(keywords) != 0:
             key = "MOPAC.keywords"
             properties.add(
                 key, "str", description="The keywords for MOPAC", noerror=True
@@ -536,14 +536,29 @@ def load_mop(
                                 print()
                                 continue
                             keyword = metadata[keyword]
+                            if value == "":
+                                print(f"Value for {keyword} missing in MOPAC .mop file")
+                                continue
                             if "reference" in keyword:
-                                description = keyword.split(".")[1]
+                                description = keyword.split(".")[0]
                                 properties.add(
                                     keyword,
                                     "str",
                                     description=f"Reference for the {description}.",
                                     noerror=True,
                                 )
+                            elif "," in value:
+                                # value , stderr
+                                tmp = value.split(",")
+                                value = tmp[0].strip()
+                                stderr = tmp[1].strip()
+                                properties.add(
+                                    f"{keyword}.stderr",
+                                    "float",
+                                    description=f"stderr for the {keyword}.",
+                                    noerror=True,
+                                )
+                                properties.put(f"{keyword}.stderr", stderr)
                             properties.put(keyword, value)
                         except Exception as e:
                             print(f"{e}: {key}")
