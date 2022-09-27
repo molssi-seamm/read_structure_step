@@ -120,7 +120,7 @@ class TkReadStructure(seamm.TkNode):
                     path = PurePath(filename)
                     extension = path.suffix
                     if extension == ".gz":
-                        extension = path.stem.suffix
+                        extension = path.with_suffix("").suffix
 
         # Get the metadata for the format
         metadata = get_format_metadata(extension)
