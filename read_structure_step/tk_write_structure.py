@@ -83,7 +83,7 @@ class TkWriteStructure(seamm.TkNode):
                     path = PurePath(filename)
                     extension = path.suffix
                     if extension == ".gz":
-                        extension = path.stem.suffix
+                        extension = path.with_suffix("").suffix
 
         # Get the metadata for the format
         metadata = get_format_metadata(extension)
@@ -100,6 +100,9 @@ class TkWriteStructure(seamm.TkNode):
         items = []
         if extension == "all" or not metadata["single_structure"]:
             items.append("structures")
+            items.append("configurations")
+            items.append("ignore missing")
+            items.append("number per file")
         items.append("remove hydrogens")
         if len(items) > 0:
             widgets = []
