@@ -2,6 +2,7 @@
 Implementation of the reader for SDF files using OpenBabel
 """
 
+import gzip
 from pathlib import Path
 import shutil
 import string
@@ -132,13 +133,15 @@ def load_sdf(
     path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
+    compress = path.suffix == ".gz"
     if printer is not None:
         n_structures = 0
-        with path.open() as fd:
+        with gzip.open(path, mode="rt") if compress else open(path, "r") as fd:
             for line in fd:
                 if line[0:4] == "$$$$":
                     n_structures += 1
-        printer(f"The SDF file contains {n_structures} structures.")
+        printer("")
+        printer(f"    The SDF file contains {n_structures} structures.")
         last_percent = 0
         t0 = time.time()
         last_t = t0
@@ -148,79 +151,98 @@ def load_sdf(
 
     configurations = []
     structure_no = 1
-    while True:
-        if structure_no == 1:
-            obMol = openbabel.OBMol()
-            not_done = obConversion.ReadFile(obMol, str(path))
-        else:
-            obMol = openbabel.OBMol()
-            not_done = obConversion.Read(obMol)
+    n_errors = 0
+    obMol = openbabel.OBMol()
+    text = ""
+    with gzip.open(path, mode="rt") if compress else open(path, "r") as fd:
+        for line in fd:
+            text += line
 
-        if not not_done:
-            break
+            if line[0:4] != "$$$$":
+                continue
 
-        if add_hydrogens:
-            obMol.AddHydrogens()
+            obConversion.ReadString(obMol, text)
 
-        if structure_no > 1:
-            if subsequent_as_configurations:
-                configuration = system.create_configuration()
-            else:
-                system = system_db.create_system()
-                configuration = system.create_configuration()
+            if add_hydrogens:
+                obMol.AddHydrogens()
 
-        configuration.from_OBMol(obMol)
-        configurations.append(configuration)
+            if structure_no > 1:
+                if subsequent_as_configurations:
+                    configuration = system.create_configuration()
+                else:
+                    system = system_db.create_system()
+                    configuration = system.create_configuration()
 
-        # Set the system name
-        if system_name is not None and system_name != "":
-            lower_name = system_name.lower()
-            if "from file" in lower_name:
-                system.name = obMol.GetTitle()
-            elif "canonical smiles" in lower_name:
-                system.name = configuration.canonical_smiles
-            elif "smiles" in lower_name:
-                system.name = configuration.smiles
-            else:
-                system.name = system_name
+            structure_no += 1
+            try:
+                configuration.from_OBMol(obMol)
+            except Exception as e:
+                n_errors += 1
+                printer("")
+                printer(f"    Error handling entry {structure_no} in the SDF file:")
+                printer("        " + str(e))
+                printer("    Text of the entry is")
+                printer("    " + 60 * "-")
+                for line in text.splitlines():
+                    printer("    " + line)
+                printer("    " + 60 * "-")
+                printer("")
+                text = ""
+                continue
 
-        # And the configuration name
-        if configuration_name is not None and configuration_name != "":
-            lower_name = configuration_name.lower()
-            if "from file" in lower_name:
-                configuration.name = obMol.GetTitle()
-            elif "canonical smiles" in lower_name:
-                configuration.name = configuration.canonical_smiles
-            elif "smiles" in lower_name:
-                configuration.name = configuration.smiles
-            elif lower_name == "sequential":
-                configuration.name = str(structure_no)
-            else:
-                configuration.name = configuration_name
+            configurations.append(configuration)
+            text = ""
 
-        structure_no += 1
-        if printer:
-            percent = int(100 * structure_no / n_structures)
-            if percent > last_percent:
-                t1 = time.time()
-                if t1 - last_t >= 60:
-                    t = int(t1 - t0)
-                    rate = structure_no / (t1 - t0)
-                    t_left = int((n_structures - structure_no) / rate)
-                    printer(
-                        f"\t{structure_no:6} ({percent}%) structures read in {t} "
-                        f"seconds. About {t_left} seconds remaining."
-                    )
-                    last_t = t1
-                    last_percent = percent
+            # Set the system name
+            if system_name is not None and system_name != "":
+                lower_name = system_name.lower()
+                if "from file" in lower_name:
+                    system.name = obMol.GetTitle()
+                elif "canonical smiles" in lower_name:
+                    system.name = configuration.canonical_smiles
+                elif "smiles" in lower_name:
+                    system.name = configuration.smiles
+                else:
+                    system.name = system_name
+
+            # And the configuration name
+            if configuration_name is not None and configuration_name != "":
+                lower_name = configuration_name.lower()
+                if "from file" in lower_name:
+                    configuration.name = obMol.GetTitle()
+                elif "canonical smiles" in lower_name:
+                    configuration.name = configuration.canonical_smiles
+                elif "smiles" in lower_name:
+                    configuration.name = configuration.smiles
+                elif lower_name == "sequential":
+                    configuration.name = str(structure_no)
+                else:
+                    configuration.name = configuration_name
+
+            if printer:
+                percent = int(100 * structure_no / n_structures)
+                if percent > last_percent:
+                    t1 = time.time()
+                    if t1 - last_t >= 60:
+                        t = int(t1 - t0)
+                        rate = structure_no / (t1 - t0)
+                        t_left = int((n_structures - structure_no) / rate)
+                        printer(
+                            f"\t{structure_no:6} ({percent}%) structures read in {t} "
+                            f"seconds. About {t_left} seconds remaining."
+                        )
+                        last_t = t1
+                        last_percent = percent
 
     if printer:
         t1 = time.time()
         rate = structure_no / (t1 - t0)
         printer(
-            f"Read {structure_no} structures in {t1 - t0:.1f} seconds = {rate:.2f} "
-            "per second"
+            f"    Read {structure_no - n_errors - 1} structures in {t1 - t0:.1f} "
+            f"seconds = {rate:.2f} per second"
         )
+        if n_errors > 0:
+            printer(f"    {n_errors} structures could not be read due to errors.")
 
     if references:
         # Add the citations for Open Babel
@@ -330,57 +352,56 @@ def write_sdf(
 
     path.expanduser().resolve()
 
-    # Get the information for progress output, if requested.
-    if printer is not None:
-        n_structures = 0
-        with path.open() as fd:
-            for line in fd:
-                if line[0:4] == "$$$$":
-                    n_structures += 1
-        printer(f"The SDF file contains {n_structures} structures.")
-        last_percent = 0
-        t0 = time.time()
-        last_t = t0
-
     obConversion = openbabel.OBConversion()
     obConversion.SetInAndOutFormats("smi", "sdf")
 
+    n_structures = len(configurations)
+    last_percent = 0
+    last_t = t0 = time.time()
     structure_no = 1
-    for configuration in configurations:
-        obMol = configuration.to_OBMol()
+    compress = path.suffix == ".gz"
+    with gzip.open(path, mode="wb") if compress else open(path, "w") as fd:
+        for configuration in configurations:
+            obMol = configuration.to_OBMol(properties="all")
 
-        system = configuration.system
-        title = f"{system.name}/{configuration.name}"
-        obMol.SetTitle(title)
+            system = configuration.system
+            title = f"{system.name}/{configuration.name}"
+            obMol.SetTitle(title)
 
-        if remove_hydrogens == "nonpolar":
-            obMol.DeleteNonPolarHydrogens()
-        elif remove_hydrogens == "all":
-            obMol.DeleteHydrogens()
+            if remove_hydrogens == "nonpolar":
+                obMol.DeleteNonPolarHydrogens()
+            elif remove_hydrogens == "all":
+                obMol.DeleteHydrogens()
 
-        if structure_no == 1:
-            ok = obConversion.WriteFile(obMol, str(path))
-        else:
-            ok = obConversion.Write(obMol)
+            if structure_no == 1:
+                text = obConversion.WriteString(obMol)
+            else:
+                text = obConversion.WriteString(obMol)
 
-        if not ok:
-            raise RuntimeError("Error writing file")
+            # if not ok
+            if text is None or text == "":
+                raise RuntimeError("Error writing file")
 
-        structure_no += 1
-        if printer:
-            percent = int(100 * structure_no / n_structures)
-            if percent > last_percent:
-                t1 = time.time()
-                if t1 - last_t >= 60:
-                    t = int(t1 - t0)
-                    rate = structure_no / (t1 - t0)
-                    t_left = int((n_structures - structure_no) / rate)
-                    printer(
-                        f"\t{structure_no:6} ({percent}%) structures wrote in {t} "
-                        f"seconds. About {t_left} seconds remaining."
-                    )
-                    last_t = t1
-                    last_percent = percent
+            if compress:
+                fd.write(bytes(text, "utf-8"))
+            else:
+                fd.write(text)
+
+            structure_no += 1
+            if printer:
+                percent = int(100 * structure_no / n_structures)
+                if percent > last_percent:
+                    t1 = time.time()
+                    if t1 - last_t >= 60:
+                        t = int(t1 - t0)
+                        rate = structure_no / (t1 - t0)
+                        t_left = int((n_structures - structure_no) / rate)
+                        printer(
+                            f"\t{structure_no:6} ({percent}%) structures wrote in {t} "
+                            f"seconds. About {t_left} seconds remaining."
+                        )
+                        last_t = t1
+                        last_percent = percent
 
     if printer:
         t1 = time.time()

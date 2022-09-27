@@ -159,7 +159,7 @@ class ReadStructure(seamm.Node):
                     path = PurePath(filename)
                     extension = path.suffix
                     if extension == ".gz":
-                        extension = path.stem.suffix
+                        extension = path.with_suffix("").suffix
 
         # Get the metadata for the format
         metadata = get_format_metadata(extension)
@@ -200,7 +200,7 @@ class ReadStructure(seamm.Node):
             else:
                 extension = path.suffix
                 if extension == ".gz":
-                    extension = path.stem.suffix
+                    extension = path.with_suffix("").suffix
 
             if extension == "":
                 extension = guess_extension(filename, use_file_name=False)
@@ -215,7 +215,7 @@ class ReadStructure(seamm.Node):
                 P, structure_handling=True
             )
 
-            read(
+            configurations = read(
                 filename,
                 configuration,
                 extension=extension,
@@ -237,31 +237,32 @@ class ReadStructure(seamm.Node):
             system, configuration = self.get_system_configuration(
                 P, structure_handling=False
             )
-            if configuration.periodicity == 3:
-                space_group = configuration.symmetry.group
-                if space_group == "":
-                    symmetry_info = ""
+            if len(configurations) == 1:
+                if configuration.periodicity == 3:
+                    space_group = configuration.symmetry.group
+                    if space_group == "":
+                        symmetry_info = ""
+                    else:
+                        symmetry_info = f" The space group is {space_group}."
+                    printer.important(
+                        __(
+                            "\n    Created a periodic structure with "
+                            f"{configuration.n_atoms} atoms. {symmetry_info}"
+                            f"\n           System name = {system.name}"
+                            f"\n    Configuration name = {configuration.name}",
+                            indent=4 * " ",
+                        )
+                    )
                 else:
-                    symmetry_info = f" The space group is {space_group}."
-                printer.important(
-                    __(
-                        "\n    Created a periodic structure with "
-                        f"{configuration.n_atoms} atoms. {symmetry_info}"
-                        f"\n           System name = {system.name}"
-                        f"\n    Configuration name = {configuration.name}",
-                        indent=4 * " ",
+                    printer.important(
+                        __(
+                            "\n    Created a molecular structure with "
+                            f"{configuration.n_atoms} atoms."
+                            f"\n           System name = {system.name}"
+                            f"\n    Configuration name = {configuration.name}",
+                            indent=4 * " ",
+                        )
                     )
-                )
-            else:
-                printer.important(
-                    __(
-                        "\n    Created a molecular structure with "
-                        f"{configuration.n_atoms} atoms."
-                        f"\n           System name = {system.name}"
-                        f"\n    Configuration name = {configuration.name}",
-                        indent=4 * " ",
-                    )
-                )
 
         printer.important("")
 
