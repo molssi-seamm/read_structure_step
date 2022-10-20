@@ -20,19 +20,19 @@ if "OpenBabel_version" not in globals():
 logger = logging.getLogger("read_structure_step.read_structure")
 
 metadata = {
-    "CP": "constant pressure heat capacity",
-    "CPR": "reference.constant pressure heat capacity",
-    "D": "dipole moment",
-    "DR": "dipole moment.reference",
-    "H": "enthalpy of formation",
-    "HR": "enthalpy of formation.reference",
-    "S": "entropy",
-    "SR": "entropy.reference",
-    "I": "ionization energy",
-    "IE": "ionization energy",
-    "IA": "ionization energy",
-    "IR": "ionization energy.reference",
-    "GR": "geometry.reference",
+    "CP": "constant pressure heat capacity#experiment",
+    "CPR": "reference.constant pressure heat capacity#experiment",
+    "D": "dipole moment#experiment",
+    "DR": "dipole moment.reference#experiment",
+    "H": "enthalpy of formation#experiment",
+    "HR": "enthalpy of formation.reference#experiment",
+    "S": "entropy#experiment",
+    "SR": "entropy.reference#experiment",
+    "I": "ionization energy#experiment",
+    "IE": "ionization energy#experiment",
+    "IA": "ionization energy#experiment",
+    "IR": "ionization energy.reference#experiment",
+    "GR": "geometry.reference#experiment",
 }
 multiplicities = {
     "SINGLET": 1,
@@ -495,13 +495,13 @@ def load_mop(
     if save_data:
         properties = configuration.properties
         if len(keywords) != 0:
-            key = "MOPAC.keywords"
+            key = "keywords#MOPAC"
             properties.add(
                 key, "str", description="The keywords for MOPAC", noerror=True
             )
             properties.put(key, " ".join(keywords))
         if len(description_lines) > 0:
-            key = "MOPAC.description"
+            key = "description#MOPAC"
             properties.add(
                 key,
                 "str",
@@ -510,7 +510,7 @@ def load_mop(
             )
             properties.put(key, "\n".join(description_lines))
         if energy is not None:
-            key = "MOPAC.reference energy"
+            key = "reference energy#MOPAC"
             properties.add(
                 key,
                 "float",
@@ -552,13 +552,16 @@ def load_mop(
                                 tmp = value.split(",")
                                 value = tmp[0].strip()
                                 stderr = tmp[1].strip()
+                                tmp = keyword.split("#")
+                                tmp[0] = tmp[0] + " stderr"
+                                new_keyword = "#".join(tmp)
                                 properties.add(
-                                    f"{keyword}.stderr",
+                                    new_keyword,
                                     "float",
                                     description=f"stderr for the {keyword}.",
                                     noerror=True,
                                 )
-                                properties.put(f"{keyword}.stderr", stderr)
+                                properties.put(new_keyword, stderr)
                             properties.put(keyword, value)
                         except Exception as e:
                             print(f"{e}: {key}")
