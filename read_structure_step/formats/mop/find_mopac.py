@@ -26,37 +26,37 @@ def find_mopac():
 
     # Next try common locations
     try:
-        mopac_exe = "/opt/mopac/MOPAC2016.exe"
+        mopac_exe = "/opt/mopac/mopac"
 
         if os.path.isfile(mopac_exe) is False:
             raise FileNotFoundError(
                 'The directory "/opt/mopac/" exists, but the executable \
-                "MOPAC2016.exe" is not there'
+                "mopac" is not there'
             )
     except FileNotFoundError:
         try:
             mopac_path = os.path.split(os.environ["mopac"])[0]
-            mopac_exe = mopac_path + "MOPAC2016.exe"
+            mopac_exe = mopac_path + "mopac"
 
             if os.path.isfile(mopac_exe) is False:
                 raise FileNotFoundError(
                     'The environment variable "mopac" is defined, but \
-                            the executable "MOPAC2016.exe" is not there'
+                            the executable "mopac" is not there'
                 )
         except (KeyError, FileNotFoundError):
             try:
-                mopac_exe = Path(os.environ["MOPAC_LICENSE"]) / "MOPAC2016.exe"
+                mopac_exe = Path(os.environ["MOPAC_LICENSE"]) / "mopac"
                 mopac_exe = str(mopac_exe)
 
                 if os.path.isfile(mopac_exe) is False:
                     raise FileNotFoundError(
                         'The environment variable "mopac" is defined, but the \
-                                executable "MOPAC2016.exe" is not there'
+                                executable "mopac" is not there'
                     )
 
             except (KeyError, FileNotFoundError):
                 try:
-                    mopac_exe = seamm_util.check_executable("MOPAC2016.exe")
+                    mopac_exe = seamm_util.check_executable("mopac")
                 except FileNotFoundError:
                     return None
 
