@@ -642,7 +642,7 @@ def load_mop(
                                 value = tmp[0].strip()
                                 stderr = tmp[1].strip()
                                 tmp = keyword.split("#")
-                                tmp[0] = tmp[0] + " stderr"
+                                tmp[0] = tmp[0] + ", stderr"
                                 new_keyword = "#".join(tmp)
                                 properties.add(
                                     new_keyword,

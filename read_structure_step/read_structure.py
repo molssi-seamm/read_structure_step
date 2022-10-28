@@ -237,7 +237,7 @@ class ReadStructure(seamm.Node):
             system, configuration = self.get_system_configuration(
                 P, structure_handling=False
             )
-            if len(configurations) == 1:
+            if configurations is None or len(configurations) == 1:
                 if configuration.periodicity == 3:
                     space_group = configuration.symmetry.group
                     if space_group == "":
