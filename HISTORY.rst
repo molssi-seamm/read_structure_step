@@ -2,6 +2,12 @@
 History
 =======
 
+2022.10.28 -- Fixed bug reading cif and mmcif files
+  * There was a bug that caused a crash when reading cif and mmcif files, and potentially
+    some other formats. It has been fixed throughout.
+  * The standard error for properties were missing a commma in the property name. The
+    comma is standard elsewhere in SEAMM so add it here: '<prop>, stderr'
+
 2022.10.26 -- Handling OpenBabel error messages for MOPAC .mop files
   Hiding messages about errors Kekulizing structures, which doesn't seem to be a serious
   issue, and printing any other messages as warnings.
