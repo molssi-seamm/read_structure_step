@@ -125,6 +125,7 @@ def load_mmcif(
 
     path.expanduser().resolve()
 
+    configurations = []
     structure_no = 0
     lines = []
     in_block = False
@@ -152,6 +153,8 @@ def load_mmcif(
                                 configuration = system.create_configuration()
 
                         configuration.from_mmcif_text(text)
+
+                        configurations.append(configuration)
 
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
@@ -205,6 +208,8 @@ def load_mmcif(
 
                 configuration.from_mmcif_text(text)
 
+                configurations.append(configuration)
+
             logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
             # Set the system name
@@ -234,3 +239,5 @@ def load_mmcif(
                     configuration.name = configuration.formula()[1]
                 else:
                     configuration.name = str(configuration_name)
+
+        return configurations

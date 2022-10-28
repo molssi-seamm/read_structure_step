@@ -125,6 +125,7 @@ def load_cif(
 
     path.expanduser().resolve()
 
+    configurations = []
     structure_no = 0
     lines = []
     in_block = False
@@ -149,6 +150,8 @@ def load_cif(
                     if text != "":
                         printer("\n")
                         printer(__(text, indent=4 * " "))
+
+                    configurations.append(configuration)
 
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
 
@@ -200,6 +203,8 @@ def load_cif(
                 printer("\n")
                 printer(__(text, indent=4 * " "))
 
+                configurations.append(configuration)
+
             # Set the system name
             if system_name is not None and system_name != "":
                 lower_name = str(system_name).lower()
@@ -227,3 +232,5 @@ def load_cif(
                     configuration.name = configuration.formula()[1]
                 else:
                     configuration.name = str(configuration_name)
+
+        return configurations
