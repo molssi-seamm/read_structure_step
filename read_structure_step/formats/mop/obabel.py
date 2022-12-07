@@ -583,6 +583,7 @@ def load_mop(
     # Save keywords, description and any data encoded in the file to the database
     if save_data:
         properties = configuration.properties
+        system_properties = system.properties
         if len(keywords) != 0:
             key = "keywords#MOPAC"
             properties.add(
@@ -630,7 +631,7 @@ def load_mop(
                                 continue
                             if "reference" in keyword:
                                 description = keyword.split(".")[0]
-                                properties.add(
+                                system_properties.add(
                                     keyword,
                                     "str",
                                     description=f"Reference for the {description}.",
@@ -644,14 +645,14 @@ def load_mop(
                                 tmp = keyword.split("#")
                                 tmp[0] = tmp[0] + ", stderr"
                                 new_keyword = "#".join(tmp)
-                                properties.add(
+                                system_properties.add(
                                     new_keyword,
                                     "float",
                                     description=f"stderr for the {keyword}.",
                                     noerror=True,
                                 )
-                                properties.put(new_keyword, stderr)
-                            properties.put(keyword, value)
+                                system_properties.put(new_keyword, stderr)
+                            system_properties.put(keyword, value)
                         except Exception as e:
                             print(f"{e}: {key}")
 
