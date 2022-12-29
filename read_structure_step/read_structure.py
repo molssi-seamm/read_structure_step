@@ -226,8 +226,8 @@ class ReadStructure(seamm.Node):
                 subsequent_as_configurations=(
                     P["subsequent structure handling"] == "Create a new configuration"
                 ),
-                system_name=P["system name"],
-                configuration_name=P["configuration name"],
+                system_name=str(P["system name"]),
+                configuration_name=str(P["configuration name"]),
                 printer=printer.important,
                 references=self.references,
                 bibliography=self._bibliography,
