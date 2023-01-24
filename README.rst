@@ -14,11 +14,11 @@ SEAMM Read Structure Plug-in
    :target: https://codecov.io/gh/molssi-seamm/read_structure_step
    :alt: Code Coverage
 
-.. image:: https://img.shields.io/lgtm/grade/python/g/molssi-seamm/read_structure_step.svg?logo=lgtm&logoWidth=18
-   :target: https://lgtm.com/projects/g/molssi-seamm/read_structure_step/context:python
+.. image:: https://github.com/molssi-seamm/quickmin_step/workflows/CodeQL/badge.svg
+   :target: https://github.com/molssi-seamm/quickmin_step/security/code-scanning
    :alt: Code Quality
 
-.. image:: https://github.com/molssi-seamm/read_structure_step/workflows/Documentation/badge.svg
+.. image:: https://github.com/molssi-seamm/read_structure_step/workflows/Release/badge.svg
    :target: https://molssi-seamm.github.io/read_structure_step/index.html
    :alt: Documentation Status
 

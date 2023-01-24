@@ -9,8 +9,11 @@ Attributes
 REGISTERED_READERS : dict(str, dict(str, str))
     The registry of file formats that can be read. Each entry, which is keyed by the
     extension including the initial dot, is a dictionary with at least the following:
-         "function": the function to call to read the file.
-         "description": the readable name for the format, e.g. "MDL structure-data file"
+
+        * "function": the function to call to read the file.
+
+        * "description": the readable name for the format, e.g.
+          "MDL structure-data file"
 
 REGISTERED_FORMAT_CHECKERS : dict(str, function)
     The registry of functions for checking is an unknown file has a given format.

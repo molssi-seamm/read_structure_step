@@ -2,9 +2,26 @@
 History
 =======
 
+2023.1.24 -- Added handler for XYZ files and added properties
+
+  * Added a custom handler for XYZ files to cope with some of the variant formats.
+
+    * Supports files with no atom count on the first line
+
+    * Supports the variant used in the Minnesota Solubility database, which has 3 header
+      lines.
+
+  * Add capability to store properties into the database for formats such as MOPAC and
+    SDF that can handle properties. Also can output the properties when writing the
+    files.
+
+  * Fixed bugs if the system name or configuration name is not a string, but rather a number.
+
 2022.10.28 -- Fixed bug reading cif and mmcif files
+
   * There was a bug that caused a crash when reading cif and mmcif files, and potentially
     some other formats. It has been fixed throughout.
+
   * The standard error for properties were missing a commma in the property name. The
     comma is standard elsewhere in SEAMM so add it here: '<prop>, stderr'
 
@@ -13,8 +30,11 @@ History
   issue, and printing any other messages as warnings.
 
 2021.2.12 (12 February 2021)
+
   * Updated the README file to give a better description.
+
   * Updated the short description in setup.py to work with the new installer.
+
   * Added keywords for better searchability.
 
 2021.2.4 (4 February 2021)
@@ -30,9 +50,10 @@ History
   Removed leftover debug print statements.
 
 0.9 (15 April 2020)
-  * General bug fixing and code cleanup.
-  * Part of release of all modules.
 
+  * General bug fixing and code cleanup.
+
+  * Part of release of all modules.
 
 0.7.1 (23 November 2019)
   First release on PyPI.

@@ -1,0 +1,415 @@
+#!/usr/bin/env run_flowchart
+!MolSSI flowchart 2.0
+#metadata
+{
+    "title": "",
+    "description": "",
+    "keywords": [],
+    "creators": [],
+    "sha256": "2761b2930c4f5a3b98e20b549f6a033e87a42307e3c2629fd276436fd7972ebe",
+    "sha256_strict": "91efe28a3f3908067e61ebe4fb3ce2300855e02e9c27ced94f61c915d265fbf4"
+}
+#flowchart
+{
+    "item": "object",
+    "module": "seamm.flowchart",
+    "class": "Flowchart",
+    "extension": null,
+    "nodes": [
+        {
+            "item": "object",
+            "module": "seamm.start_node",
+            "class": "StartNode",
+            "version": "2022.10.23",
+            "extension": null,
+            "attributes": {
+                "_tables": [],
+                "_title": "Start",
+                "_uuid": 1,
+                "extension": null,
+                "_method": null,
+                "parameters": null,
+                "x": 150.0,
+                "y": 35.0,
+                "w": 200,
+                "h": 50
+            }
+        },
+        {
+            "item": "object",
+            "module": "control_parameters_step.control_parameters",
+            "class": "ControlParameters",
+            "version": "2022.6.6",
+            "extension": "Parameters",
+            "attributes": {
+                "_tables": [],
+                "_title": "Parameters",
+                "_uuid": 278341674237091090740287868386149242040,
+                "extension": "Parameters",
+                "_method": null,
+                "parameters": {
+                    "__class__": "ControlParametersParameters",
+                    "__module__": "control_parameters_step.control_parameters_parameters",
+                    "variables": {
+                        "value": {
+                            "filename": {
+                                "optional": "No",
+                                "type": "file",
+                                "nargs": "a single value",
+                                "overwrite": "No",
+                                "default": "",
+                                "choices": "[]",
+                                "help": ""
+                            }
+                        },
+                        "units": null
+                    }
+                },
+                "x": 150.0,
+                "y": 105.0,
+                "w": 200,
+                "h": 50
+            }
+        },
+        {
+            "item": "object",
+            "module": "mopac_step.mopac",
+            "class": "MOPAC",
+            "version": "2022.10.20",
+            "extension": "MOPAC",
+            "attributes": {
+                "_tables": [],
+                "_title": "MOPAC",
+                "_uuid": 108846167464963929737587932983442657675,
+                "extension": "MOPAC",
+                "_method": null,
+                "parameters": null,
+                "x": 150.0,
+                "y": 245.0,
+                "w": 200,
+                "h": 50
+            },
+            "subflowchart": {
+                "item": "object",
+                "module": "seamm.flowchart",
+                "class": "Flowchart",
+                "extension": null,
+                "nodes": [
+                    {
+                        "item": "object",
+                        "module": "seamm.start_node",
+                        "class": "StartNode",
+                        "version": "2022.10.23",
+                        "extension": null,
+                        "attributes": {
+                            "_tables": [],
+                            "_title": "Start",
+                            "_uuid": 1,
+                            "extension": null,
+                            "_method": null,
+                            "parameters": null,
+                            "x": 150.0,
+                            "y": 35.0,
+                            "w": 200,
+                            "h": 50
+                        }
+                    },
+                    {
+                        "item": "object",
+                        "module": "mopac_step.optimization",
+                        "class": "Optimization",
+                        "version": "2022.10.20",
+                        "extension": "Optimization",
+                        "attributes": {
+                            "_tables": [],
+                            "_title": "Optimization",
+                            "_uuid": 314000650000775436994697327102915921914,
+                            "extension": "Optimization",
+                            "_method": null,
+                            "parameters": {
+                                "__class__": "OptimizationParameters",
+                                "__module__": "mopac_step.optimization_parameters",
+                                "structure": {
+                                    "value": "default",
+                                    "units": null
+                                },
+                                "hamiltonian": {
+                                    "value": "PM7",
+                                    "units": null
+                                },
+                                "convergence": {
+                                    "value": "normal",
+                                    "units": null
+                                },
+                                "uhf": {
+                                    "value": "no",
+                                    "units": null
+                                },
+                                "COSMO": {
+                                    "value": "no",
+                                    "units": null
+                                },
+                                "MOZYME": {
+                                    "value": "for larger systems",
+                                    "units": null
+                                },
+                                "nMOZYME": {
+                                    "value": "300",
+                                    "units": null
+                                },
+                                "MOZYME follow-up": {
+                                    "value": "recalculate the energy at the end using new, orthogonal localized orbitals",
+                                    "units": null
+                                },
+                                "eps": {
+                                    "value": "78.4",
+                                    "units": null
+                                },
+                                "rsolve": {
+                                    "value": "1.3",
+                                    "units": "\u00c5"
+                                },
+                                "nspa": {
+                                    "value": "42",
+                                    "units": null
+                                },
+                                "disex": {
+                                    "value": "2.0",
+                                    "units": null
+                                },
+                                "calculate gradients": {
+                                    "value": "yes",
+                                    "units": null
+                                },
+                                "relative": {
+                                    "value": "0.1",
+                                    "units": null
+                                },
+                                "absolute": {
+                                    "value": "1.0E-07",
+                                    "units": "kcal/mol"
+                                },
+                                "extra keywords": {
+                                    "value": [],
+                                    "units": null
+                                },
+                                "results": {
+                                    "value": {
+                                        "AREA": {
+                                            "property": "surface area#MOPAC"
+                                        },
+                                        "DENSITY": {
+                                            "property": "density"
+                                        },
+                                        "DIPOLE": {
+                                            "property": "dipole moment#MOPAC#{model}"
+                                        },
+                                        "ENERGY_ELECTRONIC": {
+                                            "property": "electronic energy#MOPAC#{model}"
+                                        },
+                                        "ENERGY_NUCLEAR": {
+                                            "property": "nuclear repulsion energy"
+                                        },
+                                        "DIEL_ENER": {
+                                            "property": "dielectric energy#MOPAC#{model}"
+                                        },
+                                        "HEAT_OF_FORMATION": {
+                                            "property": "enthalpy of formation#MOPAC#{model}"
+                                        },
+                                        "IONIZATION_POTENTIAL": {
+                                            "variable": "IE",
+                                            "units": "eV",
+                                            "property": "ionization energy#MOPAC#{model}"
+                                        },
+                                        "TOTAL_SPIN": {
+                                            "property": "S^2#MOPAC#{model}"
+                                        },
+                                        "VOLUME": {
+                                            "property": "volume#MOPAC"
+                                        }
+                                    },
+                                    "units": null
+                                },
+                                "create tables": {
+                                    "value": "yes",
+                                    "units": null
+                                },
+                                "method": {
+                                    "value": "default",
+                                    "units": null
+                                },
+                                "gnorm": {
+                                    "value": "1.0",
+                                    "units": "kcal/mol/\u00c5"
+                                },
+                                "cycles": {
+                                    "value": "unlimited",
+                                    "units": null
+                                },
+                                "recalc": {
+                                    "value": "never",
+                                    "units": null
+                                },
+                                "dmax": {
+                                    "value": "0.2",
+                                    "units": null
+                                },
+                                "LatticeOpt": {
+                                    "value": "Yes",
+                                    "units": null
+                                },
+                                "pressure": {
+                                    "value": "0.0",
+                                    "units": "GPa"
+                                },
+                                "structure handling": {
+                                    "value": "be put in a new configuration",
+                                    "units": null
+                                },
+                                "configuration name": {
+                                    "value": "optimized with <Hamiltonian>",
+                                    "units": null
+                                }
+                            },
+                            "x": 150.0,
+                            "y": 105.0,
+                            "w": 200,
+                            "h": 50
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "item": "edge",
+                        "node1": 1,
+                        "node2": 314000650000775436994697327102915921914,
+                        "edge_type": "execution",
+                        "edge_subtype": "next",
+                        "attributes": {
+                            "arrow_id": 51,
+                            "anchor1": "s",
+                            "anchor2": "n",
+                            "coords": [
+                                150,
+                                60,
+                                150,
+                                80
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "item": "object",
+            "module": "read_structure_step.read_structure",
+            "class": "ReadStructure",
+            "version": "2022.10.26+0.gaece41f.dirty",
+            "extension": "Read Structure",
+            "attributes": {
+                "_tables": [],
+                "_title": "Read Structure",
+                "_uuid": 276988682783054499592937338473437230529,
+                "extension": "Read Structure",
+                "_method": null,
+                "parameters": {
+                    "__class__": "ReadStructureParameters",
+                    "__module__": "read_structure_step.read_structure_parameters",
+                    "file": {
+                        "value": "$filename",
+                        "units": null
+                    },
+                    "file type": {
+                        "value": "from extension",
+                        "units": null
+                    },
+                    "add hydrogens": {
+                        "value": "yes",
+                        "units": null
+                    },
+                    "indices": {
+                        "value": "1:end",
+                        "units": null
+                    },
+                    "structure handling": {
+                        "value": "Overwrite the current configuration",
+                        "units": null
+                    },
+                    "subsequent structure handling": {
+                        "value": "Create a new system and configuration",
+                        "units": null
+                    },
+                    "system name": {
+                        "value": "from file",
+                        "units": null
+                    },
+                    "configuration name": {
+                        "value": "initial",
+                        "units": null
+                    }
+                },
+                "x": 150.0,
+                "y": 175.0,
+                "w": 200,
+                "h": 50
+            }
+        }
+    ],
+    "edges": [
+        {
+            "item": "edge",
+            "node1": 1,
+            "node2": 278341674237091090740287868386149242040,
+            "edge_type": "execution",
+            "edge_subtype": "next",
+            "attributes": {
+                "arrow_id": 74,
+                "anchor1": "s",
+                "anchor2": "n",
+                "coords": [
+                    150,
+                    60,
+                    150,
+                    80
+                ]
+            }
+        },
+        {
+            "item": "edge",
+            "node1": 278341674237091090740287868386149242040,
+            "node2": 276988682783054499592937338473437230529,
+            "edge_type": "execution",
+            "edge_subtype": "next",
+            "attributes": {
+                "arrow_id": 130,
+                "anchor1": "s",
+                "anchor2": "n",
+                "coords": [
+                    150,
+                    130,
+                    150,
+                    150
+                ]
+            }
+        },
+        {
+            "item": "edge",
+            "node1": 276988682783054499592937338473437230529,
+            "node2": 108846167464963929737587932983442657675,
+            "edge_type": "execution",
+            "edge_subtype": "next",
+            "attributes": {
+                "arrow_id": 165,
+                "anchor1": "s",
+                "anchor2": "n",
+                "coords": [
+                    150,
+                    200,
+                    150,
+                    220
+                ]
+            }
+        }
+    ]
+}
+#end
