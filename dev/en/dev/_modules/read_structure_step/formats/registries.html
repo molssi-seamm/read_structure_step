@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_structure_step.formats.registries &mdash; SEAMM Read Structure Plug-in 2022.10.28+3.g1e9c019 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> SEAMM Read Structure Plug-in
+          </a>
+              <div class="version">
+                2022.10.28+3.g1e9c019
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SEAMM Read Structure Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">read_structure_step.formats.registries</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for read_structure_step.formats.registries</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module contains the decorator definitions to register a reader for</span>
+<span class="sd">a given file format and its corresponding format checker. The decorators</span>
+<span class="sd">will automatically add the decorated function to a dictionary to ease</span>
+<span class="sd">extensibility.</span>
+
+<span class="sd">Attributes</span>
+<span class="sd">----------</span>
+<span class="sd">REGISTERED_READERS : dict(str, dict(str, str))</span>
+<span class="sd">    The registry of file formats that can be read. Each entry, which is keyed by the</span>
+<span class="sd">    extension including the initial dot, is a dictionary with at least the following:</span>
+<span class="sd">         &quot;function&quot;: the function to call to read the file.</span>
+<span class="sd">         &quot;description&quot;: the readable name for the format, e.g. &quot;MDL structure-data file&quot;</span>
+
+<span class="sd">REGISTERED_FORMAT_CHECKERS : dict(str, function)</span>
+<span class="sd">    The registry of functions for checking is an unknown file has a given format.</span>
+
+<span class="sd">FORMAT_METADATA : dict(str, dict(str, str))</span>
+<span class="sd">    Metadata describing a file format.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">REGISTERED_READERS</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">REGISTERED_WRITERS</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">REGISTERED_FORMAT_CHECKERS</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">FORMAT_METADATA</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">default_metadata</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;single_structure&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;dimensionality&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;coordinate_dimensionality&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;property_data&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;bonds&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;is_complete&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="s2">&quot;add_hydrogens&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="register_reader"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.register_reader">[docs]</a><span class="k">def</span> <span class="nf">register_reader</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">extension</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&quot;</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+
+        <span class="n">REGISTERED_READERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wrapper_function</span>
+
+    <span class="k">return</span> <span class="n">decorator_function</span></div>
+
+
+<div class="viewcode-block" id="register_writer"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.register_writer">[docs]</a><span class="k">def</span> <span class="nf">register_writer</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator for registering structure file writers.&quot;&quot;&quot;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">extension</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&quot;</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">REGISTERED_WRITERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wrapper_function</span>
+
+    <span class="k">return</span> <span class="n">decorator_function</span></div>
+
+
+<div class="viewcode-block" id="register_format_checker"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.register_format_checker">[docs]</a><span class="k">def</span> <span class="nf">register_format_checker</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+
+        <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">[</span><span class="n">file_format</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+
+        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">wrapper_function</span>
+
+    <span class="k">return</span> <span class="n">decorator_function</span></div>
+
+
+<div class="viewcode-block" id="get_format_metadata"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.get_format_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_format_metadata</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the metadata for a given extension.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    extension : str</span>
+<span class="sd">        The file format extension, including dot.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict(str, any)</span>
+<span class="sd">        The metadata as a dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">FORMAT_METADATA</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">FORMAT_METADATA</span><span class="p">[</span><span class="n">extension</span><span class="p">]}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">default_metadata</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="set_format_metadata"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.set_format_metadata">[docs]</a><span class="k">def</span> <span class="nf">set_format_metadata</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the metadata for the given extensions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    extensions : str or iterable</span>
+<span class="sd">        Either a single extension as a string or a lost of extensions that this</span>
+<span class="sd">        metadata applies to.</span>
+<span class="sd">    **kwargs :</span>
+<span class="sd">        Keyword arguments giving the metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check that the keywords are valid</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">default_metadata</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown key &#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&#39; in file format metadata.&quot;</span><span class="p">)</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">default_metadata</span><span class="p">}</span>
+    <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">FORMAT_METADATA</span><span class="p">[</span><span class="n">extensions</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">extension</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+            <span class="n">FORMAT_METADATA</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span></div>
+
+
+<div class="viewcode-block" id="last_resort_reader"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_reader">[docs]</a><span class="k">def</span> <span class="nf">last_resort_reader</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    formats : (str)</span>
+<span class="sd">        An iterable list of formats handled by the function of last resort.</span>
+<span class="sd">    fn : function</span>
+<span class="sd">        The function of last resort.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">formats</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">extension</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&quot;</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">REGISTERED_READERS</span><span class="p">:</span>
+            <span class="n">REGISTERED_READERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="last_resort_writer"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_writer">[docs]</a><span class="k">def</span> <span class="nf">last_resort_writer</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the writer for a list of formats if there is no writer registered.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    formats : (str)</span>
+<span class="sd">        An iterable list of formats handled by the function of last resort.</span>
+<span class="sd">    fn : function</span>
+<span class="sd">        The function of last resort.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">formats</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+            <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">extension</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;--&quot;</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+        <span class="k">if</span> <span class="n">extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">REGISTERED_WRITERS</span><span class="p">:</span>
+            <span class="n">REGISTERED_WRITERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="last_resort_checker"><a class="viewcode-back" href="../../../developer/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_checker">[docs]</a><span class="k">def</span> <span class="nf">last_resort_checker</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    format : str</span>
+<span class="sd">        File extension indicating format, e.g. &#39;.pdb&#39;</span>
+<span class="sd">    fn : function</span>
+<span class="sd">        The function that checks the file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="nb">format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">extension</span>
+
+    <span class="k">if</span> <span class="n">extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">:</span>
+        <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

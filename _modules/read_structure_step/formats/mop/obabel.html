@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_structure_step.formats.mop.obabel &mdash; SEAMM Read Structure Plug-in 2022.10.28 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> SEAMM Read Structure Plug-in
+          </a>
+              <div class="version">
+                2022.10.28
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">SEAMM Read Structure Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">read_structure_step.formats.mop.obabel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for read_structure_step.formats.mop.obabel</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Implementation of the reader for XYZ files using OpenBabel</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="kn">from</span> <span class="nn">openbabel</span> <span class="kn">import</span> <span class="n">openbabel</span>
+<span class="kn">from</span> <span class="nn">read_structure_step.formats.registries</span> <span class="kn">import</span> <span class="n">register_reader</span>
+<span class="kn">import</span> <span class="nn">seamm</span>
+<span class="kn">from</span> <span class="nn">.find_mopac</span> <span class="kn">import</span> <span class="n">find_mopac</span>
+
+<span class="k">if</span> <span class="s2">&quot;OpenBabel_version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span>
+    <span class="n">OpenBabel_version</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;read_structure_step.read_structure&quot;</span><span class="p">)</span>
+
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;CP&quot;</span><span class="p">:</span> <span class="s2">&quot;constant pressure heat capacity#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CPR&quot;</span><span class="p">:</span> <span class="s2">&quot;reference.constant pressure heat capacity#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="s2">&quot;dipole moment#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DR&quot;</span><span class="p">:</span> <span class="s2">&quot;dipole moment.reference#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="s2">&quot;enthalpy of formation#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;HR&quot;</span><span class="p">:</span> <span class="s2">&quot;enthalpy of formation.reference#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="s2">&quot;entropy#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SR&quot;</span><span class="p">:</span> <span class="s2">&quot;entropy.reference#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="s2">&quot;ionization energy#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IE&quot;</span><span class="p">:</span> <span class="s2">&quot;ionization energy#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IA&quot;</span><span class="p">:</span> <span class="s2">&quot;ionization energy#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;IR&quot;</span><span class="p">:</span> <span class="s2">&quot;ionization energy.reference#experiment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GR&quot;</span><span class="p">:</span> <span class="s2">&quot;geometry.reference#experiment&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">multiplicities</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;SINGLET&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;DOUBLET&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;TRIPLET&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;QUARTET&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;QUINTET&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">&quot;SEXTET&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s2">&quot;SEPTET&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="s2">&quot;OCTET&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="s2">&quot;NONET&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="OutputGrabber"><a class="viewcode-back" href="../../../../developer/read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber">[docs]</a><span class="k">class</span> <span class="nc">OutputGrabber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class used to grab standard output or another stream.</span>
+
+<span class="sd">    see https://stackoverflow.com/questions/24277488/in-python-how-to-capture-the-stdout-from-a-c-shared-library-to-a-variable/29834357#29834357  # noqa: E501</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">escape_char</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\b</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threaded</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="o">=</span> <span class="n">stream</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">threaded</span> <span class="o">=</span> <span class="n">threaded</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># Create a pipe so the stream can be captured:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipe_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pipe</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+<div class="viewcode-block" id="OutputGrabber.start"><a class="viewcode-back" href="../../../../developer/read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Start capturing the stream data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="c1"># Save a copy of the stream:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">streamfd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">dup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span><span class="p">)</span>
+        <span class="c1"># Replace the original stream with our write pipe:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_in</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threaded</span><span class="p">:</span>
+            <span class="c1"># Start thread that will read the stream:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">workerThread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">readOutput</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">workerThread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="c1"># Make sure that the thread is running and os.read() has executed:</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputGrabber.stop"><a class="viewcode-back" href="../../../../developer/read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stop capturing the stream data and save the text in `capturedtext`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Print the escape character to make the readOutput method stop:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span><span class="p">)</span>
+        <span class="c1"># Flush the stream to make sure all our data goes in before</span>
+        <span class="c1"># the escape character:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threaded</span><span class="p">:</span>
+            <span class="c1"># wait until the thread finishes so we are sure that</span>
+            <span class="c1"># we have until the last character:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">workerThread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">readOutput</span><span class="p">()</span>
+        <span class="c1"># Close the pipe:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_in</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">)</span>
+        <span class="c1"># Restore the original stream:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">dup2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamfd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span><span class="p">)</span>
+        <span class="c1"># Close the duplicate stream:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamfd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="OutputGrabber.readOutput"><a class="viewcode-back" href="../../../../developer/read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.readOutput">[docs]</a>    <span class="k">def</span> <span class="nf">readOutput</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read the stream data (one byte at a time)</span>
+<span class="sd">        and save the text in `capturedtext`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">char</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span> <span class="ow">in</span> <span class="n">char</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">+=</span> <span class="n">char</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_find_charge</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_find_standard</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_find_field</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_find_open</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+
+<span class="n">extras</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;structure&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;net_charge&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;regex&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;(CHARGE=)([\+\-]?\d)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;find&quot;</span><span class="p">:</span> <span class="n">_find_charge</span><span class="p">,</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;regex&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="sa">r</span><span class="s2">&quot;FIELD=\(([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+&quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?&quot;</span>
+                <span class="sa">r</span><span class="s2">&quot;)?)\)&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;find&quot;</span><span class="p">:</span> <span class="n">_find_field</span><span class="p">,</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;open&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;regex&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;(OPEN\()(\d+)\,\s*(\d+)\)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;find&quot;</span><span class="p">:</span> <span class="n">_find_open</span><span class="p">,</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">obabel_error_identifiers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0 molecules converted&quot;</span><span class="p">]</span>
+
+
+<span class="nd">@register_reader</span><span class="p">(</span><span class="s2">&quot;.mop&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">load_mop</span><span class="p">(</span>
+    <span class="n">file_name</span><span class="p">,</span>
+    <span class="n">configuration</span><span class="p">,</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.mop&quot;</span><span class="p">,</span>
+    <span class="n">add_hydrogens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">system_db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">indices</span><span class="o">=</span><span class="s2">&quot;1:end&quot;</span><span class="p">,</span>
+    <span class="n">subsequent_as_configurations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Canonical SMILES&quot;</span><span class="p">,</span>
+    <span class="n">configuration_name</span><span class="o">=</span><span class="s2">&quot;sequential&quot;</span><span class="p">,</span>
+    <span class="n">printer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">references</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bibliography</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">save_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read a MOPAC input file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    file_name : str or Path</span>
+<span class="sd">        The path to the file, as either a string or Path.</span>
+
+<span class="sd">    configuration : molsystem.Configuration</span>
+<span class="sd">        The configuration to put the imported structure into.</span>
+
+<span class="sd">    We&#39;ll use OpenBabel to read the file; however, OpenBabel is somewhat limited, so</span>
+<span class="sd">    we&#39;ll first preprocess the file to extract extra data and also to fit it to the</span>
+<span class="sd">    format that OpenBabel can handle.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">OpenBabel_version</span>
+
+    <span class="c1"># Get the text in the file</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">file_name</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+
+    <span class="c1"># Work through the file capturing data and also reformatting as needed.</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># The file may have comments at the beginning or interspersed. The first non-comment</span>
+    <span class="c1"># line is keywords, followed by two lines of description. Conventionally the first</span>
+    <span class="c1"># line of description is a title.</span>
+    <span class="c1">#</span>
+    <span class="c1"># The keyword line may be extended in one of two ways. If there is an &#39;&amp;&#39; keyword</span>
+    <span class="c1"># in the first line of keywords, the second line contains keywords rather than</span>
+    <span class="c1"># description. If that second line contains an &#39;&amp;&#39;, then the third line is also</span>
+    <span class="c1"># taken as keywords, leaving no description lines.</span>
+    <span class="c1">#</span>
+    <span class="c1"># If the keyword line contains a &#39;+&#39; keyword, the next line is also considered to be</span>
+    <span class="c1"># keywords, but in this case the number of description lines following the keyword</span>
+    <span class="c1"># lines is unchanged.</span>
+    <span class="c1">#</span>
+    <span class="c1"># Finally, the MOPAC test data usually has three comment lines to start, with a</span>
+    <span class="c1"># single number on the second line, which is the heat of formation calculated by</span>
+    <span class="c1"># MOPAC. If this format is found the HOF is captured.</span>
+    <span class="n">run_mopac</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">keywords</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">description_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">energy</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">geometry_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">raw_geometry_lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">line_no</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">comment_lines</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_description_lines</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;keywords&quot;</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+        <span class="n">line_no</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="n">comment_lines</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">line_no</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">comment_lines</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tmp_energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">energy</span> <span class="o">=</span> <span class="n">tmp_energy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;keywords&quot;</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">keywords</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;&amp;&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                    <span class="n">n_description_lines</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="s2">&quot;+&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">n_description_lines</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;description&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;geometry&quot;</span>
+            <span class="k">elif</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span>
+                <span class="n">description_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">n_description_lines</span> <span class="o">-=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">n_description_lines</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;geometry&quot;</span>
+            <span class="k">elif</span> <span class="n">section</span> <span class="o">==</span> <span class="s2">&quot;geometry&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">raw_geometry_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="c1"># The element may have () after...</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(.*\)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+                <span class="c1"># Look for dummy atoms</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;XX&quot;</span><span class="p">,</span> <span class="s2">&quot;99&quot;</span><span class="p">):</span>
+                    <span class="n">run_mopac</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">geometry_lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+    <span class="c1"># Sort out if the geometry looks like internals. Note that there may be a charge at</span>
+    <span class="c1"># the end of each line.</span>
+    <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">geometry_lines</span><span class="p">)</span>
+    <span class="c1"># Need to know if the first atoms coordinates are zero ... which are the default</span>
+    <span class="c1"># for missing values. Anyway, put default values into first line, treating as</span>
+    <span class="c1"># Cartesians for time being.</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">=</span> <span class="n">z0</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">el0</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">z0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el0</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">x0</span><span class="si">}</span><span class="s2"> 0 </span><span class="si">{</span><span class="n">y0</span><span class="si">}</span><span class="s2"> 0 </span><span class="si">{</span><span class="n">z0</span><span class="si">}</span><span class="s2"> 0&quot;</span>
+
+    <span class="k">if</span> <span class="n">n_atoms</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">internals</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">elif</span> <span class="n">n_atoms</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">internals</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">geometry_lines</span><span class="p">[</span><span class="mi">2</span><span class="p">:],</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">9</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s2">&quot;0&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">9</span><span class="p">]:</span>
+                            <span class="n">geometry_lines</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+                    <span class="k">elif</span> <span class="s2">&quot;0&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]:</span>
+                        <span class="n">geometry_lines</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">7</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">internals</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">internals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">internals</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">internals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">internals</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">internals</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">internals</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">internals</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">if</span> <span class="n">n_atoms</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">el1</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">internals</span><span class="p">:</span>
+            <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> 1 </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2"> 0 </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2"> 0  1 0 0&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el1</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> 1 </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2"> 0 </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2"> 0&quot;</span>
+
+    <span class="k">if</span> <span class="n">internals</span><span class="p">:</span>
+        <span class="c1"># Add connectivity to first atom since OpenBabel requires</span>
+        <span class="n">geometry_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="s2">&quot;  0 0 0&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># In Cartesians, OpenBabel requires 7 items per line</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">geometry_lines</span><span class="p">)):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">geometry_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">el</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="n">z</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="n">z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">geometry_lines</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">el</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2"> 1 </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2"> 0 </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2"> 0&quot;</span>
+
+    <span class="c1"># Reassemble an input file.</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0SCF&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">geometry_lines</span><span class="p">)</span>
+    <span class="c1"># An empty line denotes end of input, but OpenBabel requires a blank in the line</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">internals</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using internal coordinates for </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using Cartesians coordinates for </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">input_data</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input data:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">input_data</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Now try to convert using OpenBabel</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">OutputGrabber</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">out</span><span class="p">:</span>
+        <span class="n">obConversion</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBConversion</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">internals</span><span class="p">:</span>
+            <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">&quot;mopin&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">&quot;mopcrt&quot;</span><span class="p">)</span>
+
+        <span class="n">obMol</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBMol</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">run_mopac</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Forcing use of MOPAC output&quot;</span><span class="p">)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">obConversion</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="n">obMol</span><span class="p">,</span> <span class="n">input_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;obConversion failed&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;**** falling back to MOPAC&quot;</span><span class="p">)</span>
+            <span class="c1"># Try using a MOPAC output file instead. Works for e.g. mixed coordinates</span>
+            <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">find_mopac</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">mopac_exe</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;The MOPAC executable could not be found&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Create an input file</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;0SCF&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">]</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">raw_geometry_lines</span><span class="p">)</span>
+            <span class="c1"># An empty line denotes end of input</span>
+            <span class="n">text</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mopac.dat&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text</span><span class="p">)}</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MOPAC input file:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">files</span><span class="p">[</span><span class="s1">&#39;mopac.dat&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">local</span> <span class="o">=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">ExecLocal</span><span class="p">()</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">local</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="n">mopac_exe</span><span class="p">,</span> <span class="s2">&quot;mopac.dat&quot;</span><span class="p">],</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">return_files</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mopac.out&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;mopac.out&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;MOPAC failed: &quot;</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;mopac.out&quot;</span><span class="p">][</span><span class="s2">&quot;exception&quot;</span><span class="p">])</span>
+
+            <span class="n">text</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;mopac.out&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MOPAC output:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">&quot;mopout&quot;</span><span class="p">)</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">obConversion</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="n">obMol</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not process MOPAC file&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">add_hydrogens</span><span class="p">:</span>
+            <span class="n">obMol</span><span class="o">.</span><span class="n">AddHydrogens</span><span class="p">()</span>
+        <span class="n">configuration</span><span class="o">.</span><span class="n">from_OBMol</span><span class="p">(</span><span class="n">obMol</span><span class="p">)</span>
+
+    <span class="c1"># Check any stderr information from obabel.</span>
+    <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">capturedtext</span>
+        <span class="k">if</span> <span class="s2">&quot;Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="c1"># Record the charge, and the spin state</span>
+    <span class="n">charge</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CHARGE=&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+            <span class="n">charge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+            <span class="k">break</span>
+    <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">charge</span>
+
+    <span class="n">n_active_electrons</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">n_active_orbitals</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">multiplicity</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">keywords</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="n">multiplicities</span><span class="p">:</span>
+            <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">multiplicities</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">&quot;MS=&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">multiplicity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">float</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error with multiplicity: &#39;</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">keyword</span> <span class="o">==</span> <span class="s2">&quot;BIRADICAL&quot;</span><span class="p">:</span>
+            <span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">n_active_electrons</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">n_active_orbitals</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="s2">&quot;OPEN(&quot;</span> <span class="ow">in</span> <span class="n">keyword</span> <span class="ow">or</span> <span class="s2">&quot;OPEN=(&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;(&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
+            <span class="n">n_active_electrons</span><span class="p">,</span> <span class="n">n_active_orbitals</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;ROOT=&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">multiplicity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">n_electrons</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atomic_numbers</span><span class="p">)</span> <span class="o">-</span> <span class="n">charge</span>
+        <span class="k">if</span> <span class="n">n_electrons</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="n">multiplicity</span>
+
+    <span class="k">if</span> <span class="n">n_active_electrons</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">configuration</span><span class="o">.</span><span class="n">n_active_electrons</span> <span class="o">=</span> <span class="n">n_active_electrons</span>
+        <span class="n">configuration</span><span class="o">.</span><span class="n">n_active_orbitals</span> <span class="o">=</span> <span class="n">n_active_orbitals</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">charge</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">multiplicity</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;open(</span><span class="si">{</span><span class="n">n_active_electrons</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="n">n_active_orbitals</span><span class="si">}</span><span class="s2">) </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">state</span><span class="si">=}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set the system name</span>
+    <span class="k">if</span> <span class="n">system_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">lower_name</span> <span class="o">=</span> <span class="n">system_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;from file&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">description_lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">description_lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
+        <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">system_name</span>
+
+    <span class="c1"># And the configuration name</span>
+    <span class="k">if</span> <span class="n">configuration_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">configuration_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">lower_name</span> <span class="o">=</span> <span class="n">configuration_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;from file&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">obMol</span><span class="o">.</span><span class="n">GetTitle</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
+        <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
+        <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration_name</span>
+
+    <span class="k">if</span> <span class="n">references</span><span class="p">:</span>
+        <span class="c1"># Add the citations for Open Babel</span>
+        <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+            <span class="n">raw</span><span class="o">=</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;openbabel&quot;</span><span class="p">],</span>
+            <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;openbabel_jcinf&quot;</span><span class="p">,</span>
+            <span class="n">module</span><span class="o">=</span><span class="s2">&quot;read_structure_step&quot;</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The principle Open Babel citation.&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># See if we can get the version of obabel</span>
+        <span class="k">if</span> <span class="n">OpenBabel_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;obabel&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="s2">&quot;--version&quot;</span><span class="p">],</span>
+                        <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">OpenBabel_version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">OpenBabel_version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                    <span class="n">lines</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+                        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">9</span> <span class="ow">and</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Open&quot;</span><span class="p">:</span>
+                            <span class="n">OpenBabel_version</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                <span class="s2">&quot;month&quot;</span><span class="p">:</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                                <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                            <span class="p">}</span>
+                        <span class="k">break</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">OpenBabel_version</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">template</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">bibliography</span><span class="p">[</span><span class="s2">&quot;obabel&quot;</span><span class="p">])</span>
+
+                <span class="n">citation</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span>
+                    <span class="n">month</span><span class="o">=</span><span class="n">OpenBabel_version</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">],</span>
+                    <span class="n">version</span><span class="o">=</span><span class="n">OpenBabel_version</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">],</span>
+                    <span class="n">year</span><span class="o">=</span><span class="n">OpenBabel_version</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+
+                <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                    <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
+                    <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;obabel-exe&quot;</span><span class="p">,</span>
+                    <span class="n">module</span><span class="o">=</span><span class="s2">&quot;read_structure_step&quot;</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">note</span><span class="o">=</span><span class="s2">&quot;The principle citation for the Open Babel executables.&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="c1"># Save keywords, description and any data encoded in the file to the database</span>
+    <span class="k">if</span> <span class="n">save_data</span><span class="p">:</span>
+        <span class="n">properties</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">properties</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keywords</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;keywords#MOPAC&quot;</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The keywords for MOPAC&quot;</span><span class="p">,</span> <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keywords</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">description_lines</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;description#MOPAC&quot;</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span>
+                <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The description in the MOPAC input&quot;</span><span class="p">,</span>
+                <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">description_lines</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">energy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;reference energy#MOPAC&quot;</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">key</span><span class="p">,</span>
+                <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+                <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The reference energy from MOPAC&quot;</span><span class="p">,</span>
+                <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">energy</span><span class="p">)</span>
+
+        <span class="c1"># Handle properties encoded in the description</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">description_lines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">description_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="c1"># Don&#39;t handle geometry lines yet.</span>
+            <span class="k">if</span> <span class="s2">&quot;GR=&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">description_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;gr=&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">description_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">description_lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">keyword</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
+                            <span class="n">keyword</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">keyword</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;WT&quot;</span><span class="p">,</span> <span class="s2">&quot;DWT&quot;</span><span class="p">,</span> <span class="s2">&quot;IWT&quot;</span><span class="p">,</span> <span class="s2">&quot;HWT&quot;</span><span class="p">,</span> <span class="s2">&quot;GWT&quot;</span><span class="p">,</span> <span class="s2">&quot;ROOT&quot;</span><span class="p">):</span>
+                                <span class="k">continue</span>
+                            <span class="k">if</span> <span class="n">keyword</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">description_lines</span><span class="p">))</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing keyword=</span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                                <span class="nb">print</span><span class="p">()</span>
+                                <span class="k">continue</span>
+                            <span class="n">keyword</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Value for </span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2"> missing in MOPAC .mop file&quot;</span><span class="p">)</span>
+                                <span class="k">continue</span>
+                            <span class="k">if</span> <span class="s2">&quot;reference&quot;</span> <span class="ow">in</span> <span class="n">keyword</span><span class="p">:</span>
+                                <span class="n">description</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                                <span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                                    <span class="n">keyword</span><span class="p">,</span>
+                                    <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+                                    <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Reference for the </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                                    <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="p">)</span>
+                            <span class="k">elif</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                                <span class="c1"># value , stderr</span>
+                                <span class="n">tmp</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+                                <span class="n">value</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                <span class="n">stderr</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                                <span class="n">tmp</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span>
+                                <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;, stderr&quot;</span>
+                                <span class="n">new_keyword</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                                <span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                                    <span class="n">new_keyword</span><span class="p">,</span>
+                                    <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+                                    <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;stderr for the </span><span class="si">{</span><span class="n">keyword</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                                    <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                <span class="p">)</span>
+                                <span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">new_keyword</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+                            <span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">keyword</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">configuration</span><span class="p">]</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

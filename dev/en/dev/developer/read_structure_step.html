@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_structure_step package &mdash; SEAMM Read Structure Plug-in 2022.10.28+3.g1e9c019 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="read_structure_step.formats package" href="read_structure_step.formats.html" />
+    <link rel="prev" title="read_structure_step" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SEAMM Read Structure Plug-in
+          </a>
+              <div class="version">
+                2022.10.28+3.g1e9c019
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">read_structure_step</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">read_structure_step package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html">read_structure_step.formats package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SEAMM Read Structure Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">read_structure_step</a></li>
+      <li class="breadcrumb-item active">read_structure_step package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/read_structure_step.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="read-structure-step-package">
+<h1>read_structure_step package<a class="headerlink" href="#read-structure-step-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.html">read_structure_step.formats package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.cif.html">read_structure_step.formats.cif package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.cif.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif.cif">read_structure_step.formats.cif.cif module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif.mmcif">read_structure_step.formats.cif.mmcif module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.mol2.html">read_structure_step.formats.mol2 package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mol2.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mol2.html#module-read_structure_step.formats.mol2.mol2">read_structure_step.formats.mol2.mol2 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mol2.html#module-read_structure_step.formats.mol2">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.mop.html">read_structure_step.formats.mop package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop.find_mopac">read_structure_step.formats.mop.find_mopac module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop.obabel">read_structure_step.formats.mop.obabel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html">read_structure_step.formats.openbabel_io package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io.checkers">read_structure_step.formats.openbabel_io.checkers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io.obabel">read_structure_step.formats.openbabel_io.obabel module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.sdf.html">read_structure_step.formats.sdf package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.sdf.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.sdf.html#module-read_structure_step.formats.sdf.sdf">read_structure_step.formats.sdf.sdf module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.sdf.html#module-read_structure_step.formats.sdf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.smi.html">read_structure_step.formats.smi package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.smi.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.smi.html#module-read_structure_step.formats.smi.smi">read_structure_step.formats.smi.smi module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.smi.html#module-read_structure_step.formats.smi">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.xyz.html">read_structure_step.formats.xyz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#module-read_structure_step.formats.xyz.xyz">read_structure_step.formats.xyz.xyz module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#module-read_structure_step.formats.xyz">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats.registries">read_structure_step.formats.registries module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.REGISTERED_READERS"><code class="docutils literal notranslate"><span class="pre">REGISTERED_READERS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.REGISTERED_FORMAT_CHECKERS"><code class="docutils literal notranslate"><span class="pre">REGISTERED_FORMAT_CHECKERS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.FORMAT_METADATA"><code class="docutils literal notranslate"><span class="pre">FORMAT_METADATA</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.get_format_metadata"><code class="docutils literal notranslate"><span class="pre">get_format_metadata()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_checker"><code class="docutils literal notranslate"><span class="pre">last_resort_checker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_reader"><code class="docutils literal notranslate"><span class="pre">last_resort_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_writer"><code class="docutils literal notranslate"><span class="pre">last_resort_writer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.register_format_checker"><code class="docutils literal notranslate"><span class="pre">register_format_checker()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.register_reader"><code class="docutils literal notranslate"><span class="pre">register_reader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.register_writer"><code class="docutils literal notranslate"><span class="pre">register_writer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.registries.set_format_metadata"><code class="docutils literal notranslate"><span class="pre">set_format_metadata()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats.which">read_structure_step.formats.which module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html#read_structure_step.formats.which.which"><code class="docutils literal notranslate"><span class="pre">which()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-read_structure_step.errors">
+<span id="read-structure-step-errors-module"></span><h2>read_structure_step.errors module<a class="headerlink" href="#module-read_structure_step.errors" title="Permalink to this heading"></a></h2>
+<p>Errors for the various modules in the plugin</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#Error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.Error" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base class for exceptions raised by the read_structure_step</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.Mol2Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">Mol2Error</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#Mol2Error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.Mol2Error" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#read_structure_step.errors.Error" title="read_structure_step.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Class for exceptions raised by the Mol2 module in
+read_structure_step</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.MopError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">MopError</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#MopError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.MopError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#read_structure_step.errors.Error" title="read_structure_step.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Class for exceptions raised by the MOPAC module in
+read_structure_step</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.PDBError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">PDBError</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#PDBError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.PDBError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#read_structure_step.errors.Error" title="read_structure_step.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Class for exceptions raised by the PDB module in read_structure_step</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.SDFError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">SDFError</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#SDFError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.SDFError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#read_structure_step.errors.Error" title="read_structure_step.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Class for exceptions raised by the SDF module in read_structure_step</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="read_structure_step.errors.XYZError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.errors.</span></span><span class="sig-name descname"><span class="pre">XYZError</span></span><a class="reference internal" href="../_modules/read_structure_step/errors.html#XYZError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.errors.XYZError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#read_structure_step.errors.Error" title="read_structure_step.errors.Error"><code class="xref py py-class docutils literal notranslate"><span class="pre">Error</span></code></a></p>
+<p>Class for exceptions raised by the XYZ module in read_structure_step</p>
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.read">
+<span id="read-structure-step-read-module"></span><h2>read_structure_step.read module<a class="headerlink" href="#module-read_structure_step.read" title="Permalink to this heading"></a></h2>
+<p>The public interface to the read_structure_step SEAMM plugin</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.read.read">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.read.</span></span><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_hydrogens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsequent_as_configurations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">references</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bibliography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read.html#read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read.read" title="Permalink to this definition"></a></dt>
+<dd><p>Calls the appropriate functions to parse the requested file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – Name of the file</p></li>
+<li><p><strong>configuration</strong> (<em>Configuration</em>) – The SEAMM configuration to read into</p></li>
+<li><p><strong>extension</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>default: None</em>) – The extension, including initial dot, defining the format.</p></li>
+<li><p><strong>add_hydrogens</strong> (<em>bool = False</em>) – Whether to add any missing hydrogen atoms.</p></li>
+<li><p><strong>system_db</strong> (<em>System_DB = None</em>) – The system database, used if multiple structures in the file.</p></li>
+<li><p><strong>system</strong> (<em>System = None</em>) – The system to use if adding subsequent structures as configurations.</p></li>
+<li><p><strong>indices</strong> (<em>str = None</em>) – The generalized indices (slices, SMARTS, etc.) to select structures
+from a file containing multiple structures.</p></li>
+<li><p><strong>subsequent_as_configurations</strong> (<em>bool = False</em>) – Normally and subsequent structures are loaded into new systems; however,
+if this option is True, they will be added as configurations.</p></li>
+<li><p><strong>system_name</strong> (<em>str = None</em>) – The name for systems. Can be directives like “SMILES” or
+“Canonical SMILES”. If None, no name is given.</p></li>
+<li><p><strong>configuration_name</strong> (<em>str = None</em>) – The name for configurations. Can be directives like “SMILES” or
+“Canonical SMILES”. If None, no name is given.</p></li>
+<li><p><strong>printer</strong> (<em>Logger</em><em> or </em><em>Printer</em>) – A function that prints to the appropriate place, used for progress.</p></li>
+<li><p><strong>references</strong> (<em>ReferenceHandler = None</em>) – The reference handler object or None</p></li>
+<li><p><strong>bibliography</strong> (<em>dict</em>) – The bibliography as a dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The list of configurations created.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>[Configuration]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.read_structure">
+<span id="read-structure-step-read-structure-module"></span><h2>read_structure_step.read_structure module<a class="headerlink" href="#module-read_structure_step.read_structure" title="Permalink to this heading"></a></h2>
+<p>Non-graphical part of the Read Structure step in a SEAMM flowchart</p>
+<p>In addition to the normal logger, two logger-like printing facilities are
+defined: ‘job’ and ‘printer’. ‘job’ send output to the main job.out file for
+the job, and should be used very sparingly, typically to echo what this step
+will do in the initial summary of the job.</p>
+<p>‘printer’ sends output to the file ‘step.out’ in this steps working
+directory, and is used for all normal output from this step.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.read_structure.</span></span><span class="sig-name descname"><span class="pre">ReadStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Read</span> <span class="pre">Structure'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#ReadStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.create_parser">
+<span class="sig-name descname"><span class="pre">create_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#ReadStructure.create_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.create_parser" title="Permalink to this definition"></a></dt>
+<dd><p>Setup the command-line / config file parser</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.description_text">
+<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#ReadStructure.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.description_text" title="Permalink to this definition"></a></dt>
+<dd><p>Create the text description of what this step will do.
+The dictionary of control values is passed in as P so that
+the code can test values, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><p><strong>P</strong> – An optional dictionary of the current values of the control
+parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.git_revision">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">git_revision</span></span><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.git_revision" title="Permalink to this definition"></a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.read_tarfile">
+<span class="sig-name descname"><span class="pre">read_tarfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tarfile_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#ReadStructure.read_tarfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.read_tarfile" title="Permalink to this definition"></a></dt>
+<dd><p>Read structures from a tarfile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>pathlib.Path</em>) – The path to the tarfile.</p></li>
+<li><p><strong>P</strong> (<em>{str: str}</em>) – Dictionary of control parameters for this step.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#ReadStructure.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run a Read Structure step.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.ReadStructure.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#read_structure_step.read_structure.ReadStructure.version" title="Permalink to this definition"></a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.read_structure_parameters">
+<span id="read-structure-step-read-structure-parameters-module"></span><h2>read_structure_step.read_structure_parameters module<a class="headerlink" href="#module-read_structure_step.read_structure_parameters" title="Permalink to this heading"></a></h2>
+<p>Control parameters for the Read Structure step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_parameters.ReadStructureParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.read_structure_parameters.</span></span><span class="sig-name descname"><span class="pre">ReadStructureParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure_parameters.html#ReadStructureParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure_parameters.ReadStructureParameters" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></p>
+<p>The control parameters for Read Structure</p>
+<p>This is a dictionary of Parameters objects, which themselves are
+dictionaries.  You need to replace the ‘time’ example below with one or
+more definitions of the control parameters for your plugin and application.</p>
+<p>The fields of each Parameter are:</p>
+<blockquote>
+<div><p>default: the default value of the parameter, used to reset it
+kind: one of ‘integer’, ‘float’, ‘string’, ‘boolean’ or ‘enum’
+default_units: the default units, used for reseting the value
+enumeration: a tuple of enumerated values. See below for more.
+format_string: a format string for ‘pretty’ output
+description: a short string used as a prompt in the GUI
+help_text: a longer string to display as help for the user</p>
+</div></blockquote>
+<p>While the ‘kind’ of a variable might be a numeric value, it may still have
+enumerated values, such as ‘normal’, ‘precise’, etc. In addition, any
+parameter can be set to a variable of expression, indicated by having ‘$’
+as the first character in the field.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_parameters.ReadStructureParameters.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'add</span> <span class="pre">hydrogens':</span> <span class="pre">{'default':</span> <span class="pre">'yes',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Add</span> <span class="pre">hydrogens:',</span> <span class="pre">'enumeration':</span> <span class="pre">('yes',</span> <span class="pre">'no'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">add</span> <span class="pre">missing</span> <span class="pre">hydrogen</span> <span class="pre">atoms.',</span> <span class="pre">'kind':</span> <span class="pre">'bool'},</span> <span class="pre">'file':</span> <span class="pre">{'default':</span> <span class="pre">'',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Structure</span> <span class="pre">file:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">file</span> <span class="pre">containing</span> <span class="pre">the</span> <span class="pre">structure.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'file</span> <span class="pre">type':</span> <span class="pre">{'default':</span> <span class="pre">'from</span> <span class="pre">extension',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Type</span> <span class="pre">of</span> <span class="pre">file:',</span> <span class="pre">'enumeration':</span> <span class="pre">('from</span> <span class="pre">extension',</span> <span class="pre">'.CONFIG',</span> <span class="pre">'.CONTCAR',</span> <span class="pre">'.CONTFF',</span> <span class="pre">'.HISTORY',</span> <span class="pre">'.MDFF',</span> <span class="pre">'.POSCAR',</span> <span class="pre">'.POSFF',</span> <span class="pre">'.VASP',</span> <span class="pre">'.abinit',</span> <span class="pre">'.acesout',</span> <span class="pre">'.acr',</span> <span class="pre">'.adfband',</span> <span class="pre">'.adfdftb',</span> <span class="pre">'.adfout',</span> <span class="pre">'.alc',</span> <span class="pre">'.aoforce',</span> <span class="pre">'.arc',</span> <span class="pre">'.axsf',</span> <span class="pre">'.bgf',</span> <span class="pre">'.box',</span> <span class="pre">'.bs',</span> <span class="pre">'.c09out',</span> <span class="pre">'.c3d1',</span> <span class="pre">'.c3d2',</span> <span class="pre">'.caccrt',</span> <span class="pre">'.can',</span> <span class="pre">'.car',</span> <span class="pre">'.castep',</span> <span class="pre">'.ccc',</span> <span class="pre">'.cdjson',</span> <span class="pre">'.cdx',</span> <span class="pre">'.cdxml',</span> <span class="pre">'.cif',</span> <span class="pre">'.ck',</span> <span class="pre">'.cml',</span> <span class="pre">'.cmlr',</span> <span class="pre">'.cof',</span> <span class="pre">'.crk2d',</span> <span class="pre">'.crk3d',</span> <span class="pre">'.ct',</span> <span class="pre">'.cub',</span> <span class="pre">'.cube',</span> <span class="pre">'.dallog',</span> <span class="pre">'.dalmol',</span> <span class="pre">'.dat',</span> <span class="pre">'.dmol',</span> <span class="pre">'.dx',</span> <span class="pre">'.ent',</span> <span class="pre">'.exyz',</span> <span class="pre">'.fa',</span> <span class="pre">'.fasta',</span> <span class="pre">'.fch',</span> <span class="pre">'.fchk',</span> <span class="pre">'.fck',</span> <span class="pre">'.feat',</span> <span class="pre">'.fhiaims',</span> <span class="pre">'.fract',</span> <span class="pre">'.fs',</span> <span class="pre">'.fsa',</span> <span class="pre">'.g03',</span> <span class="pre">'.g09',</span> <span class="pre">'.g16',</span> <span class="pre">'.g92',</span> <span class="pre">'.g94',</span> <span class="pre">'.g98',</span> <span class="pre">'.gal',</span> <span class="pre">'.gam',</span> <span class="pre">'.gamess',</span> <span class="pre">'.gamin',</span> <span class="pre">'.gamout',</span> <span class="pre">'.got',</span> <span class="pre">'.gpr',</span> <span class="pre">'.gro',</span> <span class="pre">'.gukin',</span> <span class="pre">'.gukout',</span> <span class="pre">'.gzmat',</span> <span class="pre">'.hin',</span> <span class="pre">'.inchi',</span> <span class="pre">'.inp',</span> <span class="pre">'.ins',</span> <span class="pre">'.jin',</span> <span class="pre">'.jout',</span> <span class="pre">'.log',</span> <span class="pre">'.lpmd',</span> <span class="pre">'.mcdl',</span> <span class="pre">'.mcif',</span> <span class="pre">'.mdl',</span> <span class="pre">'.ml2',</span> <span class="pre">'.mmcif',</span> <span class="pre">'.mmd',</span> <span class="pre">'.mmod',</span> <span class="pre">'.mol',</span> <span class="pre">'.mol2',</span> <span class="pre">'.mold',</span> <span class="pre">'.molden',</span> <span class="pre">'.molf',</span> <span class="pre">'.moo',</span> <span class="pre">'.mop',</span> <span class="pre">'.mopcrt',</span> <span class="pre">'.mopin',</span> <span class="pre">'.mopout',</span> <span class="pre">'.mpc',</span> <span class="pre">'.mpo',</span> <span class="pre">'.mpqc',</span> <span class="pre">'.mrv',</span> <span class="pre">'.msi',</span> <span class="pre">'.nwo',</span> <span class="pre">'.orca',</span> <span class="pre">'.out',</span> <span class="pre">'.outmol',</span> <span class="pre">'.output',</span> <span class="pre">'.pc',</span> <span class="pre">'.pcjson',</span> <span class="pre">'.pcm',</span> <span class="pre">'.pdb',</span> <span class="pre">'.pdbqt',</span> <span class="pre">'.png',</span> <span class="pre">'.pos',</span> <span class="pre">'.pqr',</span> <span class="pre">'.pqs',</span> <span class="pre">'.prep',</span> <span class="pre">'.pwscf',</span> <span class="pre">'.qcout',</span> <span class="pre">'.res',</span> <span class="pre">'.rsmi',</span> <span class="pre">'.rxn',</span> <span class="pre">'.sd',</span> <span class="pre">'.sdf',</span> <span class="pre">'.siesta',</span> <span class="pre">'.smi',</span> <span class="pre">'.smiles',</span> <span class="pre">'.smy',</span> <span class="pre">'.sy2',</span> <span class="pre">'.t41',</span> <span class="pre">'.tdd',</span> <span class="pre">'.text',</span> <span class="pre">'.therm',</span> <span class="pre">'.tmol',</span> <span class="pre">'.txt',</span> <span class="pre">'.txyz',</span> <span class="pre">'.unixyz',</span> <span class="pre">'.vmol',</span> <span class="pre">'.wln',</span> <span class="pre">'.xml',</span> <span class="pre">'.xsf',</span> <span class="pre">'.xtc',</span> <span class="pre">'.xyz',</span> <span class="pre">'.yob'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">file,</span> <span class="pre">overrides</span> <span class="pre">the</span> <span class="pre">extension',</span> <span class="pre">'kind':</span> <span class="pre">'enum'},</span> <span class="pre">'indices':</span> <span class="pre">{'default':</span> <span class="pre">'1:end',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Structures</span> <span class="pre">to</span> <span class="pre">read:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">set</span> <span class="pre">of</span> <span class="pre">structures</span> <span class="pre">to</span> <span class="pre">read',</span> <span class="pre">'kind':</span> <span class="pre">'string'}}</span></em><a class="headerlink" href="#read_structure_step.read_structure_parameters.ReadStructureParameters.parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.read_structure_step">
+<span id="read-structure-step-read-structure-step-module"></span><h2>read_structure_step.read_structure_step module<a class="headerlink" href="#module-read_structure_step.read_structure_step" title="Permalink to this heading"></a></h2>
+<p>Helper class needed for the stevedore integration.</p>
+<p>This must provide a description() method that returns a dict containing a
+description of this node, and create_node() and create_tk_node() methods for
+creating the graphical and non-graphical nodes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_step.ReadStructureStep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.read_structure_step.</span></span><span class="sig-name descname"><span class="pre">ReadStructureStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure_step.html#ReadStructureStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure_step.ReadStructureStep" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_step.ReadStructureStep.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure_step.html#ReadStructureStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure_step.ReadStructureStep.create_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the new node object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_step.ReadStructureStep.create_tk_node">
+<span class="sig-name descname"><span class="pre">create_tk_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure_step.html#ReadStructureStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure_step.ReadStructureStep.create_tk_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the graphical Tk node object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_step.ReadStructureStep.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure_step.html#ReadStructureStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure_step.ReadStructureStep.description" title="Permalink to this definition"></a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.read_structure_step.ReadStructureStep.my_description">
+<span class="sig-name descname"><span class="pre">my_description</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">'An</span> <span class="pre">interface</span> <span class="pre">for</span> <span class="pre">Read</span> <span class="pre">Structure',</span> <span class="pre">'group':</span> <span class="pre">'Data',</span> <span class="pre">'name':</span> <span class="pre">'Read</span> <span class="pre">Structure'}</span></em><a class="headerlink" href="#read_structure_step.read_structure_step.ReadStructureStep.my_description" title="Permalink to this definition"></a></dt>
+<dd><p>The description needs three fields:</p>
+<dl class="simple">
+<dt>description:</dt><dd><p>A human-readable description of this step. It can be
+several lines long, and needs to be clear to non-expert users.</p>
+</dd>
+<dt>group:</dt><dd><p>Which group in the menus to put this step. If the group does
+not exist it will be created. Common groups are ‘Building’,
+‘Calculations’, ‘Control’ and ‘Data’.</p>
+</dd>
+<dt>name:</dt><dd><p>The name of this step, to be displayed in the menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.tk_read_structure">
+<span id="read-structure-step-tk-read-structure-module"></span><h2>read_structure_step.tk_read_structure module<a class="headerlink" href="#module-read_structure_step.tk_read_structure" title="Permalink to this heading"></a></h2>
+<p>The graphical part of a Read Structure step</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.tk_read_structure.TkReadStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.tk_read_structure.</span></span><span class="sig-name descname"><span class="pre">TkReadStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_read_structure.html#TkReadStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_read_structure.TkReadStructure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
+<p>The graphical part of a Read Structure step in a flowchart.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_read_structure.TkReadStructure.create_dialog">
+<span class="sig-name descname"><span class="pre">create_dialog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_read_structure.html#TkReadStructure.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_read_structure.TkReadStructure.create_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Create a dialog for editing the control parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_read_structure.TkReadStructure.reset_dialog">
+<span class="sig-name descname"><span class="pre">reset_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_read_structure.html#TkReadStructure.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_read_structure.TkReadStructure.reset_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Layout the widgets in the dialog</p>
+<p>This initial function simply lays them out row by rows with
+aligned labels. You may wish a more complicated layout that
+is controlled by values of some of the control parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_read_structure.TkReadStructure.right_click">
+<span class="sig-name descname"><span class="pre">right_click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_read_structure.html#TkReadStructure.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_read_structure.TkReadStructure.right_click" title="Permalink to this definition"></a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.tk_write_structure">
+<span id="read-structure-step-tk-write-structure-module"></span><h2>read_structure_step.tk_write_structure module<a class="headerlink" href="#module-read_structure_step.tk_write_structure" title="Permalink to this heading"></a></h2>
+<p>The graphical part of a Write Structure step</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.tk_write_structure.TkWriteStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.tk_write_structure.</span></span><span class="sig-name descname"><span class="pre">TkWriteStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_write_structure.html#TkWriteStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_write_structure.TkWriteStructure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
+<p>The graphical part of a Write Structure step in a flowchart.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_write_structure.TkWriteStructure.create_dialog">
+<span class="sig-name descname"><span class="pre">create_dialog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_write_structure.html#TkWriteStructure.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_write_structure.TkWriteStructure.create_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Create a dialog for editing the control parameters</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_write_structure.TkWriteStructure.reset_dialog">
+<span class="sig-name descname"><span class="pre">reset_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_write_structure.html#TkWriteStructure.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_write_structure.TkWriteStructure.reset_dialog" title="Permalink to this definition"></a></dt>
+<dd><p>Layout the widgets in the dialog</p>
+<p>This initial function simply lays them out row by rows with
+aligned labels. You may wish a more complicated layout that
+is controlled by values of some of the control parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.tk_write_structure.TkWriteStructure.right_click">
+<span class="sig-name descname"><span class="pre">right_click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/tk_write_structure.html#TkWriteStructure.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.tk_write_structure.TkWriteStructure.right_click" title="Permalink to this definition"></a></dt>
+<dd><p>Probably need to add our dialog…</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.utils">
+<span id="read-structure-step-utils-module"></span><h2>read_structure_step.utils module<a class="headerlink" href="#module-read_structure_step.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.utils.guess_extension">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.utils.</span></span><span class="sig-name descname"><span class="pre">guess_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/utils.html#guess_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.utils.guess_extension" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the file format. It can either use the file name extension or
+guess based on signatures found in the file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – Name of the file</p></li>
+<li><p><strong>use_file_name</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>default: False</em>) – If set to True, uses the file name extension to identify the
+file format.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>extension</strong> – The file format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.utils.sanitize_file_format">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.utils.</span></span><span class="sig-name descname"><span class="pre">sanitize_file_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/utils.html#sanitize_file_format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.utils.sanitize_file_format" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a uniform file format string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>file_format</strong> (<em>str</em>) – Extension of the file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>file_format</strong> – The sanitized file format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.write">
+<span id="read-structure-step-write-module"></span><h2>read_structure_step.write module<a class="headerlink" href="#module-read_structure_step.write" title="Permalink to this heading"></a></h2>
+<p>The public interface to the read_structure_step SEAMM plugin</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.write.write">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.write.</span></span><span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configurations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_hydrogens</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">printer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">references</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bibliography</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write.html#write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write.write" title="Permalink to this definition"></a></dt>
+<dd><p>Calls the appropriate functions to parse the requested file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – Name of the file</p></li>
+<li><p><strong>configurations</strong> (<em>[</em><em>Configuration</em><em>]</em>) – The SEAMM configuration(s) to write</p></li>
+<li><p><strong>extension</strong> (<em>str</em><em>, </em><em>optional</em><em>, </em><em>default: None</em>) – The extension, including initial dot, defining the format.</p></li>
+<li><p><strong>remove_hydrogens</strong> (<em>str = &quot;no&quot;</em>) – Whether to remove hydrogen atoms before writing the structure to file.</p></li>
+<li><p><strong>printer</strong> (<em>Logger</em><em> or </em><em>Printer</em>) – A function that prints to the appropriate place, used for progress.</p></li>
+<li><p><strong>references</strong> (<em>ReferenceHandler = None</em>) – The reference handler object or None</p></li>
+<li><p><strong>bibliography</strong> (<em>dict</em>) – The bibliography as a dictionary.
+The list of configurations created.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.write_structure">
+<span id="read-structure-step-write-structure-module"></span><h2>read_structure_step.write_structure module<a class="headerlink" href="#module-read_structure_step.write_structure" title="Permalink to this heading"></a></h2>
+<p>Non-graphical part of the Write Structure step in a SEAMM flowchart</p>
+<p>In addition to the normal logger, two logger-like printing facilities are
+defined: ‘job’ and ‘printer’. ‘job’ send output to the main job.out file for
+the job, and should be used very sparingly, typically to echo what this step
+will do in the initial summary of the job.</p>
+<p>‘printer’ sends output to the file ‘step.out’ in this steps working
+directory, and is used for all normal output from this step.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.write_structure.WriteStructure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.write_structure.</span></span><span class="sig-name descname"><span class="pre">WriteStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Write</span> <span class="pre">Structure'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure.html#WriteStructure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure.WriteStructure" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.write_structure.WriteStructure.description_text">
+<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure.html#WriteStructure.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure.WriteStructure.description_text" title="Permalink to this definition"></a></dt>
+<dd><p>Create the text description of what this step will do.
+The dictionary of control values is passed in as P so that
+the code can test values, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Keyword Arguments</dt>
+<dd class="field-odd"><p><strong>P</strong> – An optional dictionary of the current values of the control
+parameters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="read_structure_step.write_structure.WriteStructure.git_revision">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">git_revision</span></span><a class="headerlink" href="#read_structure_step.write_structure.WriteStructure.git_revision" title="Permalink to this definition"></a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.write_structure.WriteStructure.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure.html#WriteStructure.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure.WriteStructure.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run a Write Structure step.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="read_structure_step.write_structure.WriteStructure.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#read_structure_step.write_structure.WriteStructure.version" title="Permalink to this definition"></a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.write_structure_parameters">
+<span id="read-structure-step-write-structure-parameters-module"></span><h2>read_structure_step.write_structure_parameters module<a class="headerlink" href="#module-read_structure_step.write_structure_parameters" title="Permalink to this heading"></a></h2>
+<p>Control parameters for the Write Structure step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_parameters.WriteStructureParameters">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.write_structure_parameters.</span></span><span class="sig-name descname"><span class="pre">WriteStructureParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure_parameters.html#WriteStructureParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure_parameters.WriteStructureParameters" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></p>
+<p>The control parameters for Write Structure</p>
+<p>This is a dictionary of Parameters objects, which themselves are
+dictionaries.  You need to replace the ‘time’ example below with one or
+more definitions of the control parameters for your plugin and application.</p>
+<p>The fields of each Parameter are:</p>
+<blockquote>
+<div><p>default: the default value of the parameter, used to reset it
+kind: one of ‘integer’, ‘float’, ‘string’, ‘boolean’ or ‘enum’
+default_units: the default units, used for reseting the value
+enumeration: a tuple of enumerated values. See below for more.
+format_string: a format string for ‘pretty’ output
+description: a short string used as a prompt in the GUI
+help_text: a longer string to display as help for the user</p>
+</div></blockquote>
+<p>While the ‘kind’ of a variable might be a numeric value, it may still have
+enumerated values, such as ‘normal’, ‘precise’, etc. In addition, any
+parameter can be set to a variable of expression, indicated by having ‘$’
+as the first character in the field.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_parameters.WriteStructureParameters.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'configurations':</span> <span class="pre">{'default':</span> <span class="pre">'all',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Configuration(s)</span> <span class="pre">to</span> <span class="pre">write:',</span> <span class="pre">'enumeration':</span> <span class="pre">('all',),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;The</span> <span class="pre">configurations</span> <span class="pre">to</span> <span class="pre">write:</span> <span class="pre">a</span> <span class="pre">name,</span> <span class="pre">or</span> <span class="pre">'all</span> <span class="pre">configurations'&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'file':</span> <span class="pre">{'default':</span> <span class="pre">'',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'File:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">file</span> <span class="pre">to</span> <span class="pre">write.',</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'file</span> <span class="pre">type':</span> <span class="pre">{'default':</span> <span class="pre">'from</span> <span class="pre">extension',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Type</span> <span class="pre">of</span> <span class="pre">file:',</span> <span class="pre">'enumeration':</span> <span class="pre">('from</span> <span class="pre">extension',</span> <span class="pre">'.CONFIG',</span> <span class="pre">'.CONTCAR',</span> <span class="pre">'.CONTFF',</span> <span class="pre">'.MDFF',</span> <span class="pre">'.POSCAR',</span> <span class="pre">'.POSFF',</span> <span class="pre">'.VASP',</span> <span class="pre">'.acesin',</span> <span class="pre">'.adf',</span> <span class="pre">'.alc',</span> <span class="pre">'.ascii',</span> <span class="pre">'.bgf',</span> <span class="pre">'.box',</span> <span class="pre">'.bs',</span> <span class="pre">'.c3d1',</span> <span class="pre">'.c3d2',</span> <span class="pre">'.cac',</span> <span class="pre">'.caccrt',</span> <span class="pre">'.cache',</span> <span class="pre">'.cacint',</span> <span class="pre">'.can',</span> <span class="pre">'.cdjson',</span> <span class="pre">'.cdxml',</span> <span class="pre">'.cht',</span> <span class="pre">'.cif',</span> <span class="pre">'.ck',</span> <span class="pre">'.cml',</span> <span class="pre">'.cmlr',</span> <span class="pre">'.cof',</span> <span class="pre">'.com',</span> <span class="pre">'.confabreport',</span> <span class="pre">'.copy',</span> <span class="pre">'.crk2d',</span> <span class="pre">'.crk3d',</span> <span class="pre">'.csr',</span> <span class="pre">'.cssr',</span> <span class="pre">'.ct',</span> <span class="pre">'.cub',</span> <span class="pre">'.cube',</span> <span class="pre">'.dalmol',</span> <span class="pre">'.dmol',</span> <span class="pre">'.dx',</span> <span class="pre">'.ent',</span> <span class="pre">'.exyz',</span> <span class="pre">'.fa',</span> <span class="pre">'.fasta',</span> <span class="pre">'.feat',</span> <span class="pre">'.fh',</span> <span class="pre">'.fhiaims',</span> <span class="pre">'.fix',</span> <span class="pre">'.fps',</span> <span class="pre">'.fpt',</span> <span class="pre">'.fract',</span> <span class="pre">'.fs',</span> <span class="pre">'.fsa',</span> <span class="pre">'.gamin',</span> <span class="pre">'.gau',</span> <span class="pre">'.gjc',</span> <span class="pre">'.gjf',</span> <span class="pre">'.gpr',</span> <span class="pre">'.gr96',</span> <span class="pre">'.gro',</span> <span class="pre">'.gukin',</span> <span class="pre">'.gukout',</span> <span class="pre">'.gzmat',</span> <span class="pre">'.hin',</span> <span class="pre">'.inchi',</span> <span class="pre">'.inchikey',</span> <span class="pre">'.inp',</span> <span class="pre">'.jin',</span> <span class="pre">'.k',</span> <span class="pre">'.lmpdat',</span> <span class="pre">'.lpmd',</span> <span class="pre">'.mcdl',</span> <span class="pre">'.mcif',</span> <span class="pre">'.mdl',</span> <span class="pre">'.ml2',</span> <span class="pre">'.mmcif',</span> <span class="pre">'.mmd',</span> <span class="pre">'.mmod',</span> <span class="pre">'.mna',</span> <span class="pre">'.mol',</span> <span class="pre">'.mol2',</span> <span class="pre">'.mold',</span> <span class="pre">'.molden',</span> <span class="pre">'.molf',</span> <span class="pre">'.molreport',</span> <span class="pre">'.mop',</span> <span class="pre">'.mopcrt',</span> <span class="pre">'.mopin',</span> <span class="pre">'.mp',</span> <span class="pre">'.mpc',</span> <span class="pre">'.mpd',</span> <span class="pre">'.mpqcin',</span> <span class="pre">'.mrv',</span> <span class="pre">'.msms',</span> <span class="pre">'.nul',</span> <span class="pre">'.nw',</span> <span class="pre">'.orcainp',</span> <span class="pre">'.outmol',</span> <span class="pre">'.paint',</span> <span class="pre">'.pcjson',</span> <span class="pre">'.pcm',</span> <span class="pre">'.pdb',</span> <span class="pre">'.pdbqt',</span> <span class="pre">'.png',</span> <span class="pre">'.pointcloud',</span> <span class="pre">'.pov',</span> <span class="pre">'.pqr',</span> <span class="pre">'.pqs',</span> <span class="pre">'.qcin',</span> <span class="pre">'.report',</span> <span class="pre">'.rinchi',</span> <span class="pre">'.rsmi',</span> <span class="pre">'.rxn',</span> <span class="pre">'.sd',</span> <span class="pre">'.sdf',</span> <span class="pre">'.smi',</span> <span class="pre">'.smiles',</span> <span class="pre">'.stl',</span> <span class="pre">'.svg',</span> <span class="pre">'.sy2',</span> <span class="pre">'.tdd',</span> <span class="pre">'.text',</span> <span class="pre">'.therm',</span> <span class="pre">'.tmol',</span> <span class="pre">'.txt',</span> <span class="pre">'.txyz',</span> <span class="pre">'.unixyz',</span> <span class="pre">'.vmol',</span> <span class="pre">'.xed',</span> <span class="pre">'.xyz',</span> <span class="pre">'.yob',</span> <span class="pre">'.zin'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">type</span> <span class="pre">of</span> <span class="pre">file,</span> <span class="pre">overrides</span> <span class="pre">the</span> <span class="pre">extension',</span> <span class="pre">'kind':</span> <span class="pre">'enum'},</span> <span class="pre">'ignore</span> <span class="pre">missing':</span> <span class="pre">{'default':</span> <span class="pre">'yes',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Ignore</span> <span class="pre">missing</span> <span class="pre">structures:',</span> <span class="pre">'enumeration':</span> <span class="pre">('yes',</span> <span class="pre">'no'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Silently</span> <span class="pre">ignore</span> <span class="pre">structures</span> <span class="pre">that</span> <span class="pre">don't</span> <span class="pre">exist.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'boolean'},</span> <span class="pre">'number</span> <span class="pre">per</span> <span class="pre">file':</span> <span class="pre">{'default':</span> <span class="pre">'all',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'#</span> <span class="pre">structures</span> <span class="pre">per</span> <span class="pre">file:',</span> <span class="pre">'enumeration':</span> <span class="pre">('all',),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">structures</span> <span class="pre">to</span> <span class="pre">write</span> <span class="pre">per</span> <span class="pre">file.',</span> <span class="pre">'kind':</span> <span class="pre">'integer'},</span> <span class="pre">'remove</span> <span class="pre">hydrogens':</span> <span class="pre">{'default':</span> <span class="pre">'no',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Remove</span> <span class="pre">hydrogens:',</span> <span class="pre">'enumeration':</span> <span class="pre">('no',</span> <span class="pre">'nonpolar',</span> <span class="pre">'all'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'Whether</span> <span class="pre">to</span> <span class="pre">remove</span> <span class="pre">hydrogen</span> <span class="pre">atoms</span> <span class="pre">before</span> <span class="pre">writing,</span> <span class="pre">and</span> <span class="pre">if</span> <span class="pre">so,</span> <span class="pre">just</span> <span class="pre">the</span> <span class="pre">nonpolar</span> <span class="pre">ones</span> <span class="pre">or</span> <span class="pre">all.',</span> <span class="pre">'kind':</span> <span class="pre">'enum'},</span> <span class="pre">'structures':</span> <span class="pre">{'default':</span> <span class="pre">'current</span> <span class="pre">configuration',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Structures</span> <span class="pre">to</span> <span class="pre">write:',</span> <span class="pre">'enumeration':</span> <span class="pre">('current</span> <span class="pre">configuration',</span> <span class="pre">'current</span> <span class="pre">system',</span> <span class="pre">'all</span> <span class="pre">systems',</span> <span class="pre">'list</span> <span class="pre">of</span> <span class="pre">configurations'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">set</span> <span class="pre">of</span> <span class="pre">structures</span> <span class="pre">to</span> <span class="pre">write',</span> <span class="pre">'kind':</span> <span class="pre">'string'}}</span></em><a class="headerlink" href="#read_structure_step.write_structure_parameters.WriteStructureParameters.parameters" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.write_structure_step">
+<span id="read-structure-step-write-structure-step-module"></span><h2>read_structure_step.write_structure_step module<a class="headerlink" href="#module-read_structure_step.write_structure_step" title="Permalink to this heading"></a></h2>
+<p>Helper class needed for the stevedore integration.</p>
+<p>This must provide a description() method that returns a dict containing a
+description of this node, and create_node() and create_tk_node() methods for
+creating the graphical and non-graphical nodes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_step.WriteStructureStep">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">read_structure_step.write_structure_step.</span></span><span class="sig-name descname"><span class="pre">WriteStructureStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure_step.html#WriteStructureStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure_step.WriteStructureStep" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_step.WriteStructureStep.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure_step.html#WriteStructureStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure_step.WriteStructureStep.create_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the new node object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_step.WriteStructureStep.create_tk_node">
+<span class="sig-name descname"><span class="pre">create_tk_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure_step.html#WriteStructureStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure_step.WriteStructureStep.create_tk_node" title="Permalink to this definition"></a></dt>
+<dd><p>Create and return the graphical Tk node object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_step.WriteStructureStep.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/write_structure_step.html#WriteStructureStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.write_structure_step.WriteStructureStep.description" title="Permalink to this definition"></a></dt>
+<dd><p>Return a description of what this extension does</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.write_structure_step.WriteStructureStep.my_description">
+<span class="sig-name descname"><span class="pre">my_description</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">'An</span> <span class="pre">interface</span> <span class="pre">for</span> <span class="pre">Write</span> <span class="pre">Structure',</span> <span class="pre">'group':</span> <span class="pre">'Data',</span> <span class="pre">'name':</span> <span class="pre">'Write</span> <span class="pre">Structure'}</span></em><a class="headerlink" href="#read_structure_step.write_structure_step.WriteStructureStep.my_description" title="Permalink to this definition"></a></dt>
+<dd><p>The description needs three fields:</p>
+<dl class="simple">
+<dt>description:</dt><dd><p>A human-readable description of this step. It can be
+several lines long, and needs to be clear to non-expert users.</p>
+</dd>
+<dt>group:</dt><dd><p>Which group in the menus to put this step. If the group does
+not exist it will be created. Common groups are ‘Building’,
+‘Calculations’, ‘Control’ and ‘Data’.</p>
+</dd>
+<dt>name:</dt><dd><p>The name of this step, to be displayed in the menus.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-read_structure_step" title="Permalink to this heading"></a></h2>
+<p>read_structure_step
+A SEAMM plugin to read common formats in computational chemistry</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="read_structure_step" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="read_structure_step.formats.html" class="btn btn-neutral float-right" title="read_structure_step.formats package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_structure_step &mdash; SEAMM Read Structure Plug-in 2022.10.28+3.g1e9c019 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="read_structure_step package" href="read_structure_step.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SEAMM Read Structure Plug-in
+          </a>
+              <div class="version">
+                2022.10.28+3.g1e9c019
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">read_structure_step</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html">read_structure_step package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SEAMM Read Structure Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Documentation</a></li>
+      <li class="breadcrumb-item active">read_structure_step</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="read-structure-step">
+<h1>read_structure_step<a class="headerlink" href="#read-structure-step" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.html">read_structure_step package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.html">read_structure_step.formats package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats.registries">read_structure_step.formats.registries module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats.which">read_structure_step.formats.which module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.html#module-read_structure_step.formats">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.errors">read_structure_step.errors module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.Error"><code class="docutils literal notranslate"><span class="pre">Error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.Mol2Error"><code class="docutils literal notranslate"><span class="pre">Mol2Error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.MopError"><code class="docutils literal notranslate"><span class="pre">MopError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.PDBError"><code class="docutils literal notranslate"><span class="pre">PDBError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.SDFError"><code class="docutils literal notranslate"><span class="pre">SDFError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.errors.XYZError"><code class="docutils literal notranslate"><span class="pre">XYZError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.read">read_structure_step.read module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.read.read"><code class="docutils literal notranslate"><span class="pre">read()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.read_structure">read_structure_step.read_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure"><code class="docutils literal notranslate"><span class="pre">ReadStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.create_parser"><code class="docutils literal notranslate"><span class="pre">ReadStructure.create_parser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.description_text"><code class="docutils literal notranslate"><span class="pre">ReadStructure.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.git_revision"><code class="docutils literal notranslate"><span class="pre">ReadStructure.git_revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.read_tarfile"><code class="docutils literal notranslate"><span class="pre">ReadStructure.read_tarfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.run"><code class="docutils literal notranslate"><span class="pre">ReadStructure.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure.ReadStructure.version"><code class="docutils literal notranslate"><span class="pre">ReadStructure.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.read_structure_parameters">read_structure_step.read_structure_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_parameters.ReadStructureParameters"><code class="docutils literal notranslate"><span class="pre">ReadStructureParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_parameters.ReadStructureParameters.parameters"><code class="docutils literal notranslate"><span class="pre">ReadStructureParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.read_structure_step">read_structure_step.read_structure_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_step.ReadStructureStep"><code class="docutils literal notranslate"><span class="pre">ReadStructureStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_step.ReadStructureStep.create_node"><code class="docutils literal notranslate"><span class="pre">ReadStructureStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_step.ReadStructureStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">ReadStructureStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_step.ReadStructureStep.description"><code class="docutils literal notranslate"><span class="pre">ReadStructureStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.read_structure_step.ReadStructureStep.my_description"><code class="docutils literal notranslate"><span class="pre">ReadStructureStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.tk_read_structure">read_structure_step.tk_read_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_read_structure.TkReadStructure"><code class="docutils literal notranslate"><span class="pre">TkReadStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_read_structure.TkReadStructure.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkReadStructure.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_read_structure.TkReadStructure.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkReadStructure.reset_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_read_structure.TkReadStructure.right_click"><code class="docutils literal notranslate"><span class="pre">TkReadStructure.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.tk_write_structure">read_structure_step.tk_write_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_write_structure.TkWriteStructure"><code class="docutils literal notranslate"><span class="pre">TkWriteStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_write_structure.TkWriteStructure.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkWriteStructure.create_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_write_structure.TkWriteStructure.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkWriteStructure.reset_dialog()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.tk_write_structure.TkWriteStructure.right_click"><code class="docutils literal notranslate"><span class="pre">TkWriteStructure.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.utils">read_structure_step.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.utils.guess_extension"><code class="docutils literal notranslate"><span class="pre">guess_extension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.utils.sanitize_file_format"><code class="docutils literal notranslate"><span class="pre">sanitize_file_format()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.write">read_structure_step.write module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.write.write"><code class="docutils literal notranslate"><span class="pre">write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.write_structure">read_structure_step.write_structure module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure.WriteStructure"><code class="docutils literal notranslate"><span class="pre">WriteStructure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure.WriteStructure.description_text"><code class="docutils literal notranslate"><span class="pre">WriteStructure.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure.WriteStructure.git_revision"><code class="docutils literal notranslate"><span class="pre">WriteStructure.git_revision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure.WriteStructure.run"><code class="docutils literal notranslate"><span class="pre">WriteStructure.run()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure.WriteStructure.version"><code class="docutils literal notranslate"><span class="pre">WriteStructure.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.write_structure_parameters">read_structure_step.write_structure_parameters module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_parameters.WriteStructureParameters"><code class="docutils literal notranslate"><span class="pre">WriteStructureParameters</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_parameters.WriteStructureParameters.parameters"><code class="docutils literal notranslate"><span class="pre">WriteStructureParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step.write_structure_step">read_structure_step.write_structure_step module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_step.WriteStructureStep"><code class="docutils literal notranslate"><span class="pre">WriteStructureStep</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_step.WriteStructureStep.create_node"><code class="docutils literal notranslate"><span class="pre">WriteStructureStep.create_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_step.WriteStructureStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">WriteStructureStep.create_tk_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_step.WriteStructureStep.description"><code class="docutils literal notranslate"><span class="pre">WriteStructureStep.description()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.html#read_structure_step.write_structure_step.WriteStructureStep.my_description"><code class="docutils literal notranslate"><span class="pre">WriteStructureStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.html#module-read_structure_step">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="read_structure_step.html" class="btn btn-neutral float-right" title="read_structure_step package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

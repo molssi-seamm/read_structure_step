@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_structure_step.formats package &mdash; SEAMM Read Structure Plug-in 2022.10.28+3.g1e9c019 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="read_structure_step.formats.cif package" href="read_structure_step.formats.cif.html" />
+    <link rel="prev" title="read_structure_step package" href="read_structure_step.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> SEAMM Read Structure Plug-in
+          </a>
+              <div class="version">
+                2022.10.28+3.g1e9c019
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/index.html">User Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Developer Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">read_structure_step</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="read_structure_step.html">read_structure_step package</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">read_structure_step.formats package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SEAMM Read Structure Plug-in</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Developer Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">read_structure_step</a></li>
+          <li class="breadcrumb-item"><a href="read_structure_step.html">read_structure_step package</a></li>
+      <li class="breadcrumb-item active">read_structure_step.formats package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/developer/read_structure_step.formats.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="read-structure-step-formats-package">
+<h1>read_structure_step.formats package<a class="headerlink" href="#read-structure-step-formats-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.cif.html">read_structure_step.formats.cif package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.cif.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif.cif">read_structure_step.formats.cif.cif module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif.mmcif">read_structure_step.formats.cif.mmcif module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.cif.html#module-read_structure_step.formats.cif">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.mol2.html">read_structure_step.formats.mol2 package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mol2.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mol2.html#module-read_structure_step.formats.mol2.mol2">read_structure_step.formats.mol2.mol2 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mol2.html#module-read_structure_step.formats.mol2">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.mop.html">read_structure_step.formats.mop package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mop.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop.find_mopac">read_structure_step.formats.mop.find_mopac module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.find_mopac.find_mopac"><code class="docutils literal notranslate"><span class="pre">find_mopac()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop.obabel">read_structure_step.formats.mop.obabel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber"><code class="docutils literal notranslate"><span class="pre">OutputGrabber</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.escape_char"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.escape_char</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.readOutput"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.readOutput()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.start"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.mop.html#read_structure_step.formats.mop.obabel.OutputGrabber.stop"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.stop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.mop.html#module-read_structure_step.formats.mop">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html">read_structure_step.formats.openbabel_io package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io.checkers">read_structure_step.formats.openbabel_io.checkers module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.add_format_checkers"><code class="docutils literal notranslate"><span class="pre">add_format_checkers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_pdb"><code class="docutils literal notranslate"><span class="pre">check_for_pdb()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_xyz"><code class="docutils literal notranslate"><span class="pre">check_for_xyz()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io.obabel">read_structure_step.formats.openbabel_io.obabel module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.obabel.load_file"><code class="docutils literal notranslate"><span class="pre">load_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.obabel.write_file"><code class="docutils literal notranslate"><span class="pre">write_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.openbabel_io.html#module-read_structure_step.formats.openbabel_io">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.sdf.html">read_structure_step.formats.sdf package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.sdf.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.sdf.html#module-read_structure_step.formats.sdf.sdf">read_structure_step.formats.sdf.sdf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.sdf.html#module-read_structure_step.formats.sdf">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.smi.html">read_structure_step.formats.smi package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.smi.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.smi.html#module-read_structure_step.formats.smi.smi">read_structure_step.formats.smi.smi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.smi.html#module-read_structure_step.formats.smi">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="read_structure_step.formats.xyz.html">read_structure_step.formats.xyz package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.xyz.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.xyz.html#module-read_structure_step.formats.xyz.xyz">read_structure_step.formats.xyz.xyz module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber"><code class="docutils literal notranslate"><span class="pre">OutputGrabber</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.escape_char"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.escape_char</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.readOutput"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.readOutput()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.start"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.stop"><code class="docutils literal notranslate"><span class="pre">OutputGrabber.stop()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="read_structure_step.formats.xyz.html#module-read_structure_step.formats.xyz">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-read_structure_step.formats.registries">
+<span id="read-structure-step-formats-registries-module"></span><h2>read_structure_step.formats.registries module<a class="headerlink" href="#module-read_structure_step.formats.registries" title="Permalink to this heading"></a></h2>
+<p>This module contains the decorator definitions to register a reader for
+a given file format and its corresponding format checker. The decorators
+will automatically add the decorated function to a dictionary to ease
+extensibility.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.REGISTERED_READERS">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">REGISTERED_READERS</span></span><a class="headerlink" href="#read_structure_step.formats.registries.REGISTERED_READERS" title="Permalink to this definition"></a></dt>
+<dd><p>The registry of file formats that can be read. Each entry, which is keyed by the
+extension including the initial dot, is a dictionary with at least the following:</p>
+<blockquote>
+<div><p>“function”: the function to call to read the file.
+“description”: the readable name for the format, e.g. “MDL structure-data file”</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict(str, dict(str, str))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.REGISTERED_FORMAT_CHECKERS">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">REGISTERED_FORMAT_CHECKERS</span></span><a class="headerlink" href="#read_structure_step.formats.registries.REGISTERED_FORMAT_CHECKERS" title="Permalink to this definition"></a></dt>
+<dd><p>The registry of functions for checking is an unknown file has a given format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict(str, function)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.FORMAT_METADATA">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">FORMAT_METADATA</span></span><a class="headerlink" href="#read_structure_step.formats.registries.FORMAT_METADATA" title="Permalink to this definition"></a></dt>
+<dd><p>Metadata describing a file format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict(str, dict(str, str))</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.get_format_metadata">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">get_format_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extension</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#get_format_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.get_format_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Return the metadata for a given extension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>extension</strong> (<em>str</em>) – The file format extension, including dot.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The metadata as a dictionary.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict(str, any)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.last_resort_checker">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">last_resort_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#last_resort_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.last_resort_checker" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the reader for a list of formats if there is no reader registered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> (<em>str</em>) – File extension indicating format, e.g. ‘.pdb’</p></li>
+<li><p><strong>fn</strong> (<em>function</em>) – The function that checks the file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.last_resort_reader">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">last_resort_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#last_resort_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.last_resort_reader" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the reader for a list of formats if there is no reader registered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formats</strong> (<em>(</em><em>str</em><em>)</em>) – An iterable list of formats handled by the function of last resort.</p></li>
+<li><p><strong>fn</strong> (<em>function</em>) – The function of last resort.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.last_resort_writer">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">last_resort_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formats</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#last_resort_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.last_resort_writer" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the writer for a list of formats if there is no writer registered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formats</strong> (<em>(</em><em>str</em><em>)</em>) – An iterable list of formats handled by the function of last resort.</p></li>
+<li><p><strong>fn</strong> (<em>function</em>) – The function of last resort.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.register_format_checker">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">register_format_checker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#register_format_checker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.register_format_checker" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.register_reader">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">register_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#register_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.register_reader" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.register_writer">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">register_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#register_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.register_writer" title="Permalink to this definition"></a></dt>
+<dd><p>A decorator for registering structure file writers.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.registries.set_format_metadata">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.registries.</span></span><span class="sig-name descname"><span class="pre">set_format_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extensions</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/registries.html#set_format_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.registries.set_format_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Set the metadata for the given extensions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extensions</strong> (<em>str</em><em> or </em><em>iterable</em>) – Either a single extension as a string or a lost of extensions that this
+metadata applies to.</p></li>
+<li><p><strong>**kwargs</strong> – Keyword arguments giving the metadata.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-read_structure_step.formats.which">
+<span id="read-structure-step-formats-which-module"></span><h2>read_structure_step.formats.which module<a class="headerlink" href="#module-read_structure_step.formats.which" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.formats.which.which">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.formats.which.</span></span><span class="sig-name descname"><span class="pre">which</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">program</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/formats/which.html#which"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.formats.which.which" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-read_structure_step.formats">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-read_structure_step.formats" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="read_structure_step.html" class="btn btn-neutral float-left" title="read_structure_step package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="read_structure_step.formats.cif.html" class="btn btn-neutral float-right" title="read_structure_step.formats.cif package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020-2021, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under awards OAC-1547580
+    and CHE-2136142.
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
