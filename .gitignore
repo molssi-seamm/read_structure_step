@@ -14,13 +14,6 @@ tramp
 .org-id-locations
 *_archive
 
-# VStudio
-.vscode
-
-# MOPAC
-*.arc
-*.out
-
 # flymake-mode
 *_flymake.*
 
