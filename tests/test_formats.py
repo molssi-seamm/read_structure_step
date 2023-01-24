@@ -59,7 +59,14 @@ def configuration():
 
 
 @pytest.mark.parametrize(
-    "structure", ["3TR_model.mol2", "3TR_model.xyz", "3TR_model.pdb", "3TR_model.sdf"]
+    "structure",
+    [
+        "3TR_model.mol2",
+        "3TR_model.xyz",
+        "3TR_model_MN.xyz",
+        "3TR_model.pdb",
+        "3TR_model.sdf",
+    ],
 )
 def test_format(configuration, structure):
 
