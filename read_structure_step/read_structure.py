@@ -234,9 +234,8 @@ class ReadStructure(seamm.Node):
             )
 
             # Finish the output
-            system, configuration = self.get_system_configuration(
-                P, structure_handling=False
-            )
+            system, configuration = self.get_system_configuration()
+
             if configurations is None or len(configurations) == 1:
                 if configuration.periodicity == 3:
                     space_group = configuration.symmetry.group
