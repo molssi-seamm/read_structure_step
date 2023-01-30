@@ -2,6 +2,11 @@
 History
 =======
 
+2023.1.30 -- Fixed issue#43, duplicate systems or configuration created
+
+  * Reading a single structure from e.g. a .sdf file created a second system or
+    configuration, depending on the stucture control options.
+
 2023.1.24 -- Added handler for XYZ files and added properties
 
   * Added a custom handler for XYZ files to cope with some of the variant formats.
