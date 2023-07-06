@@ -76,7 +76,6 @@ class WriteStructureParameters(seamm.Parameters):
                 "current configuration",
                 "current system",
                 "all systems",
-                "list of configurations",
             ),
             "format_string": "s",
             "description": "Structures to write:",
@@ -89,7 +88,7 @@ class WriteStructureParameters(seamm.Parameters):
             "enumeration": ("all",),
             "format_string": "s",
             "description": "Configuration(s) to write:",
-            "help_text": "The configurations to write: a name, or 'all configurations'",
+            "help_text": "The configurations to write: a name, or 'all'",
         },
         "number per file": {
             "default": "all",

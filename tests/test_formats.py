@@ -69,7 +69,6 @@ def configuration():
     ],
 )
 def test_format(configuration, structure):
-
     file_name = build_filenames.build_data_filename(structure)
     read_structure_step.read(file_name, configuration)
 
@@ -97,7 +96,6 @@ def test_format(configuration, structure):
     reason="MOPAC could not be found",
 )
 def test_mopac(configuration):
-
     file_name = build_filenames.build_data_filename("acetonitrile.mop")
     read_structure_step.read(file_name, configuration)
 

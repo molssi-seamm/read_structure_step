@@ -34,7 +34,6 @@ def guess_extension(file_name, use_file_name=False):
     available_extensions = formats.registries.REGISTERED_FORMAT_CHECKERS.keys()
 
     for extension in available_extensions:
-
         extension_checker = formats.registries.REGISTERED_FORMAT_CHECKERS[extension]
 
         if extension_checker(file_name) is True:

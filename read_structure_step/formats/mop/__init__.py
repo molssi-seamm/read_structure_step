@@ -272,9 +272,7 @@ keywords = [
 
 @register_format_checker(".mop")
 def check_format(file_name):
-
     with open(file_name, "r") as f:
-
         data = f.read()
 
         if any(keyword in data for keyword in keywords):

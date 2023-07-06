@@ -4,7 +4,6 @@ from . import xyz  # noqa: F401
 
 @register_format_checker(".xyz")
 def check_format(file_name):
-
     with open(file_name, "r") as f:
         lines = f.read().splitlines()
 

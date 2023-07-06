@@ -38,7 +38,6 @@ default_metadata = {
 
 
 def register_reader(file_format):
-
     tmp = file_format.split()
     extension = tmp[0]
     if extension[0] != ".":
@@ -52,7 +51,6 @@ def register_reader(file_format):
             description = " ".join(tmp[1:])
 
     def decorator_function(fn):
-
         REGISTERED_READERS[extension] = {"function": fn, "description": description}
 
         def wrapper_function(*args, **kwargs):
@@ -90,7 +88,6 @@ def register_writer(file_format):
 
 def register_format_checker(file_format):
     def decorator_function(fn):
-
         REGISTERED_FORMAT_CHECKERS[file_format] = fn
 
         def wrapper_function(*args, **kwargs):
