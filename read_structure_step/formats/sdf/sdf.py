@@ -407,8 +407,8 @@ def write_sdf(
         t1 = time.time()
         rate = structure_no / (t1 - t0)
         printer(
-            f"Wrote {structure_no} structures in {t1 - t0:.1f} seconds = {rate:.2f} "
-            "per second"
+            f"    Wrote {structure_no - 1} structures in {t1 - t0:.1f} seconds = "
+            f"{rate:.2f} per second"
         )
 
     if references:

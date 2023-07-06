@@ -92,11 +92,9 @@ def read(
     file_name = os.path.abspath(file_name)
 
     if extension is None:
-
         extension = utils.guess_extension(file_name, use_file_name=True)
 
         if extension is None:
-
             extension = utils.guess_extension(file_name, use_file_name=False)
 
     else:

@@ -34,7 +34,6 @@ def configuration():
 @pytest.mark.parametrize("file_name", ["spc.xyz", "spc"])
 @pytest.mark.parametrize("extension", [None, ".xyz", "xyz", "XYZ", "xYz"])
 def test_extensions(configuration, file_name, extension):
-
     xyz_file = build_filenames.build_data_filename(file_name)
     read_structure_step.read(xyz_file, configuration, extension=extension)
 
@@ -52,6 +51,5 @@ def test_extensions(configuration, file_name, extension):
 
 
 def test_sanitize_file_format_regex_validation(configuration):
-
     with pytest.raises(NameError):
         read_structure_step.read("spc.xyz", configuration, extension=".xy-z")

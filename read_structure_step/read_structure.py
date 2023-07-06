@@ -74,7 +74,6 @@ class ReadStructure(seamm.Node):
         """Setup the command-line / config file parser"""
         # Need to mimic MOPAC step to find the MOPAC executable
         parser_name = "mopac-step"
-        print(f"Parser {parser_name}, {self.step_type=}")
         parser = getParser()
 
         # Remember if the parser exists ... this type of step may have been
@@ -155,7 +154,9 @@ class ReadStructure(seamm.Node):
             if file_type != "from extension":
                 extension = file_type.split()[0]
             else:
-                if filename != "":
+                if self.is_expr(filename):
+                    extension = "all"
+                elif filename != "":
                     path = PurePath(filename)
                     extension = path.suffix
                     if extension == ".gz":

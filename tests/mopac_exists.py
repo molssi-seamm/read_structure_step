@@ -2,7 +2,6 @@ import os
 
 
 def mopac_exists():
-
     if os.path.isdir("/opt/mopac/"):
         mopac_path = "/opt/mopac/"
     else:

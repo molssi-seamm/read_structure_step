@@ -2,6 +2,10 @@
 History
 =======
 
+2023.7.6 -- Bugfixes
+  * Fixed output of number of structures written to SDF files, which was off by 1.
+  * Cleaned up the output for the write-structure step
+    
 2023.1.30 -- Fixed issue#43, duplicate systems or configuration created
 
   * Reading a single structure from e.g. a .sdf file created a second system or
