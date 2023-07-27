@@ -42,7 +42,7 @@ acetonitrile_bonds = """\
 5  2  3          1"""
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture()
 def configuration():
     """Create a system db, system and configuration."""
     db = SystemDB(filename="file:seamm_db?mode=memory&cache=shared")
@@ -66,6 +66,8 @@ def configuration():
         "3TR_model_MN.xyz",
         "3TR_model.pdb",
         "3TR_model.sdf",
+        "3TR_model.sdf.gz",
+        "3TR_model.sdf.bz2",
     ],
 )
 def test_format(configuration, structure):
@@ -370,3 +372,25 @@ def test_mopac_8(configuration):
 
     assert configuration.atoms.symbols == check_symbols
     assert smiles == check_smiles
+
+
+@pytest.mark.parametrize(
+    "structure",
+    [
+        "tmQM_test.xyz.gz",
+        "tmQM_test.xyz.bz2",
+    ],
+)
+def test_compressed(configuration, structure):
+    file_name = build_filenames.build_data_filename(structure)
+    system = configuration.system
+    system_db = system.system_db
+    read_structure_step.read(
+        file_name,
+        configuration,
+        system_db=system_db,
+        system=system,
+        subsequent_as_configurations=False,
+    )
+
+    assert system_db.n_systems == 7
