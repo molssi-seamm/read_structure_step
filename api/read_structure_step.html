@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>read_structure_step package &#8212; SEAMM Read Structure Plug-in 2023.7.6 documentation</title>
+    <title>read_structure_step package &#8212; SEAMM Read Structure Plug-in 2023.7.27 documentation</title>
   
   
   
@@ -901,6 +900,7 @@ is controlled by values of some of the control parameters.</p>
 <span class="sig-prename descclassname"><span class="pre">read_structure_step.utils.</span></span><span class="sig-name descname"><span class="pre">guess_extension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_file_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/utils.html#guess_extension"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.utils.guess_extension" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the file format. It can either use the file name extension or
 guess based on signatures found in the file.</p>
+<p>Correctly handles .gz and .bz2 files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

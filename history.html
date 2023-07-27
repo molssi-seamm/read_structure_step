@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2023.7.6 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2023.7.27 documentation</title>
   
   
   
@@ -481,6 +480,11 @@ document.write(`
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Permalink to this heading">#</a></h1>
 <dl class="simple">
+<dt>2023.7.27 – Support for .gz and .bz2 files, and multi-structure .xyz files</dt><dd><ul class="simple">
+<li><p>Handle .gz and .bz2 files for .sdf and .xyz extensions.</p></li>
+<li><p>Handle multi-structure XYZ files with a blank line between records.</p></li>
+</ul>
+</dd>
 <dt>2023.7.6 – Bugfixes</dt><dd><ul class="simple">
 <li><p>Fixed output of number of structures written to SDF files, which was off by 1.</p></li>
 <li><p>Cleaned up the output for the write-structure step</p></li>

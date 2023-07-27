@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.utils &#8212; SEAMM Read Structure Plug-in 2023.7.6 documentation</title>
+    <title>read_structure_step.utils &#8212; SEAMM Read Structure Plug-in 2023.7.27 documentation</title>
   
   
   
@@ -476,7 +475,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <h1>Source code for read_structure_step.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">formats</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
@@ -485,6 +484,8 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the file format. It can either use the file name extension or</span>
 <span class="sd">    guess based on signatures found in the file.</span>
+
+<span class="sd">    Correctly handles .gz and .bz2 files.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -502,8 +503,13 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">use_file_name</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="n">suffixes</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">suffixes</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffixes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="n">suffixes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffixes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">suffixes</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">ext</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 
