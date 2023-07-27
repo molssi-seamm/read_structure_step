@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from . import formats
 import re
 
@@ -7,6 +7,8 @@ def guess_extension(file_name, use_file_name=False):
     """
     Returns the file format. It can either use the file name extension or
     guess based on signatures found in the file.
+
+    Correctly handles .gz and .bz2 files.
 
     Parameters
     ----------
@@ -24,8 +26,13 @@ def guess_extension(file_name, use_file_name=False):
     """
 
     if use_file_name is True:
-        (root, ext) = os.path.splitext(file_name)
-
+        path = Path(file_name)
+        suffixes = path.suffixes
+        ext = ""
+        if len(suffixes) > 0:
+            ext = suffixes[-1]
+            if ext in (".gz", ".bz2") and len(suffixes) > 1:
+                ext = suffixes[-2]
         if ext == "":
             return None
 

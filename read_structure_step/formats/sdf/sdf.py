@@ -2,6 +2,7 @@
 Implementation of the reader for SDF files using OpenBabel
 """
 
+import bz2
 import gzip
 from pathlib import Path
 import shutil
@@ -133,10 +134,15 @@ def load_sdf(
     path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
-    compress = path.suffix == ".gz"
     if printer is not None:
         n_structures = 0
-        with gzip.open(path, mode="rt") if compress else open(path, "r") as fd:
+        with (
+            gzip.open(path, mode="rt")
+            if path.suffix == ".gz"
+            else bz2.open(path, mode="rt")
+            if path.suffix == ".bz2"
+            else open(path, "r")
+        ) as fd:
             for line in fd:
                 if line[0:4] == "$$$$":
                     n_structures += 1
@@ -154,7 +160,13 @@ def load_sdf(
     n_errors = 0
     obMol = openbabel.OBMol()
     text = ""
-    with gzip.open(path, mode="rt") if compress else open(path, "r") as fd:
+    with (
+        gzip.open(path, mode="rt")
+        if path.suffix == ".gz"
+        else bz2.open(path, mode="rt")
+        if path.suffix == ".bz2"
+        else open(path, "r")
+    ) as fd:
         for line in fd:
             text += line
 
