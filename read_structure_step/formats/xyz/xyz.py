@@ -462,7 +462,7 @@ def load_xyz(
         t1 = time.time()
         rate = structure_no / (t1 - t0)
         printer(
-            f"    Read {structure_no - n_errors - 1} structures in {t1 - t0:.1f} "
+            f"    Read {structure_no - n_errors} structures in {t1 - t0:.1f} "
             f"seconds = {rate:.2f} per second"
         )
         if n_errors > 0:
