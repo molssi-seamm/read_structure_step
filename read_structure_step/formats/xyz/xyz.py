@@ -410,7 +410,7 @@ def load_xyz(
                 elif "|" in title:
                     for tmp in title.split("|"):
                         if "=" in tmp:
-                            key, val = tmp.split(maxsplit=1)
+                            key, val = tmp.split("=", maxsplit=1)
                             key = key.strip()
                             val = val.strip()
                             if key == "q":
