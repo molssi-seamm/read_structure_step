@@ -216,8 +216,6 @@ def load_xyz(
         path = file_name
     path = path.expanduser().resolve()
 
-    print(f"In xyz.py, path = {path}")
-
     # Get the information for progress output, if requested.
     n_structures = 0
     last_line = 0
@@ -258,7 +256,6 @@ def load_xyz(
         if path.suffix == ".bz2"
         else open(path, "r")
     ) as fd:
-        print(f"{fd=}")
         lines = []
         line_no = 0
         for line in fd:
@@ -270,7 +267,6 @@ def load_xyz(
                 # End of block, so examine the first lines and see which format
                 file_type = "unknown"
                 n_lines = len(lines)
-                print(f"Found block of {n_lines} lines")
                 line1 = lines[0].strip()
                 fields1 = line1.split()
                 n_fields1 = len(fields1)
@@ -348,10 +344,6 @@ def load_xyz(
 
                 # Reassemble an input file.
                 input_data = "".join(lines)
-
-                print("Input data")
-                print(input_data)
-                print("---------")
 
                 logger.info(f"Input data:\n\n{input_data}\n")
 
@@ -470,7 +462,7 @@ def load_xyz(
         t1 = time.time()
         rate = structure_no / (t1 - t0)
         printer(
-            f"    Read {structure_no - n_errors - 1} structures in {t1 - t0:.1f} "
+            f"    Read {structure_no - n_errors} structures in {t1 - t0:.1f} "
             f"seconds = {rate:.2f} per second"
         )
         if n_errors > 0:

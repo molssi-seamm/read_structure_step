@@ -2,6 +2,8 @@
 History
 =======
 
+2023.7.27.1 -- Removed debug printing.
+
 2023.7.27 -- Support for .gz and .bz2 files, and multi-structure .xyz files
   * Handle .gz and .bz2 files for .sdf and .xyz extensions.
   * Handle multi-structure XYZ files with a blank line between records.
