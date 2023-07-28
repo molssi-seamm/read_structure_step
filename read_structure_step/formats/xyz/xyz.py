@@ -240,6 +240,20 @@ def load_xyz(
         t0 = time.time()
         last_t = t0
 
+    # Get the indices to pick
+    tmp = indices.replace("end", str(n_structures + 1))
+    tmp = tmp.split(":")
+    start = int(tmp[0])
+    if len(tmp) == 3:
+        step = int(tmp[2])
+    else:
+        step = 1
+    if len(tmp) == 2:
+        stop = int(tmp[1])
+    else:
+        stop = start + 1
+    indices = list(range(start, stop, step))
+
     obConversion = openbabel.OBConversion()
     obConversion.SetInFormat("xyz")
 
@@ -264,6 +278,12 @@ def load_xyz(
             line_no += 1
             lines.append(line)
             if total_lines == last_line or line_no > 3 and line.strip() == "":
+                structure_no += 1
+                if structure_no >= stop:
+                    break
+                if structure_no not in indices:
+                    continue
+
                 # End of block, so examine the first lines and see which format
                 file_type = "unknown"
                 n_lines = len(lines)
@@ -362,7 +382,6 @@ def load_xyz(
                     if add_hydrogens:
                         obMol.AddHydrogens()
 
-                    structure_no += 1
                     if structure_no > 1:
                         if subsequent_as_configurations:
                             configuration = system.create_configuration()
@@ -391,7 +410,7 @@ def load_xyz(
                 elif "|" in title:
                     for tmp in title.split("|"):
                         if "=" in tmp:
-                            key, val = tmp.split(maxsplit=1)
+                            key, val = tmp.split("=", maxsplit=1)
                             key = key.strip()
                             val = val.strip()
                             if key == "q":

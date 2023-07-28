@@ -14,7 +14,7 @@ def read(
     add_hydrogens=False,
     system_db=None,
     system=None,
-    indices=None,
+    indices="1:end",
     subsequent_as_configurations=False,
     system_name=None,
     configuration_name=None,

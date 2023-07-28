@@ -134,29 +134,43 @@ def load_sdf(
     path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
+    n_structures = 0
+    with (
+        gzip.open(path, mode="rt")
+        if path.suffix == ".gz"
+        else bz2.open(path, mode="rt")
+        if path.suffix == ".bz2"
+        else open(path, "r")
+    ) as fd:
+        for line in fd:
+            if line[0:4] == "$$$$":
+                n_structures += 1
     if printer is not None:
-        n_structures = 0
-        with (
-            gzip.open(path, mode="rt")
-            if path.suffix == ".gz"
-            else bz2.open(path, mode="rt")
-            if path.suffix == ".bz2"
-            else open(path, "r")
-        ) as fd:
-            for line in fd:
-                if line[0:4] == "$$$$":
-                    n_structures += 1
         printer("")
         printer(f"    The SDF file contains {n_structures} structures.")
         last_percent = 0
         t0 = time.time()
         last_t = t0
 
+    # Get the indices to pick
+    tmp = indices.replace("end", str(n_structures + 1))
+    tmp = tmp.split(":")
+    start = int(tmp[0])
+    if len(tmp) == 3:
+        step = int(tmp[2])
+    else:
+        step = 1
+    if len(tmp) == 2:
+        stop = int(tmp[1])
+    else:
+        stop = start + 1
+    indices = list(range(start, stop, step))
+
     obConversion = openbabel.OBConversion()
     obConversion.SetInAndOutFormats("sdf", "smi")
 
     configurations = []
-    structure_no = 1
+    structure_no = 0
     n_errors = 0
     obMol = openbabel.OBMol()
     text = ""
@@ -173,6 +187,12 @@ def load_sdf(
             if line[0:4] != "$$$$":
                 continue
 
+            structure_no += 1
+            if structure_no >= stop:
+                break
+            if structure_no not in indices:
+                continue
+
             obConversion.ReadString(obMol, text)
 
             if add_hydrogens:
@@ -185,7 +205,6 @@ def load_sdf(
                     system = system_db.create_system()
                     configuration = system.create_configuration()
 
-            structure_no += 1
             try:
                 configuration.from_OBMol(obMol)
             except Exception as e:
