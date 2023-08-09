@@ -17,6 +17,7 @@ import re
 
 from openbabel import openbabel
 from read_structure_step.formats.registries import register_reader
+from ...utils import parse_indices
 
 if "OpenBabel_version" not in globals():
     OpenBabel_version = None
@@ -114,7 +115,7 @@ def load_xyz(
     add_hydrogens=True,
     system_db=None,
     system=None,
-    indices="1:end",
+    indices="1-end",
     subsequent_as_configurations=False,
     system_name="Canonical SMILES",
     configuration_name="sequential",
@@ -145,7 +146,7 @@ def load_xyz(
     system : System = None
         The system to use if adding subsequent structures as configurations.
 
-    indices : str = "1:end"
+    indices : str = "1-end"
         The generalized indices (slices, SMARTS, etc.) to select structures
         from a file containing multiple structures.
 
@@ -217,7 +218,7 @@ def load_xyz(
     path = path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
-    n_structures = 0
+    n_records = 0
     last_line = 0
     with (
         gzip.open(path, mode="rt")
@@ -229,35 +230,29 @@ def load_xyz(
         for line in fd:
             last_line += 1
             if line.strip() == "":
-                n_structures += 1
+                n_records += 1
     # may not have blank line at end
     if line.strip() != "":
-        n_structures += 1
+        n_records += 1
     if printer is not None:
         printer("")
-        printer(f"    The XYZ file contains {n_structures} structures.")
+        printer(f"    The XYZ file contains {n_records} structures.")
         last_percent = 0
         t0 = time.time()
         last_t = t0
 
     # Get the indices to pick
-    tmp = indices.replace("end", str(n_structures + 1))
-    tmp = tmp.split(":")
-    start = int(tmp[0])
-    if len(tmp) == 3:
-        step = int(tmp[2])
-    else:
-        step = 1
-    if len(tmp) == 2:
-        stop = int(tmp[1])
-    else:
-        stop = start + 1
-    indices = list(range(start, stop, step))
+    indices = parse_indices(indices, n_records)
+    n_structures = len(indices)
+    if n_structures == 0:
+        return
+    stop = indices[-1]
 
     obConversion = openbabel.OBConversion()
     obConversion.SetInFormat("xyz")
 
     configurations = []
+    record_no = 0
     structure_no = 0
     n_errors = 0
     obMol = openbabel.OBMol()
@@ -278,10 +273,10 @@ def load_xyz(
             line_no += 1
             lines.append(line)
             if total_lines == last_line or line_no > 3 and line.strip() == "":
-                structure_no += 1
-                if structure_no >= stop:
+                record_no += 1
+                if record_no > stop:
                     break
-                if structure_no not in indices:
+                if record_no not in indices:
                     continue
 
                 # End of block, so examine the first lines and see which format
@@ -382,6 +377,7 @@ def load_xyz(
                     if add_hydrogens:
                         obMol.AddHydrogens()
 
+                    structure_no += 1
                     if structure_no > 1:
                         if subsequent_as_configurations:
                             configuration = system.create_configuration()

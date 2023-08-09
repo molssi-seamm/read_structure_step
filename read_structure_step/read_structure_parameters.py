@@ -66,10 +66,10 @@ class ReadStructureParameters(seamm.Parameters):
             "help_text": ("Whether to add missing hydrogen atoms."),
         },
         "indices": {
-            "default": "1:end",
+            "default": "1-end",
             "kind": "string",
             "default_units": "",
-            "enumeration": tuple(),
+            "enumeration": ("1-end",),
             "format_string": "s",
             "description": "Structures to read:",
             "help_text": ("The set of structures to read"),

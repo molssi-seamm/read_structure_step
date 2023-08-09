@@ -2,13 +2,17 @@
 The cif/mmcif reader/writer
 """
 
+import bz2
+import gzip
 import logging
 from pathlib import Path
+import time
 
 from ..registries import register_format_checker
 from ..registries import register_reader
 from ..registries import set_format_metadata
 from seamm_util.printing import FormattedText as __
+from ...utils import parse_indices
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +60,7 @@ def load_cif(
     add_hydrogens=False,
     system_db=None,
     system=None,
-    indices="1:end",
+    indices="1-end",
     subsequent_as_configurations=False,
     system_name="from file",
     configuration_name="sequential",
@@ -90,7 +94,7 @@ def load_cif(
     system : System = None
         The system to use if adding subsequent structures as configurations.
 
-    indices : str = "1:end"
+    indices : str = "1-end"
         The generalized indices (slices, SMARTS, etc.) to select structures
         from a file containing multiple structures.
 
@@ -123,14 +127,47 @@ def load_cif(
     if isinstance(path, str):
         path = Path(path)
 
-    path.expanduser().resolve()
+    path = path.expanduser().resolve()
+
+    # Get the information for progress output, if requested.
+    n_records = 0
+    with (
+        gzip.open(path, mode="rt")
+        if path.suffix == ".gz"
+        else bz2.open(path, mode="rt")
+        if path.suffix == ".bz2"
+        else open(path, "r")
+    ) as fd:
+        for line in fd:
+            if line[0:5] == "data_":
+                n_records += 1
+    if printer is not None:
+        printer("")
+        printer(f"    The CIF file contains {n_records} data blocks.")
+        last_percent = 0
+        t0 = time.time()
+        last_t = t0
+
+    # Get the indices to pick
+    indices = parse_indices(indices, n_records)
+    n_structures = len(indices)
+    if n_structures == 0:
+        return
+    stop = indices[-1]
 
     configurations = []
+    record_no = 0
     structure_no = 0
     lines = []
     in_block = False
     block_name = ""
-    with open(path, "r") as fd:
+    with (
+        gzip.open(path, mode="rt")
+        if path.suffix == ".gz"
+        else bz2.open(path, mode="rt")
+        if path.suffix == ".bz2"
+        else open(path, "r")
+    ) as fd:
         for line in fd:
             if line[0:5] == "data_":
                 logger.debug(f"Found block {line}")
@@ -138,6 +175,14 @@ def load_cif(
                     in_block = True
                     block_name = line[5:].strip()
                 else:
+                    record_no += 1
+                    if record_no > stop:
+                        lines = []
+                        break
+                    if record_no not in indices:
+                        lines = []
+                        continue
+
                     structure_no += 1
                     if structure_no > 1:
                         if subsequent_as_configurations:
@@ -183,54 +228,71 @@ def load_cif(
                         else:
                             configuration.name = str(configuration_name)
                     logger.debug(f"   added system {system_db.n_systems}: {block_name}")
+
+                    if printer:
+                        percent = int(100 * structure_no / n_structures)
+                        if percent > last_percent:
+                            t1 = time.time()
+                            if t1 - last_t >= 60:
+                                t = int(t1 - t0)
+                                rate = structure_no / (t1 - t0)
+                                t_left = int((n_structures - structure_no) / rate)
+                                printer(
+                                    f"\t{structure_no:6} ({percent}%) structures read "
+                                    f"in {t} seconds. About {t_left} seconds remaining."
+                                )
+                                last_t = t1
+                                last_percent = percent
                 block_name = line[5:].strip()
                 lines = []
             lines.append(line)
 
         if len(lines) > 0:
             # The last block just ends at the end of the file
-            structure_no += 1
-            if structure_no > 1:
-                if subsequent_as_configurations:
-                    configuration = system.create_configuration()
-                else:
-                    system = system_db.create_system()
-                    configuration = system.create_configuration()
+            record_no += 1
+            if record_no in indices:
+                structure_no += 1
+                if structure_no > 1:
+                    if subsequent_as_configurations:
+                        configuration = system.create_configuration()
+                    else:
+                        system = system_db.create_system()
+                        configuration = system.create_configuration()
 
-            text = configuration.from_cif_text("\n".join(lines))
-            logger.debug(f"   added system {system_db.n_systems}: {block_name}")
-            if text != "":
-                printer("\n")
-                printer(__(text, indent=4 * " "))
+                text = configuration.from_cif_text("\n".join(lines))
+                logger.debug(f"   added system {system_db.n_systems}: {block_name}")
+                if text != "":
+                    printer("\n")
+                    printer(__(text, indent=4 * " "))
 
-                configurations.append(configuration)
+                    configurations.append(configuration)
 
-            # Set the system name
-            if system_name is not None and system_name != "":
-                lower_name = str(system_name).lower()
-                if "from file" in lower_name:
-                    system.name = block_name
-                elif "file name" in lower_name:
-                    system.name = path.stem
-                elif "formula" in lower_name:
-                    system.name = configuration.formula()[0]
-                elif "empirical formula" in lower_name:
-                    system.name = configuration.formula()[1]
-                else:
-                    system.name = str(system_name)
+                # Set the system name
+                if system_name is not None and system_name != "":
+                    lower_name = str(system_name).lower()
+                    if "from file" in lower_name:
+                        system.name = block_name
+                    elif "file name" in lower_name:
+                        system.name = path.stem
+                    elif "formula" in lower_name:
+                        system.name = configuration.formula()[0]
+                    elif "empirical formula" in lower_name:
+                        system.name = configuration.formula()[1]
+                    else:
+                        system.name = str(system_name)
 
-            # And the configuration name
-            if configuration_name is not None and configuration_name != "":
-                lower_name = str(configuration_name).lower()
-                if "from file" in lower_name:
-                    configuration.name = block_name
-                elif "file name" in lower_name:
-                    configuration.name = path.stem
-                elif "formula" in lower_name:
-                    configuration.name = configuration.formula()[0]
-                elif "empirical formula" in lower_name:
-                    configuration.name = configuration.formula()[1]
-                else:
-                    configuration.name = str(configuration_name)
+                # And the configuration name
+                if configuration_name is not None and configuration_name != "":
+                    lower_name = str(configuration_name).lower()
+                    if "from file" in lower_name:
+                        configuration.name = block_name
+                    elif "file name" in lower_name:
+                        configuration.name = path.stem
+                    elif "formula" in lower_name:
+                        configuration.name = configuration.formula()[0]
+                    elif "empirical formula" in lower_name:
+                        configuration.name = configuration.formula()[1]
+                    else:
+                        configuration.name = str(configuration_name)
 
         return configurations
