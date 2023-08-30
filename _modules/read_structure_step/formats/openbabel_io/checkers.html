@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.openbabel_io.checkers &#8212; SEAMM Read Structure Plug-in 2023.7.28 documentation</title>
+    <title>read_structure_step.formats.openbabel_io.checkers &#8212; SEAMM Read Structure Plug-in 2023.8.30 documentation</title>
   
   
   
@@ -27,10 +27,10 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -44,12 +44,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../_static/clipboard.min.js"></script>
-    <script src="../../../../_static/copybutton.js"></script>
-    <script src="../../../../_static/design-tabs.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=e6c77f19"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/read_structure_step/formats/openbabel_io/checkers';</script>
 
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -480,7 +480,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">read_structure_step.formats.registries</span> <span class="kn">import</span> <span class="n">last_resort_checker</span>
 
 
-<div class="viewcode-block" id="check_for_pdb"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_pdb">[docs]</a><span class="k">def</span> <span class="nf">check_for_pdb</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+<div class="viewcode-block" id="check_for_pdb">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_pdb">[docs]</a>
+<span class="k">def</span> <span class="nf">check_for_pdb</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a file appears to be a PDB file.</span>
 
 <span class="sd">    The PDB files have a number of required keywords; however, some, like &quot;AUTHOR&quot;</span>
@@ -517,7 +519,10 @@ document.write(`
         <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="check_for_xyz"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_xyz">[docs]</a><span class="k">def</span> <span class="nf">check_for_xyz</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+
+<div class="viewcode-block" id="check_for_xyz">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.check_for_xyz">[docs]</a>
+<span class="k">def</span> <span class="nf">check_for_xyz</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if a file appears to be an XYZ file.</span>
 
 <span class="sd">    Parameters</span>
@@ -550,10 +555,14 @@ document.write(`
     <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="add_format_checkers"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.add_format_checkers">[docs]</a><span class="k">def</span> <span class="nf">add_format_checkers</span><span class="p">():</span>
+
+<div class="viewcode-block" id="add_format_checkers">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.openbabel_io.html#read_structure_step.formats.openbabel_io.checkers.add_format_checkers">[docs]</a>
+<span class="k">def</span> <span class="nf">add_format_checkers</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add any missing format checkers.&quot;&quot;&quot;</span>
     <span class="n">last_resort_checker</span><span class="p">(</span><span class="s2">&quot;.pdb&quot;</span><span class="p">,</span> <span class="n">check_for_pdb</span><span class="p">)</span>
     <span class="n">last_resort_checker</span><span class="p">(</span><span class="s2">&quot;.xyz&quot;</span><span class="p">,</span> <span class="n">check_for_xyz</span><span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

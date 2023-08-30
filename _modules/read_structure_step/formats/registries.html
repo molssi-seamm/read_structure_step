@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.registries &#8212; SEAMM Read Structure Plug-in 2023.7.28 documentation</title>
+    <title>read_structure_step.formats.registries &#8212; SEAMM Read Structure Plug-in 2023.8.30 documentation</title>
   
   
   
@@ -27,10 +27,10 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -44,12 +44,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
-    <script src="../../../_static/design-tabs.js"></script>
+    <script src="../../../_static/documentation_options.js?v=e6c77f19"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/read_structure_step/formats/registries';</script>
 
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -514,7 +514,9 @@ document.write(`
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="register_reader"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_reader">[docs]</a><span class="k">def</span> <span class="nf">register_reader</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+<div class="viewcode-block" id="register_reader">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_reader">[docs]</a>
+<span class="k">def</span> <span class="nf">register_reader</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
@@ -538,7 +540,10 @@ document.write(`
     <span class="k">return</span> <span class="n">decorator_function</span></div>
 
 
-<div class="viewcode-block" id="register_writer"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_writer">[docs]</a><span class="k">def</span> <span class="nf">register_writer</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+
+<div class="viewcode-block" id="register_writer">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_writer">[docs]</a>
+<span class="k">def</span> <span class="nf">register_writer</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator for registering structure file writers.&quot;&quot;&quot;</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -563,7 +568,10 @@ document.write(`
     <span class="k">return</span> <span class="n">decorator_function</span></div>
 
 
-<div class="viewcode-block" id="register_format_checker"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_format_checker">[docs]</a><span class="k">def</span> <span class="nf">register_format_checker</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+
+<div class="viewcode-block" id="register_format_checker">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_format_checker">[docs]</a>
+<span class="k">def</span> <span class="nf">register_format_checker</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
         <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">[</span><span class="n">file_format</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
 
@@ -575,7 +583,10 @@ document.write(`
     <span class="k">return</span> <span class="n">decorator_function</span></div>
 
 
-<div class="viewcode-block" id="get_format_metadata"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.get_format_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_format_metadata</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
+
+<div class="viewcode-block" id="get_format_metadata">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.get_format_metadata">[docs]</a>
+<span class="k">def</span> <span class="nf">get_format_metadata</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the metadata for a given extension.</span>
 
 <span class="sd">    Parameters</span>
@@ -594,7 +605,10 @@ document.write(`
         <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">default_metadata</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="set_format_metadata"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.set_format_metadata">[docs]</a><span class="k">def</span> <span class="nf">set_format_metadata</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+<div class="viewcode-block" id="set_format_metadata">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.set_format_metadata">[docs]</a>
+<span class="k">def</span> <span class="nf">set_format_metadata</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the metadata for the given extensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -620,7 +634,10 @@ document.write(`
             <span class="n">FORMAT_METADATA</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span></div>
 
 
-<div class="viewcode-block" id="last_resort_reader"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_reader">[docs]</a><span class="k">def</span> <span class="nf">last_resort_reader</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+
+<div class="viewcode-block" id="last_resort_reader">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_reader">[docs]</a>
+<span class="k">def</span> <span class="nf">last_resort_reader</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
 
 <span class="sd">    Parameters</span>
@@ -647,7 +664,10 @@ document.write(`
             <span class="n">REGISTERED_READERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="last_resort_writer"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_writer">[docs]</a><span class="k">def</span> <span class="nf">last_resort_writer</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+
+<div class="viewcode-block" id="last_resort_writer">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_writer">[docs]</a>
+<span class="k">def</span> <span class="nf">last_resort_writer</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the writer for a list of formats if there is no writer registered.</span>
 
 <span class="sd">    Parameters</span>
@@ -674,7 +694,10 @@ document.write(`
             <span class="n">REGISTERED_WRITERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="last_resort_checker"><a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_checker">[docs]</a><span class="k">def</span> <span class="nf">last_resort_checker</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+
+<div class="viewcode-block" id="last_resort_checker">
+<a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_checker">[docs]</a>
+<span class="k">def</span> <span class="nf">last_resort_checker</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
 
 <span class="sd">    Parameters</span>
@@ -691,6 +714,7 @@ document.write(`
 
     <span class="k">if</span> <span class="n">extension</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">:</span>
         <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span></div>
+
 </pre></div>
 
                 </article>

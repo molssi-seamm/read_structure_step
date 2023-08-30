@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.xyz.xyz &#8212; SEAMM Read Structure Plug-in 2023.7.28 documentation</title>
+    <title>read_structure_step.formats.xyz.xyz &#8212; SEAMM Read Structure Plug-in 2023.8.30 documentation</title>
   
   
   
@@ -27,10 +27,10 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
@@ -44,12 +44,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../_static/clipboard.min.js"></script>
-    <script src="../../../../_static/copybutton.js"></script>
-    <script src="../../../../_static/design-tabs.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=e6c77f19"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/read_structure_step/formats/xyz/xyz';</script>
 
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -494,6 +494,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">openbabel</span> <span class="kn">import</span> <span class="n">openbabel</span>
 <span class="kn">from</span> <span class="nn">read_structure_step.formats.registries</span> <span class="kn">import</span> <span class="n">register_reader</span>
+<span class="kn">from</span> <span class="nn">...utils</span> <span class="kn">import</span> <span class="n">parse_indices</span>
 
 <span class="k">if</span> <span class="s2">&quot;OpenBabel_version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">():</span>
     <span class="n">OpenBabel_version</span> <span class="o">=</span> <span class="kc">None</span>
@@ -501,7 +502,9 @@ document.write(`
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;read_structure_step.read_structure&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="OutputGrabber"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber">[docs]</a><span class="k">class</span> <span class="nc">OutputGrabber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="OutputGrabber">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber">[docs]</a>
+<span class="k">class</span> <span class="nc">OutputGrabber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class used to grab standard output or another stream.</span>
 
 <span class="sd">    see https://stackoverflow.com/questions/24277488/in-python-how-to-capture-the-stdout-from-a-c-shared-library-to-a-variable/29834357#29834357  # noqa: E501</span>
@@ -526,7 +529,9 @@ document.write(`
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 
-<div class="viewcode-block" id="OutputGrabber.start"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OutputGrabber.start">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.start">[docs]</a>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start capturing the stream data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -542,7 +547,10 @@ document.write(`
             <span class="c1"># Make sure that the thread is running and os.read() has executed:</span>
             <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OutputGrabber.stop"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OutputGrabber.stop">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.stop">[docs]</a>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stop capturing the stream data and save the text in `capturedtext`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -565,7 +573,10 @@ document.write(`
         <span class="c1"># Close the duplicate stream:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamfd</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OutputGrabber.readOutput"><a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.readOutput">[docs]</a>    <span class="k">def</span> <span class="nf">readOutput</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="OutputGrabber.readOutput">
+<a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.readOutput">[docs]</a>
+    <span class="k">def</span> <span class="nf">readOutput</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read the stream data (one byte at a time)</span>
 <span class="sd">        and save the text in `capturedtext`.</span>
@@ -574,7 +585,9 @@ document.write(`
             <span class="n">char</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span> <span class="ow">in</span> <span class="n">char</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">+=</span> <span class="n">char</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">+=</span> <span class="n">char</span></div>
+</div>
+
 
 
 <span class="k">def</span> <span class="nf">_find_charge</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
@@ -591,7 +604,7 @@ document.write(`
     <span class="n">add_hydrogens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">system_db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">indices</span><span class="o">=</span><span class="s2">&quot;1:end&quot;</span><span class="p">,</span>
+    <span class="n">indices</span><span class="o">=</span><span class="s2">&quot;1-end&quot;</span><span class="p">,</span>
     <span class="n">subsequent_as_configurations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Canonical SMILES&quot;</span><span class="p">,</span>
     <span class="n">configuration_name</span><span class="o">=</span><span class="s2">&quot;sequential&quot;</span><span class="p">,</span>
@@ -622,7 +635,7 @@ document.write(`
 <span class="sd">    system : System = None</span>
 <span class="sd">        The system to use if adding subsequent structures as configurations.</span>
 
-<span class="sd">    indices : str = &quot;1:end&quot;</span>
+<span class="sd">    indices : str = &quot;1-end&quot;</span>
 <span class="sd">        The generalized indices (slices, SMARTS, etc.) to select structures</span>
 <span class="sd">        from a file containing multiple structures.</span>
 
@@ -694,7 +707,7 @@ document.write(`
     <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
     <span class="c1"># Get the information for progress output, if requested.</span>
-    <span class="n">n_structures</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">n_records</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">last_line</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">with</span> <span class="p">(</span>
         <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span>
@@ -706,35 +719,29 @@ document.write(`
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">last_line</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">n_structures</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">n_records</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="c1"># may not have blank line at end</span>
     <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-        <span class="n">n_structures</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">n_records</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">printer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">printer</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    The XYZ file contains </span><span class="si">{</span><span class="n">n_structures</span><span class="si">}</span><span class="s2"> structures.&quot;</span><span class="p">)</span>
+        <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    The XYZ file contains </span><span class="si">{</span><span class="n">n_records</span><span class="si">}</span><span class="s2"> structures.&quot;</span><span class="p">)</span>
         <span class="n">last_percent</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">last_t</span> <span class="o">=</span> <span class="n">t0</span>
 
     <span class="c1"># Get the indices to pick</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_structures</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="n">step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">step</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">stop</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">parse_indices</span><span class="p">(</span><span class="n">indices</span><span class="p">,</span> <span class="n">n_records</span><span class="p">)</span>
+    <span class="n">n_structures</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_structures</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">obConversion</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBConversion</span><span class="p">()</span>
     <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">&quot;xyz&quot;</span><span class="p">)</span>
 
     <span class="n">configurations</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">record_no</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">structure_no</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">n_errors</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">obMol</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBMol</span><span class="p">()</span>
@@ -755,10 +762,10 @@ document.write(`
             <span class="n">line_no</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">total_lines</span> <span class="o">==</span> <span class="n">last_line</span> <span class="ow">or</span> <span class="n">line_no</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-                <span class="n">structure_no</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">structure_no</span> <span class="o">&gt;=</span> <span class="n">stop</span><span class="p">:</span>
+                <span class="n">record_no</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">record_no</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
                     <span class="k">break</span>
-                <span class="k">if</span> <span class="n">structure_no</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">record_no</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
                     <span class="k">continue</span>
 
                 <span class="c1"># End of block, so examine the first lines and see which format</span>
@@ -859,6 +866,7 @@ document.write(`
                     <span class="k">if</span> <span class="n">add_hydrogens</span><span class="p">:</span>
                         <span class="n">obMol</span><span class="o">.</span><span class="n">AddHydrogens</span><span class="p">()</span>
 
+                    <span class="n">structure_no</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="k">if</span> <span class="n">structure_no</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">subsequent_as_configurations</span><span class="p">:</span>
                             <span class="n">configuration</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">create_configuration</span><span class="p">()</span>
