@@ -2,6 +2,8 @@
 History
 =======
 
+2023.8.30 -- Support for spacegroup symmetry
+
 2023.7.28 -- Implemented ranges for reading XYZ and SDF files.
 
 2023.7.27.1 -- Removed debug printing.
