@@ -16,6 +16,7 @@ from ..registries import register_format_checker
 from ..registries import register_reader
 from ..registries import register_writer
 from ..registries import set_format_metadata
+from ...utils import parse_indices
 
 if "OpenBabel_version" not in globals():
     OpenBabel_version = None
@@ -61,7 +62,7 @@ def load_sdf(
     add_hydrogens=True,
     system_db=None,
     system=None,
-    indices="1:end",
+    indices="1-end",
     subsequent_as_configurations=False,
     system_name="Canonical SMILES",
     configuration_name="sequential",
@@ -96,7 +97,7 @@ def load_sdf(
     system : System = None
         The system to use if adding subsequent structures as configurations.
 
-    indices : str = "1:end"
+    indices : str = "1-end"
         The generalized indices (slices, SMARTS, etc.) to select structures
         from a file containing multiple structures.
 
@@ -131,10 +132,10 @@ def load_sdf(
     if isinstance(path, str):
         path = Path(path)
 
-    path.expanduser().resolve()
+    path = path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
-    n_structures = 0
+    n_records = 0
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
@@ -144,32 +145,26 @@ def load_sdf(
     ) as fd:
         for line in fd:
             if line[0:4] == "$$$$":
-                n_structures += 1
+                n_records += 1
     if printer is not None:
         printer("")
-        printer(f"    The SDF file contains {n_structures} structures.")
+        printer(f"    The SDF file contains {n_records} structures.")
         last_percent = 0
         t0 = time.time()
         last_t = t0
 
     # Get the indices to pick
-    tmp = indices.replace("end", str(n_structures + 1))
-    tmp = tmp.split(":")
-    start = int(tmp[0])
-    if len(tmp) == 3:
-        step = int(tmp[2])
-    else:
-        step = 1
-    if len(tmp) == 2:
-        stop = int(tmp[1])
-    else:
-        stop = start + 1
-    indices = list(range(start, stop, step))
+    indices = parse_indices(indices, n_records)
+    n_structures = len(indices)
+    if n_structures == 0:
+        return
+    stop = indices[-1]
 
     obConversion = openbabel.OBConversion()
     obConversion.SetInAndOutFormats("sdf", "smi")
 
     configurations = []
+    record_no = 0
     structure_no = 0
     n_errors = 0
     obMol = openbabel.OBMol()
@@ -187,22 +182,45 @@ def load_sdf(
             if line[0:4] != "$$$$":
                 continue
 
-            structure_no += 1
-            if structure_no >= stop:
+            record_no += 1
+            if record_no > stop:
+                text = ""
                 break
-            if structure_no not in indices:
+            if record_no not in indices:
+                text = ""
                 continue
 
             obConversion.ReadString(obMol, text)
 
+            # See if the system and configuration names are encoded in the title
+            title = obMol.GetTitle()
+            sysname = title
+            confname = title
+            have_sysname = False
+            if "SEAMM=" in title:
+                for tmp in title.split("|"):
+                    if "SEAMM=" in tmp and "/" in tmp:
+                        sysname, confname = tmp.split("=", 1)[1].split("/")
+                        sysname = sysname.strip()
+                        confname = confname.strip()
+                        have_sysname = True
+
             if add_hydrogens:
                 obMol.AddHydrogens()
 
+            structure_no += 1
             if structure_no > 1:
                 if subsequent_as_configurations:
                     configuration = system.create_configuration()
                 else:
-                    system = system_db.create_system()
+                    if have_sysname and "from file" in system_name.lower():
+                        # Reuse the system if it exists
+                        if system_db.system_exists(sysname):
+                            system = system_db.get_system(sysname)
+                        else:
+                            system = system_db.create_system()
+                    else:
+                        system = system_db.create_system()
                     configuration = system.create_configuration()
 
             try:
@@ -210,7 +228,7 @@ def load_sdf(
             except Exception as e:
                 n_errors += 1
                 printer("")
-                printer(f"    Error handling entry {structure_no} in the SDF file:")
+                printer(f"    Error handling entry {record_no} in the SDF file:")
                 printer("        " + str(e))
                 printer("    Text of the entry is")
                 printer("    " + 60 * "-")
@@ -228,7 +246,7 @@ def load_sdf(
             if system_name is not None and system_name != "":
                 lower_name = system_name.lower()
                 if "from file" in lower_name:
-                    system.name = obMol.GetTitle()
+                    system.name = sysname
                 elif "canonical smiles" in lower_name:
                     system.name = configuration.canonical_smiles
                 elif "smiles" in lower_name:
@@ -240,13 +258,13 @@ def load_sdf(
             if configuration_name is not None and configuration_name != "":
                 lower_name = configuration_name.lower()
                 if "from file" in lower_name:
-                    configuration.name = obMol.GetTitle()
+                    configuration.name = confname
                 elif "canonical smiles" in lower_name:
                     configuration.name = configuration.canonical_smiles
                 elif "smiles" in lower_name:
                     configuration.name = configuration.smiles
                 elif lower_name == "sequential":
-                    configuration.name = str(structure_no)
+                    configuration.name = str(record_no)
                 else:
                     configuration.name = configuration_name
 
@@ -269,7 +287,7 @@ def load_sdf(
         t1 = time.time()
         rate = structure_no / (t1 - t0)
         printer(
-            f"    Read {structure_no - n_errors - 1} structures in {t1 - t0:.1f} "
+            f"    Read {structure_no - n_errors} structures in {t1 - t0:.1f} "
             f"seconds = {rate:.2f} per second"
         )
         if n_errors > 0:
@@ -396,7 +414,7 @@ def write_sdf(
             obMol = configuration.to_OBMol(properties="all")
 
             system = configuration.system
-            title = f"{system.name}/{configuration.name}"
+            title = f"SEAMM={system.name}/{configuration.name}"
             obMol.SetTitle(title)
 
             if remove_hydrogens == "nonpolar":

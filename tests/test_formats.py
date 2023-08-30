@@ -10,29 +10,31 @@ from . import build_filenames
 from molsystem.system_db import SystemDB
 
 bond_string = """\
-    i   j  bondorder
-1   1   2          1
-2   1   5          1
-3   1   7          1
-4   2   3          2
-5   3   4          1
-6   3   6          1
-7   4   5          2
-8   5   8          1
-9   6   9          1
-10  6  10          1"""
+    i   j  bondorder symop1 symop2
+1   1   2          1      .      .
+2   1   5          1      .      .
+3   1   7          1      .      .
+4   2   3          2      .      .
+5   3   4          1      .      .
+6   3   6          1      .      .
+7   4   5          2      .      .
+8   5   8          1      .      .
+9   6   9          1      .      .
+10  6  10          1      .      ."""
+
 xyz_bond_string = """\
-    i   j  bondorder
-1   1   7          1
-2   5   8          1
-3   1   5          1
-4   1   2          1
-5   4   5          2
-6   2   3          2
-7   3   4          1
-8   3   6          1
-9   6  10          1
-10  6   9          1"""
+    i   j  bondorder symop1 symop2
+1   1   7          1      .      .
+2   5   8          1      .      .
+3   1   5          1      .      .
+4   1   2          1      .      .
+5   4   5          2      .      .
+6   2   3          2      .      .
+7   3   4          1      .      .
+8   3   6          1      .      .
+9   6  10          1      .      .
+10  6   9          1      .      ."""
+
 acetonitrile_bonds = """\
    i  j  bondorder
 1  2  5          1
@@ -394,3 +396,26 @@ def test_compressed(configuration, structure):
     )
 
     assert system_db.n_systems == 7
+
+
+@pytest.mark.parametrize(
+    "structure",
+    [
+        "tmQM_test.cif",
+        "tmQM_test.cif.gz",
+        "tmQM_test.cif.bz2",
+    ],
+)
+def test_cif(configuration, structure):
+    file_name = build_filenames.build_data_filename(structure)
+    system = configuration.system
+    system_db = system.system_db
+    read_structure_step.read(
+        file_name,
+        configuration,
+        system_db=system_db,
+        system=system,
+        subsequent_as_configurations=False,
+    )
+
+    assert system_db.n_systems == 3

@@ -74,3 +74,43 @@ def sanitize_file_format(file_format):
         file_format = "." + file_format
 
     return file_format
+
+
+def parse_indices(text, maximum):
+    """Return a list of values in the given index expression.
+
+    Handles expressions like "1-10 by 2, 20-end" which would result in
+    1,3,5,7,9,20,21,22,23,24,25 if there were 25 items in the list.
+    """
+    result = set()
+    for indices in text.split(","):
+        increment = 1
+        if "to" in indices:
+            tmp = indices.split("to")
+        else:
+            if ":" in indices:
+                tmp = indices.split(":")
+                increment = 0
+            else:
+                tmp = indices.split("-")
+        if len(tmp) == 1:
+            if tmp[0].strip() == "end":
+                result.add(maximum)
+            else:
+                result.add(int(tmp[0].strip()))
+        else:
+            start = int(tmp[0].strip())
+            end = tmp[1]
+            if "by" in end:
+                end, by = end.split("by")
+                by = int(by.strip())
+            else:
+                by = 1
+            end = end.strip()
+            if end == "end":
+                end = maximum
+                increment = 1
+            else:
+                end = int(end)
+            result.update(range(start, end + increment, by))
+    return sorted(result)

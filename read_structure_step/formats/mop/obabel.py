@@ -17,6 +17,7 @@ import subprocess
 from openbabel import openbabel
 from read_structure_step.formats.registries import register_reader
 import seamm
+from seamm_util import Q_
 from .find_mopac import find_mopac
 
 if "OpenBabel_version" not in globals():
@@ -239,6 +240,8 @@ def load_mop(
     # Finally, the MOPAC test data usually has three comment lines to start, with a
     # single number on the second line, which is the heat of formation calculated by
     # MOPAC. If this format is found the HOF is captured.
+    kcal2kJ = Q_(1, "kcal").m_as("kJ")
+
     run_mopac = False
     keywords = []
     description_lines = []
@@ -605,9 +608,10 @@ def load_mop(
                 key,
                 "float",
                 description="The reference energy from MOPAC",
+                units="kJ/mol",
                 noerror=True,
             )
-            properties.put(key, energy)
+            properties.put(key, energy * kcal2kJ)
 
         # Handle properties encoded in the description
         if len(description_lines) == 2 and "=" in description_lines[1]:
@@ -651,7 +655,19 @@ def load_mop(
                                     description=f"stderr for the {keyword}.",
                                     noerror=True,
                                 )
+                                if (
+                                    "heat capacity" in keyword
+                                    or "enthalpy" in keyword
+                                    or "entropy" in keyword
+                                ):
+                                    stderr = float(stderr) * kcal2kJ
                                 system_properties.put(new_keyword, stderr)
+                            if (
+                                "heat capacity" in keyword
+                                or "enthalpy" in keyword
+                                or "entropy" in keyword
+                            ):
+                                value = float(value) * kcal2kJ
                             system_properties.put(keyword, value)
                         except Exception as e:
                             print(f"{e}: {key}")
