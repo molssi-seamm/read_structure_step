@@ -158,6 +158,7 @@ def load_cif(
     configurations = []
     record_no = 0
     structure_no = 0
+    n_errors = 0
     lines = []
     in_block = False
     block_name = ""
@@ -181,6 +182,7 @@ def load_cif(
                         break
                     if record_no not in indices:
                         lines = []
+                        lines.append(line)
                         continue
 
                     structure_no += 1
@@ -191,58 +193,77 @@ def load_cif(
                             system = system_db.create_system()
                             configuration = system.create_configuration()
 
-                    text = configuration.from_cif_text("\n".join(lines))
-                    if text != "":
-                        printer("\n")
-                        printer(__(text, indent=4 * " "))
+                    try:
+                        text = configuration.from_cif_text("".join(lines))
+                        if text != "":
+                            printer("\n")
+                            printer(__(text, indent=4 * " "))
+                    except Exception as e:
+                        n_errors += 1
+                        printer("")
+                        printer(f" Error handling entry {record_no} in the CIF file:")
+                        printer("        " + str(e))
+                        printer("    Text of the entry is")
+                        printer("    " + 60 * "-")
+                        for tmp in lines:
+                            printer("    " + tmp.rstrip())
+                        printer("    " + 60 * "-")
+                        printer("")
+                        if n_structures <= 1:
+                            raise
+                    else:
+                        configurations.append(configuration)
 
-                    configurations.append(configuration)
+                        logger.debug(
+                            f"   added system {system_db.n_systems}: {block_name}"
+                        )
 
-                    logger.debug(f"   added system {system_db.n_systems}: {block_name}")
+                        # Set the system name
+                        if system_name is not None and system_name != "":
+                            lower_name = str(system_name).lower()
+                            if "from file" in lower_name:
+                                system.name = block_name
+                            elif "file name" in lower_name:
+                                system.name = path.stem
+                            elif "formula" in lower_name:
+                                system.name = configuration.formula()[0]
+                            elif "empirical formula" in lower_name:
+                                system.name = configuration.formula()[1]
+                            else:
+                                system.name = str(system_name)
 
-                    # Set the system name
-                    if system_name is not None and system_name != "":
-                        lower_name = str(system_name).lower()
-                        if "from file" in lower_name:
-                            system.name = block_name
-                        elif "file name" in lower_name:
-                            system.name = path.stem
-                        elif "formula" in lower_name:
-                            system.name = configuration.formula()[0]
-                        elif "empirical formula" in lower_name:
-                            system.name = configuration.formula()[1]
-                        else:
-                            system.name = str(system_name)
+                        # And the configuration name
+                        if configuration_name is not None and configuration_name != "":
+                            lower_name = str(configuration_name).lower()
+                            if "from file" in lower_name:
+                                configuration.name = block_name
+                            elif "file name" in lower_name:
+                                configuration.name = path.stem
+                            elif "formula" in lower_name:
+                                configuration.name = configuration.formula()[0]
+                            elif "empirical formula" in lower_name:
+                                configuration.name = configuration.formula()[1]
+                            else:
+                                configuration.name = str(configuration_name)
+                        logger.debug(
+                            f"   added system {system_db.n_systems}: {block_name}"
+                        )
 
-                    # And the configuration name
-                    if configuration_name is not None and configuration_name != "":
-                        lower_name = str(configuration_name).lower()
-                        if "from file" in lower_name:
-                            configuration.name = block_name
-                        elif "file name" in lower_name:
-                            configuration.name = path.stem
-                        elif "formula" in lower_name:
-                            configuration.name = configuration.formula()[0]
-                        elif "empirical formula" in lower_name:
-                            configuration.name = configuration.formula()[1]
-                        else:
-                            configuration.name = str(configuration_name)
-                    logger.debug(f"   added system {system_db.n_systems}: {block_name}")
-
-                    if printer:
-                        percent = int(100 * structure_no / n_structures)
-                        if percent > last_percent:
-                            t1 = time.time()
-                            if t1 - last_t >= 60:
-                                t = int(t1 - t0)
-                                rate = structure_no / (t1 - t0)
-                                t_left = int((n_structures - structure_no) / rate)
-                                printer(
-                                    f"\t{structure_no:6} ({percent}%) structures read "
-                                    f"in {t} seconds. About {t_left} seconds remaining."
-                                )
-                                last_t = t1
-                                last_percent = percent
+                        if printer:
+                            percent = int(100 * structure_no / n_structures)
+                            if percent > last_percent:
+                                t1 = time.time()
+                                if t1 - last_t >= 60:
+                                    t = int(t1 - t0)
+                                    rate = structure_no / (t1 - t0)
+                                    t_left = int((n_structures - structure_no) / rate)
+                                    printer(
+                                        f"\t{structure_no:6} ({percent}%) structures "
+                                        f"read in {t} seconds. About {t_left} seconds "
+                                        "remaining."
+                                    )
+                                    last_t = t1
+                                    last_percent = percent
                 block_name = line[5:].strip()
                 lines = []
             lines.append(line)
@@ -259,13 +280,13 @@ def load_cif(
                         system = system_db.create_system()
                         configuration = system.create_configuration()
 
-                text = configuration.from_cif_text("\n".join(lines))
+                text = configuration.from_cif_text("".join(lines))
                 logger.debug(f"   added system {system_db.n_systems}: {block_name}")
                 if text != "":
                     printer("\n")
                     printer(__(text, indent=4 * " "))
 
-                    configurations.append(configuration)
+                configurations.append(configuration)
 
                 # Set the system name
                 if system_name is not None and system_name != "":
@@ -294,5 +315,15 @@ def load_cif(
                         configuration.name = configuration.formula()[1]
                     else:
                         configuration.name = str(configuration_name)
+
+    if printer:
+        t1 = time.time()
+        rate = structure_no / (t1 - t0)
+        printer(
+            f"    Read {structure_no - n_errors} structures in {t1 - t0:.1f} "
+            f"seconds = {rate:.2f} per second"
+        )
+        if n_errors > 0:
+            printer(f"    {n_errors} structures could not be read due to errors.")
 
         return configurations

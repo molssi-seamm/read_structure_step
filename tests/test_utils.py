@@ -10,9 +10,10 @@ from . import build_filenames
 from molsystem.system_db import SystemDB
 
 bond_string = """\
-   i  j  bondorder  offset1  offset2  offset3
-1  1  2          1        0        0        0
-2  1  3          1        0        0        0"""
+   i  j  bondorder symop1 symop2
+1  1  2          1      .      .
+2  1  3          1      .      ."""
+
 
 @pytest.fixture(scope="module")
 def configuration():

@@ -9,6 +9,7 @@ from . import build_filenames
 
 from molsystem.system_db import SystemDB
 
+
 @pytest.fixture()
 def configuration():
     """Create a system db, system and configuration."""
@@ -24,7 +25,9 @@ def configuration():
     except Exception:
         print("Caught error deleting the database")
 
+
 #        "ABENEB01.cif",
+
 
 @pytest.mark.parametrize(
     "structure",
@@ -33,6 +36,16 @@ def configuration():
     ],
 )
 def test_cif(configuration, structure):
+    """Test the bonds in a benzene crystal."""
+    correct = (
+        "1.3788 1.3788 1.3788 1.3788 1.3788 1.3788 1.3788 1.3788 "
+        "1.3820 1.3820 1.3820 1.3820 1.3820 1.3820 1.3820 1.3820 "
+        "0.9300 0.9300 0.9300 0.9300 0.9300 0.9300 0.9300 0.9300 "
+        "1.3761 1.3761 1.3761 1.3761 1.3761 1.3761 1.3761 1.3761 "
+        "0.9306 0.9306 0.9306 0.9306 0.9306 0.9306 0.9306 0.9306 "
+        "0.9296 0.9296 0.9296 0.9296 0.9296 0.9296 0.9296 0.9296"
+    )
+
     file_name = build_filenames.build_data_filename(structure)
     system = configuration.system
     system_db = system.system_db
@@ -45,6 +58,15 @@ def test_cif(configuration, structure):
     )
 
     assert system_db.n_systems == 1
-    configuration = system_db.system.configuration
+    configuration = system.configuration
+
+    atoms = configuration.atoms
+    assert atoms.n_atoms == 48
     bonds = configuration.bonds
-    assert bonds.n_bonds == 12 * 4
+    assert bonds.n_bonds == 48
+
+    lengths = " ".join([f"{r:.4f}" for r in bonds.get_lengths()])
+    if lengths != correct:
+        print(lengths)
+
+    assert lengths == correct

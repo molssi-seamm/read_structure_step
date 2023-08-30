@@ -10,30 +10,30 @@ from . import build_filenames
 from molsystem.system_db import SystemDB
 
 bond_string = """\
-    i   j  bondorder  offset1  offset2  offset3
-1   1   2          1        0        0        0
-2   1   5          1        0        0        0
-3   1   7          1        0        0        0
-4   2   3          2        0        0        0
-5   3   4          1        0        0        0
-6   3   6          1        0        0        0
-7   4   5          2        0        0        0
-8   5   8          1        0        0        0
-9   6   9          1        0        0        0
-10  6  10          1        0        0        0"""
+    i   j  bondorder symop1 symop2
+1   1   2          1      .      .
+2   1   5          1      .      .
+3   1   7          1      .      .
+4   2   3          2      .      .
+5   3   4          1      .      .
+6   3   6          1      .      .
+7   4   5          2      .      .
+8   5   8          1      .      .
+9   6   9          1      .      .
+10  6  10          1      .      ."""
 
 xyz_bond_string = """\
-    i   j  bondorder  offset1  offset2  offset3
-1   1   7          1        0        0        0
-2   5   8          1        0        0        0
-3   1   5          1        0        0        0
-4   1   2          1        0        0        0
-5   4   5          2        0        0        0
-6   2   3          2        0        0        0
-7   3   4          1        0        0        0
-8   3   6          1        0        0        0
-9   6  10          1        0        0        0
-10  6   9          1        0        0        0"""
+    i   j  bondorder symop1 symop2
+1   1   7          1      .      .
+2   5   8          1      .      .
+3   1   5          1      .      .
+4   1   2          1      .      .
+5   4   5          2      .      .
+6   2   3          2      .      .
+7   3   4          1      .      .
+8   3   6          1      .      .
+9   6  10          1      .      .
+10  6   9          1      .      ."""
 
 acetonitrile_bonds = """\
    i  j  bondorder
