@@ -79,7 +79,6 @@ class ReadStructure(seamm.Node):
         # Remember if the parser exists ... this type of step may have been
         # found before
         parser_exists = parser.exists(parser_name)
-        print(f"{parser_exists=}")
 
         # Create the standard options, e.g. log-level
         result = super().create_parser(name=parser_name)
@@ -212,9 +211,7 @@ class ReadStructure(seamm.Node):
 
             # Read the file into the system
             system_db = self.get_variable("_system_db")
-            system, configuration = self.get_system_configuration(
-                P, structure_handling=True
-            )
+            system, configuration = self.get_system_configuration(P, same_as=None)
 
             configurations = read(
                 filename,
@@ -327,7 +324,7 @@ class ReadStructure(seamm.Node):
                     # Read the file into the system
                     system_db = self.get_variable("_system_db")
                     system, configuration = self.get_system_configuration(
-                        P, structure_handling=True
+                        P, same_as=None
                     )
 
                     read(
