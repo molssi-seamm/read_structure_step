@@ -181,7 +181,7 @@ class WriteStructure(seamm.Node):
 
         # Write the file into the system
         system_db = self.get_variable("_system_db")
-        system, configuration = self.get_system_configuration(P)
+        system, configuration = self.get_system_configuration()
 
         structures = P["structures"]
         configs = P["configurations"]
