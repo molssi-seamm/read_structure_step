@@ -2,8 +2,11 @@
 The mmcif reader/writer
 """
 
+import bz2
+import gzip
 import logging
 from pathlib import Path
+import time
 
 from ..registries import register_format_checker
 from ..registries import register_reader
@@ -241,3 +244,90 @@ def load_mmcif(
                     configuration.name = str(configuration_name)
 
         return configurations
+
+
+@register_writer(".mmcif -- Macromolecular Crystallographic Information File")
+def write_mmcif(
+    path,
+    configurations,
+    extension=None,
+    remove_hydrogens="no",
+    printer=None,
+    references=None,
+    bibliography=None,
+):
+    """Write to MMCIF files.
+
+    Parameters
+    ----------
+    path : str
+        Name of the file
+
+    configurations : [Configuration]
+        The SEAMM configurations to write
+
+    extension : str, optional, default: None
+        The extension, including initial dot, defining the format.
+
+    remove_hydrogens : str = "no"
+        Whether to remove hydrogen atoms before writing the structure to file.
+
+    printer : Logger or Printer
+        A function that prints to the appropriate place, used for progress.
+
+    references : ReferenceHandler = None
+        The reference handler object or None
+
+    bibliography : dict
+        The bibliography as a dictionary.
+    """
+
+    if isinstance(path, str):
+        path = Path(path)
+    path.expanduser().resolve()
+
+    n_structures = len(configurations)
+    last_percent = 0
+    last_t = t0 = time.time()
+    structure_no = 0
+    compress = path.suffix in (".gz", ".bz")
+    with (
+        gzip.open(path, mode="wb")
+        if path.suffix == ".gz"
+        else bz2.open(path, mode="wb")
+        if path.suffix == ".bz2"
+        else open(path, "w")
+    ) as fd:
+        for configuration in configurations:
+            text = configuration.to_mmcif_text()
+
+            structure_no += 1
+
+            if compress:
+                fd.write(bytes(text, "utf-8"))
+            else:
+                fd.write(text)
+
+            if printer:
+                percent = int(100 * structure_no / n_structures)
+                if percent > last_percent:
+                    t1 = time.time()
+                    if t1 - last_t >= 60:
+                        t = int(t1 - t0)
+                        rate = structure_no / (t1 - t0)
+                        t_left = int((n_structures - structure_no) / rate)
+                        printer(
+                            f"\t{structure_no:6} ({percent}%) structures wrote in {t} "
+                            f"seconds. About {t_left} seconds remaining."
+                        )
+                        last_t = t1
+                        last_percent = percent
+
+    if printer:
+        t1 = time.time()
+        rate = structure_no / (t1 - t0)
+        printer(
+            f"    Wrote {structure_no} structures in {t1 - t0:.1f} seconds = "
+            f"{rate:.2f} per second"
+        )
+    return configurations
