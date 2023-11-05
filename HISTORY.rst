@@ -1,7 +1,11 @@
 =======
 History
 =======
+2023.11.5 -- Added writers for CIF and mmCIF.
 
+2023.11.2 -- Initial changes to structure handling
+  * Moving towards the standard structure handling that has developed across SEAMM.
+  
 2023.8.30 -- Support for spacegroup symmetry
 
 2023.7.28 -- Implemented ranges for reading XYZ and SDF files.
