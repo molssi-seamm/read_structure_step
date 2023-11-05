@@ -10,6 +10,7 @@ import time
 
 from ..registries import register_format_checker
 from ..registries import register_reader
+from ..registries import register_writer
 from ..registries import set_format_metadata
 
 logger = logging.getLogger(__name__)
