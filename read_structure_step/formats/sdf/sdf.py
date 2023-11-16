@@ -200,7 +200,7 @@ def load_sdf(
             if "SEAMM=" in title:
                 for tmp in title.split("|"):
                     if "SEAMM=" in tmp and "/" in tmp:
-                        sysname, confname = tmp.split("=", 1)[1].split("/")
+                        sysname, confname = tmp.split("=", 1)[1].split("/", 1)
                         sysname = sysname.strip()
                         confname = confname.strip()
                         have_sysname = True
