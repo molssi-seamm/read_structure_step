@@ -295,9 +295,7 @@ def write_mmcif(
     with (
         gzip.open(path, mode="wb")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="wb")
-        if path.suffix == ".bz2"
-        else open(path, "w")
+        else bz2.open(path, mode="wb") if path.suffix == ".bz2" else open(path, "w")
     ) as fd:
         for configuration in configurations:
             text = configuration.to_mmcif_text()

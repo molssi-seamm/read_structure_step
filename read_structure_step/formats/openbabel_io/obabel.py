@@ -22,7 +22,7 @@ def load_file(
     path,
     configuration,
     extension=".sdf",
-    add_hydrogens=True,
+    add_hydrogens=False,
     system_db=None,
     system=None,
     indices="1:end",
@@ -111,24 +111,44 @@ def load_file(
     # Set the system name
     if system_name is not None and system_name != "":
         lower_name = system_name.lower()
-        if "from file" in lower_name:
-            system.name = obMol.GetTitle()
+        if lower_name == "title":
+            tmp = obMol.GetTitle()
+            if tmp != "":
+                system.name = tmp
+            else:
+                system.name = path.stem
         elif "canonical smiles" in lower_name:
             system.name = configuration.canonical_smiles
         elif "smiles" in lower_name:
             system.name = configuration.smiles
+        elif "iupac" in lower_name:
+            system.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            system.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            system.name = configuration.inchi
         else:
             system.name = system_name
 
     # And the configuration name
     if configuration_name is not None and configuration_name != "":
         lower_name = configuration_name.lower()
-        if "from file" in lower_name:
-            configuration.name = obMol.GetTitle()
+        if lower_name == "title":
+            tmp = obMol.GetTitle()
+            if tmp != "":
+                configuration.name = tmp
+            else:
+                configuration.name = path.stem
         elif "canonical smiles" in lower_name:
             configuration.name = configuration.canonical_smiles
         elif "smiles" in lower_name:
             configuration.name = configuration.smiles
+        elif "iupac" in lower_name:
+            configuration.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            configuration.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            configuration.name = configuration.inchi
         elif lower_name == "sequential":
             configuration.name = "1"
         else:

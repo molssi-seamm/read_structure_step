@@ -135,9 +135,7 @@ def load_cif(
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="rt")
-        if path.suffix == ".bz2"
-        else open(path, "r")
+        else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
         for line in fd:
             if line[0:5] == "data_":
@@ -166,9 +164,7 @@ def load_cif(
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="rt")
-        if path.suffix == ".bz2"
-        else open(path, "r")
+        else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
         for line in fd:
             if line[0:5] == "data_":
@@ -378,9 +374,7 @@ def write_cif(
     with (
         gzip.open(path, mode="wb")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="wb")
-        if path.suffix == ".bz2"
-        else open(path, "w")
+        else bz2.open(path, mode="wb") if path.suffix == ".bz2" else open(path, "w")
     ) as fd:
         for configuration in configurations:
             text = configuration.to_cif_text()

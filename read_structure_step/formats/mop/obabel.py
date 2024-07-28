@@ -497,9 +497,7 @@ def load_mop(
     # Set the system name
     if system_name is not None and system_name != "":
         lower_name = system_name.lower()
-        if "from file" in lower_name:
-            system.name = str(path)
-        elif lower_name == "title":
+        if lower_name == "title":
             if len(description_lines) > 0:
                 system.name = description_lines[0]
             else:
@@ -508,18 +506,30 @@ def load_mop(
             system.name = configuration.canonical_smiles
         elif "smiles" in lower_name:
             system.name = configuration.smiles
+        elif "iupac" in lower_name:
+            system.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            system.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            system.name = configuration.inchi
         else:
             system.name = system_name
 
     # And the configuration name
     if configuration_name is not None and configuration_name != "":
         lower_name = configuration_name.lower()
-        if "from file" in lower_name:
+        if lower_name == "title":
             configuration.name = obMol.GetTitle()
         elif "canonical smiles" in lower_name:
             configuration.name = configuration.canonical_smiles
         elif "smiles" in lower_name:
             configuration.name = configuration.smiles
+        elif "iupac" in lower_name:
+            configuration.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            configuration.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            configuration.name = configuration.inchi
         elif lower_name == "sequential":
             configuration.name = "1"
         else:

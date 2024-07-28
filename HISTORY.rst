@@ -1,6 +1,12 @@
 =======
 History
 =======
+2024.7.28 -- Added new names for systems and configurations
+  * Made the naming of systems and configurations consistent with the standard
+    parameters for them in the GUI.
+  * Removed all "from file" options, replacing them with "title", which means the title
+    from the file, if it exists, or the filename if it doesn't.
+    
 2023.11.16 -- Bugfix: titles in SDF files
   * Crashed reading some SDF files write by SEAMM due to the system and configuration
     names encoded in the title having multiple slashes (/).

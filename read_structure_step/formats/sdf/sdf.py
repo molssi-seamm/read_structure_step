@@ -64,7 +64,7 @@ def load_sdf(
     system=None,
     indices="1-end",
     subsequent_as_configurations=False,
-    system_name="Canonical SMILES",
+    system_name="title",
     configuration_name="sequential",
     printer=None,
     references=None,
@@ -105,7 +105,7 @@ def load_sdf(
         Normally and subsequent structures are loaded into new systems; however,
         if this option is True, they will be added as configurations.
 
-    system_name : str = "from file"
+    system_name : str = "title"
         The name for systems. Can be directives like "SMILES" or
         "Canonical SMILES". If None, no name is given.
 
@@ -139,9 +139,7 @@ def load_sdf(
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="rt")
-        if path.suffix == ".bz2"
-        else open(path, "r")
+        else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
         for line in fd:
             if line[0:4] == "$$$$":
@@ -172,9 +170,7 @@ def load_sdf(
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="rt")
-        if path.suffix == ".bz2"
-        else open(path, "r")
+        else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
         for line in fd:
             text += line
@@ -213,7 +209,7 @@ def load_sdf(
                 if subsequent_as_configurations:
                     configuration = system.create_configuration()
                 else:
-                    if have_sysname and "from file" in system_name.lower():
+                    if have_sysname and "title" in system_name.lower():
                         # Reuse the system if it exists
                         if system_db.system_exists(sysname):
                             system = system_db.get_system(sysname)
@@ -245,24 +241,42 @@ def load_sdf(
             # Set the system name
             if system_name is not None and system_name != "":
                 lower_name = system_name.lower()
-                if "from file" in lower_name:
-                    system.name = sysname
+                if lower_name == "title":
+                    if sysname != "":
+                        system.name = sysname
+                    else:
+                        system.name = f"{path.stem}_{record_no}"
                 elif "canonical smiles" in lower_name:
                     system.name = configuration.canonical_smiles
                 elif "smiles" in lower_name:
                     system.name = configuration.smiles
+                elif "iupac" in lower_name:
+                    system.name = configuration.PC_iupac_name
+                elif "inchikey" in lower_name:
+                    system.name = configuration.inchikey
+                elif "inchi" in lower_name:
+                    system.name = configuration.inchi
                 else:
                     system.name = system_name
 
             # And the configuration name
             if configuration_name is not None and configuration_name != "":
                 lower_name = configuration_name.lower()
-                if "from file" in lower_name:
-                    configuration.name = confname
+                if lower_name == "title":
+                    if confname != "":
+                        configuration.name = confname
+                    else:
+                        configuration.name = f"{path.stem}_{record_no}"
                 elif "canonical smiles" in lower_name:
                     configuration.name = configuration.canonical_smiles
                 elif "smiles" in lower_name:
                     configuration.name = configuration.smiles
+                elif "iupac" in lower_name:
+                    configuration.name = configuration.PC_iupac_name
+                elif "inchikey" in lower_name:
+                    configuration.name = configuration.inchikey
+                elif "inchi" in lower_name:
+                    configuration.name = configuration.inchi
                 elif lower_name == "sequential":
                     configuration.name = str(record_no)
                 else:

@@ -13,6 +13,7 @@ directory, and is used for all normal output from this step.
 
 import logging
 from pathlib import PurePath, Path
+import pprint  # noqa: F401
 import tarfile
 import tempfile
 import textwrap
@@ -180,7 +181,6 @@ class ReadStructure(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
-
         # Check for tar files, potentially compressed
         if isinstance(P["file"], Path):
             path = P["file"].expanduser().resolve()
