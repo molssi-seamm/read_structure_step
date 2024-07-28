@@ -7,6 +7,10 @@ History
   * Removed all "from file" options, replacing them with "title", which means the title
     from the file, if it exists, or the filename if it doesn't.
     
+2023.11.16 -- Bugfix: titles in SDF files
+  * Crashed reading some SDF files write by SEAMM due to the system and configuration
+    names encoded in the title having multiple slashes (/).
+
 2023.11.5 -- Added writers for CIF and mmCIF.
 
 2023.11.2 -- Initial changes to structure handling
