@@ -1,6 +1,12 @@
 =======
 History
 =======
+2024.7.28 -- Added new names for systems and configurations
+  * Made the naming of systems and configurations consistent with the standard
+    parameters for them in the GUI.
+  * Removed all "from file" options, replacing them with "title", which means the title
+    from the file, if it exists, or the filename if it doesn't.
+    
 2023.11.5 -- Added writers for CIF and mmCIF.
 
 2023.11.2 -- Initial changes to structure handling

@@ -101,7 +101,7 @@ def load_mol2(
         Normally and subsequent structures are loaded into new systems; however,
         if this option is True, they will be added as configurations.
 
-    system_name : str = "from file"
+    system_name : str = "title"
         The name for systems. Can be directives like "SMILES" or
         "Canonical SMILES". If None, no name is given.
 
@@ -174,24 +174,44 @@ def load_mol2(
         # Set the system name
         if system_name is not None and system_name != "":
             lower_name = system_name.lower()
-            if "from file" in lower_name:
-                system.name = obMol.GetTitle()
+            if lower_name == "title":
+                tmp = obMol.GetTitle()
+                if tmp != "":
+                    system.name = tmp
+                else:
+                    system.name = f"{path.stem} {structure_no}"
             elif "canonical smiles" in lower_name:
                 system.name = configuration.canonical_smiles
             elif "smiles" in lower_name:
                 system.name = configuration.smiles
+            elif "iupac" in lower_name:
+                system.name = configuration.PC_iupac_name
+            elif "inchikey" in lower_name:
+                system.name = configuration.inchikey
+            elif "inchi" in lower_name:
+                system.name = configuration.inchi
             else:
                 system.name = system_name
 
         # And the configuration name
         if configuration_name is not None and configuration_name != "":
             lower_name = configuration_name.lower()
-            if "from file" in lower_name:
-                configuration.name = obMol.GetTitle()
+            if lower_name == "title":
+                tmp = obMol.GetTitle()
+                if tmp != "":
+                    configuration.name = tmp
+                else:
+                    configuration.name = f"{path.stem} {structure_no}"
             elif "canonical smiles" in lower_name:
                 configuration.name = configuration.canonical_smiles
             elif "smiles" in lower_name:
                 configuration.name = configuration.smiles
+            elif "iupac" in lower_name:
+                configuration.name = configuration.PC_iupac_name
+            elif "inchikey" in lower_name:
+                configuration.name = configuration.inchikey
+            elif "inchi" in lower_name:
+                configuration.name = configuration.inchi
             elif lower_name == "sequential":
                 configuration.name = str(structure_no)
             else:

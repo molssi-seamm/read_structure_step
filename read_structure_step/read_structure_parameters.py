@@ -57,8 +57,8 @@ class ReadStructureParameters(seamm.Parameters):
             "help_text": ("The type of file, overrides the extension"),
         },
         "add hydrogens": {
-            "default": "yes",
-            "kind": "bool",
+            "default": "no",
+            "kind": "boolean",
             "default_units": "",
             "enumeration": ("yes", "no"),
             "format_string": "s",
