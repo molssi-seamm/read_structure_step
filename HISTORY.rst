@@ -1,6 +1,14 @@
 =======
 History
 =======
+2024.8.23 -- Enhancements to directory handling
+  * Changed the handling of paths to make them relative to the directory that the step
+    is running in. In a loop, for instance, files are relative to the iteration
+    directory.
+  * When reading files, allow the syntax 'job://<job number>/...' to read files from
+    another job. If the job number is omitted, so the prefix is 'job:///...', the top
+    directory of the current job is used.
+
 2024.7.28 -- Added new names for systems and configurations
   * Made the naming of systems and configurations consistent with the standard
     parameters for them in the GUI.

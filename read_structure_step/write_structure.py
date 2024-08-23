@@ -12,7 +12,7 @@ directory, and is used for all normal output from this step.
 """
 
 import logging
-from pathlib import PurePath
+from pathlib import Path
 import textwrap
 
 import read_structure_step
@@ -159,9 +159,15 @@ class WriteStructure(seamm.Node):
             context=seamm.flowchart_variables._data
         )
 
+        # Save relative to current working directory
+        wd = Path(self.directory).parent
+
         # What type of file?
         filename = P["file"].strip()
-        path = PurePath(filename)
+        if filename.startswith("/"):
+            path = Path(self.flowchart.root_directory) / filename[1:]
+        else:
+            path = wd / filename
         file_type = P["file type"]
 
         if file_type != "from extension":
@@ -223,7 +229,7 @@ class WriteStructure(seamm.Node):
             )
         if n_per_file == "all" or n_configurations <= n_per_file:
             write(
-                filename,
+                str(path),
                 configurations,
                 extension=extension,
                 remove_hydrogens=P["remove hydrogens"],
