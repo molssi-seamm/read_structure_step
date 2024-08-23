@@ -181,11 +181,41 @@ class ReadStructure(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
+        # Read relative to current working directory
+        wd = Path(self.directory).parent
+
         # Check for tar files, potentially compressed
         if isinstance(P["file"], Path):
             path = P["file"].expanduser().resolve()
         else:
-            path = Path(P["file"].strip()).expanduser().resolve()
+            filename = P["file"]
+            if filename.startswith("/"):
+                path = Path(P["file"].strip()).expanduser().resolve()
+                if not path.exists():
+                    path = Path(self.flowchart.root_directory) / filename
+            elif filename.lower().startswith("job://"):
+                tmp = filename[6:]
+                if tmp[0] == "/":
+                    # Current job
+                    path = Path(self.flowchart.root_directory) / tmp[1:]
+                else:
+                    job_no, rest = tmp.split("/", 1)
+                    job_no = int(job_no)
+                    jobs_root = Path(self.flowchart.root_directory).parent.parent.parent
+                    if jobs_root.name != "Jobs":
+                        raise RuntimeError(
+                            f"Error find root for Job: {filename}: {jobs_root=}"
+                        )
+                    paths = [*jobs_root.glob(f"*/*/Job_{job_no:06d}")]
+                    if len(paths) == 0:
+                        raise RuntimeError(f"Could not find job '{job_no}'.")
+                    elif len(paths) == 1:
+                        path = paths[0] / rest
+                    else:
+                        paths = "/n/t'" + "',\n\t'".join(paths) + "'"
+                        raise RuntimeError(f"Found multiple jobs {job_no}: {paths}")
+            else:
+                path = wd / filename
 
         extensions = path.suffixes
         if ".tar" in extensions or ".tgz" in extensions:
