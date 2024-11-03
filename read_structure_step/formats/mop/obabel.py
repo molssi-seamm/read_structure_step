@@ -16,9 +16,8 @@ import subprocess
 
 from openbabel import openbabel
 from read_structure_step.formats.registries import register_reader
-import seamm
 from seamm_util import Q_
-from .find_mopac import find_mopac
+from .find_mopac import find_mopac  # noqa: F401
 
 if "OpenBabel_version" not in globals():
     OpenBabel_version = None
@@ -196,6 +195,7 @@ def load_mop(
     references=None,
     bibliography=None,
     save_data=True,
+    step=None,
     **kwargs,
 ):
     """Read a MOPAC input file.
@@ -405,10 +405,6 @@ def load_mop(
         except Exception:
             logger.info("**** falling back to MOPAC")
             # Try using a MOPAC output file instead. Works for e.g. mixed coordinates
-            mopac_exe = find_mopac()
-            if mopac_exe is None:
-                raise FileNotFoundError("The MOPAC executable could not be found")
-
             # Create an input file
             text = ["0SCF", "title", "description"]
             text.extend(raw_geometry_lines)
@@ -418,10 +414,7 @@ def load_mop(
 
             logger.debug(f"MOPAC input file:\n\n{files['mopac.dat']}\n")
 
-            local = seamm.ExecLocal()
-            result = local.run(
-                cmd=[mopac_exe, "mopac.dat"], files=files, return_files=["mopac.out"]
-            )
+            result = step.run_mopac(files=files, return_files=["mopac.out"])
 
             if result["mopac.out"]["data"] is None:
                 raise RuntimeError("MOPAC failed: " + result["mopac.out"]["exception"])
@@ -642,6 +635,7 @@ def load_mop(
                             keyword = metadata[keyword]
                             if value == "":
                                 print(f"Value for {keyword} missing in MOPAC .mop file")
+                                print("\n\t".join(description_lines))
                                 continue
                             if "reference" in keyword:
                                 description = keyword.split(".")[0]
@@ -672,7 +666,7 @@ def load_mop(
                                 ):
                                     stderr = float(stderr) * kcal2kJ
                                 system_properties.put(new_keyword, stderr)
-                            if (
+                            if "reference" not in keyword and (
                                 "heat capacity" in keyword
                                 or "enthalpy" in keyword
                                 or "entropy" in keyword
