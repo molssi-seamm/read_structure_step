@@ -11,9 +11,13 @@ will do in the initial summary of the job.
 directory, and is used for all normal output from this step.
 """
 
+import configparser
+import importlib
 import logging
+import os
 from pathlib import PurePath, Path
 import pprint  # noqa: F401
+import shutil
 import tarfile
 import tempfile
 import textwrap
@@ -23,7 +27,7 @@ import read_structure_step
 from .read import read
 import seamm
 from seamm_util import ureg, Q_  # noqa: F401
-from seamm_util import getParser
+from seamm_util import Configuration, getParser
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 from .utils import guess_extension
@@ -259,6 +263,7 @@ class ReadStructure(seamm.Node):
                 printer=printer.important,
                 references=self.references,
                 bibliography=self._bibliography,
+                step=self,
             )
 
             # Finish the output
@@ -371,6 +376,7 @@ class ReadStructure(seamm.Node):
                         printer=printer.important,
                         references=self.references,
                         bibliography=self._bibliography,
+                        step=self,
                     )
 
                     tmp_path.unlink()
@@ -384,3 +390,75 @@ class ReadStructure(seamm.Node):
                 indent=4 * " ",
             )
         )
+
+    def run_mopac(self, files=None, return_files=["mopac.out"]):
+        """Run MOPAC to parse the input file."""
+
+        import mopac_step
+
+        # Access the options
+        seamm_options = self.global_options
+
+        executor = self.flowchart.executor
+
+        # Read configuration file for MOPAC if it exists
+        executor_type = executor.name
+        full_config = configparser.ConfigParser()
+        ini_dir = Path(seamm_options["root"]).expanduser()
+        path = ini_dir / "mopac.ini"
+        # If the config file doesn't exists, get the default
+        if not path.exists():
+            resources = importlib.resources.files("mopac_step") / "data"
+            ini_text = (resources / "mopac.ini").read_text()
+            txt_config = Configuration(path)
+            txt_config.from_string(ini_text)
+
+            # Work out the conda info needed
+            txt_config.set_value("local", "conda", os.environ["CONDA_EXE"])
+            txt_config.set_value("local", "conda-environment", "seamm-mopac")
+            txt_config.save()
+
+        full_config.read(ini_dir / "mopac.ini")
+
+        # Getting desperate! Look for an executable in the path
+        if executor_type not in full_config:
+            path = shutil.which("mopac")
+            if path is None:
+                raise RuntimeError(
+                    f"No section for '{executor_type}' in MOPAC ini file "
+                    f"({ini_dir / 'mopac.ini'}), nor in the defaults, nor "
+                    "in the path!"
+                )
+            else:
+                txt_config = Configuration(path)
+                txt_config.add_section(executor_type)
+                txt_config.set_value(executor_type, "installation", "local")
+                txt_config.set_value(executor_type, "code", str(path))
+                txt_config.save()
+                full_config.read(ini_dir / "mopac.ini")
+
+        config = dict(full_config.items(executor_type))
+
+        # Use the matching version of the seamm-mopac image by default.
+        config["version"] = mopac_step.__version__
+
+        env = {
+            "OMP_NUM_THREADS": "1",
+        }
+
+        result = executor.run(
+            cmd=["{code}", "mopac.dat", ">", "stdout.txt", "2>", "stderr.txt"],
+            config=config,
+            directory=self.directory,
+            files=files,
+            return_files=return_files,
+            in_situ=True,
+            shell=True,
+            env=env,
+        )
+
+        if not result:
+            self.logger.error("There was an error running MOPAC")
+            return None
+
+        return result

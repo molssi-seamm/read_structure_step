@@ -1,6 +1,12 @@
 =======
 History
 =======
+2024.11.3 -- Bugfix: MOPAC files with references in comments
+  * Fixed a bug that caused a crash when reading MOPAC files with references in the
+    comments.
+  * Updated the MOPAC reader to the new approach for running MOPAC in the cases that
+    it is needed: Z-matrices and mixed inputs that OpenBabel can't handle.
+      
 2024.8.23 -- Enhancements to directory handling
   * Changed the handling of paths to make them relative to the directory that the step
     is running in. In a loop, for instance, files are relative to the iteration

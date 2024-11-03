@@ -1,6 +1,7 @@
-import seamm_util
 from pathlib import Path
 import os
+
+import seamm_util
 
 mopac_error_identifiers = []
 

@@ -21,6 +21,7 @@ def read(
     printer=None,
     references=None,
     bibliography=None,
+    step=None,
 ):
     """
     Calls the appropriate functions to parse the requested file.
@@ -69,6 +70,9 @@ def read(
 
     bibliography : dict
         The bibliography as a dictionary.
+
+    step : seamm.Node = None
+        The node in the flowchart, used for running e.g. MOPAC.
 
     Returns
     -------
@@ -124,6 +128,7 @@ def read(
         printer=printer,
         references=references,
         bibliography=bibliography,
+        step=step,
     )
 
     return configurations
