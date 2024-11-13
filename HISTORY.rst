@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.11.13 -- Bugfix: Issues with the names of properties
+  * Fixed syntax of the properties pulled out from MOPAC encoded parameterization
+    inputs.
+    
 2024.11.3 -- Bugfix: MOPAC files with references in comments
   * Fixed a bug that caused a crash when reading MOPAC files with references in the
     comments.

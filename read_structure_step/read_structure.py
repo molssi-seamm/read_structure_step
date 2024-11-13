@@ -398,7 +398,6 @@ class ReadStructure(seamm.Node):
 
         # Access the options
         seamm_options = self.global_options
-
         executor = self.flowchart.executor
 
         # Read configuration file for MOPAC if it exists
