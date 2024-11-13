@@ -26,18 +26,18 @@ logger = logging.getLogger("read_structure_step.read_structure")
 
 metadata = {
     "CP": "constant pressure heat capacity#experiment",
-    "CPR": "reference.constant pressure heat capacity#experiment",
+    "CPR": "constant pressure heat capacity,reference#experiment",
     "D": "dipole moment#experiment",
-    "DR": "dipole moment.reference#experiment",
+    "DR": "dipole moment,reference#experiment",
     "H": "enthalpy of formation#experiment",
-    "HR": "enthalpy of formation.reference#experiment",
+    "HR": "enthalpy of formation,reference#experiment",
     "S": "entropy#experiment",
-    "SR": "entropy.reference#experiment",
+    "SR": "entropy,reference#experiment",
     "I": "ionization energy#experiment",
     "IE": "ionization energy#experiment",
     "IA": "ionization energy#experiment",
-    "IR": "ionization energy.reference#experiment",
-    "GR": "geometry.reference#experiment",
+    "IR": "ionization energy,reference#experiment",
+    "GR": "geometry,reference#experiment",
 }
 multiplicities = {
     "SINGLET": 1,
@@ -628,17 +628,37 @@ def load_mop(
                             if keyword in ("WT", "DWT", "IWT", "HWT", "GWT", "ROOT"):
                                 continue
                             if keyword not in metadata:
-                                print("\n".join(description_lines))
-                                print(f"Missing keyword={keyword}")
-                                print()
+                                if printer is not None:
+                                    printer(
+                                        f"Missing keyword={keyword} in MOPAC metadata\n"
+                                    )
+                                    printer(
+                                        "\t" + "\n\t".join(description_lines) + "\n"
+                                    )
+                                else:
+                                    print("\n".join(description_lines))
+                                    print(f"Missing keyword={keyword}")
+                                    print()
                                 continue
                             keyword = metadata[keyword]
                             if value == "":
-                                print(f"Value for {keyword} missing in MOPAC .mop file")
-                                print("\n\t".join(description_lines))
+                                if printer is not None:
+                                    printer(
+                                        f"Value for {keyword} missing in MOPAC .mop "
+                                        "file"
+                                    )
+                                    printer(
+                                        "\t" + "\n\t".join(description_lines) + "\n"
+                                    )
+                                else:
+                                    print(
+                                        f"Value for {keyword} missing in MOPAC .mop "
+                                        "file"
+                                    )
+                                    print("\n\t".join(description_lines))
                                 continue
                             if "reference" in keyword:
-                                description = keyword.split(".")[0]
+                                description = keyword.split(",")[0]
                                 system_properties.add(
                                     keyword,
                                     "str",
@@ -651,7 +671,7 @@ def load_mop(
                                 value = tmp[0].strip()
                                 stderr = tmp[1].strip()
                                 tmp = keyword.split("#")
-                                tmp[0] = tmp[0] + ", stderr"
+                                tmp[0] = tmp[0] + ",stderr"
                                 new_keyword = "#".join(tmp)
                                 system_properties.add(
                                     new_keyword,
@@ -674,6 +694,9 @@ def load_mop(
                                 value = float(value) * kcal2kJ
                             system_properties.put(keyword, value)
                         except Exception as e:
-                            print(f"{e}: {key}")
+                            if printer is not None:
+                                printer(f"Error -- {e}: {key}")
+                            else:
+                                print(f"Error -- {e}: {key}")
 
     return [configuration]
