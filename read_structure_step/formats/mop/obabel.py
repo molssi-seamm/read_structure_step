@@ -505,6 +505,8 @@ def load_mop(
             system.name = configuration.inchikey
         elif "inchi" in lower_name:
             system.name = configuration.inchi
+        elif "formula" in lower_name:
+            system.name = configuration.formula[0]
         else:
             system.name = system_name
 
@@ -525,6 +527,8 @@ def load_mop(
             configuration.name = configuration.inchi
         elif lower_name == "sequential":
             configuration.name = "1"
+        elif "formula" in lower_name:
+            configuration.name = configuration.formula[0]
         else:
             configuration.name = configuration_name
 

@@ -204,6 +204,8 @@ def load_mol2(
                 system.name = configuration.inchikey
             elif "inchi" in lower_name:
                 system.name = configuration.inchi
+            elif "formula" in lower_name:
+                system.name = configuration.formula[0]
             else:
                 system.name = system_name
 
@@ -228,6 +230,8 @@ def load_mol2(
                 configuration.name = configuration.inchi
             elif lower_name == "sequential":
                 configuration.name = str(structure_no)
+            elif "formula" in lower_name:
+                configuration.name = configuration.formula[0]
             else:
                 configuration.name = configuration_name
 
