@@ -1,6 +1,8 @@
 =======
 History
 =======
+2024.11.29 -- Added chemical formula as option for system/configuration names
+
 2024.11.13 -- Bugfix: Issues with the names of properties
   * Fixed syntax of the properties pulled out from MOPAC encoded parameterization
     inputs.
