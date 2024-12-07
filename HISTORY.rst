@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.12.7 -- Minor update due to changes in molsystem
+  * The molsystem was updated to improve the handling of properties. This required
+    changes in this module to match the new molsystem.
+    
 2024.11.29 -- Added chemical formula as option for system/configuration names
 
 2024.11.13 -- Bugfix: Issues with the names of properties
