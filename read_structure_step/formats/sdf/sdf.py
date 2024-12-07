@@ -429,7 +429,7 @@ def write_sdf(
     compress = path.suffix == ".gz"
     with gzip.open(path, mode="wb") if compress else open(path, "w") as fd:
         for configuration in configurations:
-            obMol = configuration.to_OBMol(properties="all")
+            obMol = configuration.to_OBMol(properties="*")
 
             system = configuration.system
             title = f"SEAMM={system.name}/{configuration.name}"
