@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.12.29 -- Bugfix: Issue with reusing systems matching SDF files.
+  * The logic was faulty, so if the first structure in an SDF file was a configuration
+    of an existing system, it was not added to the system correctly.
+    
 2024.12.7 -- Minor update due to changes in molsystem
   * The molsystem was updated to improve the handling of properties. This required
     changes in this module to match the new molsystem.
