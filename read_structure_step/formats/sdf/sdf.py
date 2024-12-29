@@ -205,18 +205,30 @@ def load_sdf(
                 obMol.AddHydrogens()
 
             structure_no += 1
-            if structure_no > 1:
+
+            # See if either the system or configuration names are "title"
+            if (
+                system_name is not None
+                and system_name.lower() == "title"
+                and have_sysname
+            ):
+                # Reuse the system if it exists
+                if system_db.system_exists(sysname):
+                    system = system_db.get_system(sysname)
+                elif structure_no > 1:
+                    system = system_db.create_system()
+                if configuration_name.lower() == "title":
+                    names = system.configuration_names
+                    if confname in names:
+                        cid = system.get_configuration_id(confname)
+                        configuration = system.get_configuration(cid)
+                    elif structure_no > 1:
+                        configuration = system.create_configuration()
+            elif structure_no > 1:
                 if subsequent_as_configurations:
                     configuration = system.create_configuration()
                 else:
-                    if have_sysname and "title" in system_name.lower():
-                        # Reuse the system if it exists
-                        if system_db.system_exists(sysname):
-                            system = system_db.get_system(sysname)
-                        else:
-                            system = system_db.create_system()
-                    else:
-                        system = system_db.create_system()
+                    system = system_db.create_system()
                     configuration = system.create_configuration()
 
             try:
