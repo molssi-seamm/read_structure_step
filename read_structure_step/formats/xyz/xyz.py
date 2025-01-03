@@ -393,6 +393,9 @@ def load_xyz(
                     ):
                         logger.warning(f"{structure_no}: {tmp}")
 
+                # Extract any additional information from the title
+                extra = {}
+
                 if file_type == "Minnesota":
                     # Record the charge, and the spin state
                     configuration.charge = charge
@@ -415,8 +418,17 @@ def load_xyz(
                                     configuration.spin_multiplicity = int(val)
                                 except Exception:
                                     pass
-                            elif key == "CSD_code":
+                            elif key in ("CSD_code", "title"):
                                 title = val
+                            elif key == "model":
+                                extra["model"] = val
+                            elif key == "name":
+                                extra["name"] = val
+                            elif key == "symmetry":
+                                extra["symmetry"] = val
+                        else:
+                            if tmp == "TS":
+                                extra["target"] = "TS"
 
                 # Set the system name
                 if system_name is not None and system_name != "":
@@ -438,6 +450,10 @@ def load_xyz(
                         system.name = configuration.inchi
                     elif "formula" in lower_name:
                         system.name = configuration.formula[0]
+                    elif "name" in lower_name and "name" in extra:
+                        system.name = extra["name"]
+                    elif "model" in lower_name and "model" in extra:
+                        system.name = extra["model"]
                     else:
                         system.name = system_name
 
@@ -463,6 +479,10 @@ def load_xyz(
                         configuration.name = str(structure_no)
                     elif "formula" in lower_name:
                         configuration.name = configuration.formula[0]
+                    elif "name" in lower_name and "name" in extra:
+                        configuration.name = extra["name"]
+                    elif "model" in lower_name and "model" in extra:
+                        configuration.name = extra["model"]
                     else:
                         configuration.name = configuration_name
 

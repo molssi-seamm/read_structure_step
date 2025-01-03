@@ -46,7 +46,7 @@ class TkWriteStructure(seamm.TkNode):
             self[key] = P[key].widget(frame)
 
         # Set bindings
-        for name in ("file", "file type"):
+        for name in ("file", "file type", "structures"):
             combobox = self[name].combobox
             combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
             combobox.bind("<Return>", self.reset_dialog)
@@ -72,6 +72,7 @@ class TkWriteStructure(seamm.TkNode):
         extension = ""
         filename = self["file"].get().strip()
         file_type = self["file type"].get()
+        structures = self["structures"].get()
 
         if self.is_expr(filename) or self.is_expr(file_type):
             extension = "all"
@@ -100,7 +101,8 @@ class TkWriteStructure(seamm.TkNode):
         items = []
         if extension == "all" or not metadata["single_structure"]:
             items.append("structures")
-            items.append("configurations")
+            if structures != "current configuration":
+                items.append("configurations")
             items.append("ignore missing")
             items.append("number per file")
         items.append("remove hydrogens")

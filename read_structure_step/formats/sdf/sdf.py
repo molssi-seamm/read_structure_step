@@ -9,6 +9,7 @@ import shutil
 import string
 import subprocess
 import time
+import traceback
 
 from openbabel import openbabel
 
@@ -209,7 +210,7 @@ def load_sdf(
             # See if either the system or configuration names are "title"
             if (
                 system_name is not None
-                and system_name.lower() == "title"
+                and system_name.lower() in ("keep current name", "title")
                 and have_sysname
             ):
                 # Reuse the system if it exists
@@ -217,7 +218,7 @@ def load_sdf(
                     system = system_db.get_system(sysname)
                 elif structure_no > 1:
                     system = system_db.create_system()
-                if configuration_name.lower() == "title":
+                if configuration_name.lower() in ("keep current name", "title"):
                     names = system.configuration_names
                     if confname in names:
                         cid = system.get_configuration_id(confname)
@@ -238,6 +239,9 @@ def load_sdf(
                 printer("")
                 printer(f"    Error handling entry {record_no} in the SDF file:")
                 printer("        " + str(e))
+                printer(60 * "-")
+                printer("\n".join(traceback.format_exception(e)))
+                printer(60 * "-")
                 printer("    Text of the entry is")
                 printer("    " + 60 * "-")
                 for line in text.splitlines():
@@ -253,7 +257,7 @@ def load_sdf(
             # Set the system name
             if system_name is not None and system_name != "":
                 lower_name = system_name.lower()
-                if lower_name == "title":
+                if lower_name in ("keep current name", "title"):
                     if sysname != "":
                         system.name = sysname
                     else:
@@ -276,7 +280,7 @@ def load_sdf(
             # And the configuration name
             if configuration_name is not None and configuration_name != "":
                 lower_name = configuration_name.lower()
-                if lower_name == "title":
+                if lower_name in ("keep current name", "title"):
                     if confname != "":
                         configuration.name = confname
                     else:
