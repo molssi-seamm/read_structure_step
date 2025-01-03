@@ -1,6 +1,15 @@
 =======
 History
 =======
+2025.1.3 -- Enhancements to SDF and XYZ files
+  * Added more keywords to the header of XYZ files to allow for more flexibility in
+    reading them. Specifically 'title', 'model', and 'name', which can be used to name
+    the system and/or configuration.
+  * When reading SDF files, 'keep current name' will use the encoded system name in SDF
+    files written by SEAMM, if it exists.
+  * Fixed minor issue writing SDF files where the 'configurations' widget was displayed
+    when writing the current configuration. The widget is now correctly hidden.
+    
 2024.12.29 -- Bugfix: Issue with reusing systems matching SDF files.
   * The logic was faulty, so if the first structure in an SDF file was a configuration
     of an existing system, it was not added to the system correctly.
