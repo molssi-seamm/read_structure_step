@@ -1,6 +1,11 @@
 =======
 History
 =======
+2025.1.3.1 -- Bugfix: Issue with reading XYZ files
+  * If the XYZ file had the charge and spin multiplicity encoded in the comment line,
+    and the spin multiplicity came before the charge, the spin multiplicity was not
+    correctly set. This fixes that issue.
+    
 2025.1.3 -- Enhancements to SDF and XYZ files
   * Added more keywords to the header of XYZ files to allow for more flexibility in
     reading them. Specifically 'title', 'model', and 'name', which can be used to name
