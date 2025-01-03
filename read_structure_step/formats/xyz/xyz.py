@@ -403,6 +403,9 @@ def load_xyz(
 
                     logger.info(f"{charge=} {multiplicity=}")
                 elif "|" in title:
+                    # Careful! Setting charge sets spin to 0, so remember if we set
+                    # spin first
+                    spin = None
                     for tmp in title.split("|"):
                         if "=" in tmp:
                             key, val = tmp.split("=", maxsplit=1)
@@ -410,12 +413,15 @@ def load_xyz(
                             val = val.strip()
                             if key == "q":
                                 try:
-                                    configuration.charge = float(val)
+                                    configuration.charge = int(val)
+                                    if spin is not None:
+                                        configuration.spin_multiplicity = spin
                                 except Exception:
                                     pass
                             elif key == "S":
                                 try:
-                                    configuration.spin_multiplicity = int(val)
+                                    spin = int(val)
+                                    configuration.spin_multiplicity = spin
                                 except Exception:
                                     pass
                             elif key in ("CSD_code", "title"):
