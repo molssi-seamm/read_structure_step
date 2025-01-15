@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.utils &#8212; SEAMM Read Structure Plug-in 2025.1.3.1 documentation</title>
+    <title>read_structure_step.utils &#8212; SEAMM Read Structure Plug-in 2025.1.15 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=04bc431a"></script>
+    <script src="../../_static/documentation_options.js?v=db94f7d9"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.1.3.1" />
+  <meta name="docsearch:version" content="2025.1.15" />
   </head>
   
   
@@ -469,14 +469,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <article class="bd-article">
                   
   <h1>Source code for read_structure_step.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">formats</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">formats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
 
 <div class="viewcode-block" id="guess_extension">
 <a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.utils.guess_extension">[docs]</a>
-<span class="k">def</span> <span class="nf">guess_extension</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">use_file_name</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">guess_extension</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">use_file_name</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the file format. It can either use the file name extension or</span>
 <span class="sd">    guess based on signatures found in the file.</span>
@@ -523,7 +523,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="sanitize_file_format">
 <a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.utils.sanitize_file_format">[docs]</a>
-<span class="k">def</span> <span class="nf">sanitize_file_format</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">sanitize_file_format</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a uniform file format string.</span>
 
@@ -555,7 +555,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="parse_indices">
 <a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.utils.parse_indices">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_indices</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_indices</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">maximum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a list of values in the given index expression.</span>
 
 <span class="sd">    Handles expressions like &quot;1-10 by 2, 20-end&quot; which would result in</span>

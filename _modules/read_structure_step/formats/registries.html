@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.registries &#8212; SEAMM Read Structure Plug-in 2025.1.3.1 documentation</title>
+    <title>read_structure_step.formats.registries &#8212; SEAMM Read Structure Plug-in 2025.1.15 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=c224919a" />
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../_static/documentation_options.js?v=04bc431a"></script>
+    <script src="../../../_static/documentation_options.js?v=db94f7d9"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2025.1.3.1" />
+  <meta name="docsearch:version" content="2025.1.15" />
   </head>
   
   
@@ -510,7 +510,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="register_reader">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_reader">[docs]</a>
-<span class="k">def</span> <span class="nf">register_reader</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_reader</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">extension</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;.&quot;</span><span class="p">:</span>
@@ -523,10 +523,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">else</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
-    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
         <span class="n">REGISTERED_READERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
 
-        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapper_function</span>
@@ -537,7 +537,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="register_writer">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_writer">[docs]</a>
-<span class="k">def</span> <span class="nf">register_writer</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_writer</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A decorator for registering structure file writers.&quot;&quot;&quot;</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">file_format</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
     <span class="n">extension</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -551,10 +551,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">else</span><span class="p">:</span>
             <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
-    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
         <span class="n">REGISTERED_WRITERS</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;function&quot;</span><span class="p">:</span> <span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">description</span><span class="p">}</span>
 
-        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapper_function</span>
@@ -565,11 +565,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="register_format_checker">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.register_format_checker">[docs]</a>
-<span class="k">def</span> <span class="nf">register_format_checker</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_format_checker</span><span class="p">(</span><span class="n">file_format</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator_function</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
         <span class="n">REGISTERED_FORMAT_CHECKERS</span><span class="p">[</span><span class="n">file_format</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
 
-        <span class="k">def</span> <span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapper_function</span>
@@ -580,7 +580,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="get_format_metadata">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.get_format_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">get_format_metadata</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_format_metadata</span><span class="p">(</span><span class="n">extension</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the metadata for a given extension.</span>
 
 <span class="sd">    Parameters</span>
@@ -602,7 +602,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="set_format_metadata">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.set_format_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">set_format_metadata</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_format_metadata</span><span class="p">(</span><span class="n">extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the metadata for the given extensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -631,7 +631,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="last_resort_reader">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_reader">[docs]</a>
-<span class="k">def</span> <span class="nf">last_resort_reader</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">last_resort_reader</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
 
 <span class="sd">    Parameters</span>
@@ -661,7 +661,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="last_resort_writer">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_writer">[docs]</a>
-<span class="k">def</span> <span class="nf">last_resort_writer</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">last_resort_writer</span><span class="p">(</span><span class="n">formats</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the writer for a list of formats if there is no writer registered.</span>
 
 <span class="sd">    Parameters</span>
@@ -691,7 +691,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="last_resort_checker">
 <a class="viewcode-back" href="../../../api/read_structure_step.formats.html#read_structure_step.formats.registries.last_resort_checker">[docs]</a>
-<span class="k">def</span> <span class="nf">last_resort_checker</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">last_resort_checker</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Sets the reader for a list of formats if there is no reader registered.</span>
 
 <span class="sd">    Parameters</span>
