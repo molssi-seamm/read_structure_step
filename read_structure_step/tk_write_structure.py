@@ -101,7 +101,7 @@ class TkWriteStructure(seamm.TkNode):
         items = []
         if extension == "all" or not metadata["single_structure"]:
             items.append("structures")
-            if structures != "current configuration":
+            if structures in ("current system", "all systems"):
                 items.append("configurations")
             items.append("ignore missing")
             items.append("number per file")

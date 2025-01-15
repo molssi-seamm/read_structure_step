@@ -137,10 +137,12 @@ class WriteStructure(seamm.Node):
                     f"more than {n_per_file} structures each."
                 )
         else:
-            text = (
-                f"The variable {structures} will determine which systems to write out, "
-                f"and {configs} the configurations for those systems."
-            )
+            if isinstance(structures, str):
+                text = (
+                    f"The variable {structures} will determine which systems to write."
+                )
+            else:
+                text = "The list of configurations in 'structures' will be written out."
             if n_per_file != "all":
                 text += (
                     " The output will be broken into multiple files containing no "
@@ -216,6 +218,10 @@ class WriteStructure(seamm.Node):
                     cid = system.get_configuration_id(configs, errors=errors)
                     if cid is not None:
                         configurations.append(system.get_configuration(cid))
+        else:
+            configurations = structures
+            tmp = set([c.system.id for c in configurations])
+            n_systems = len(tmp)
 
         n_per_file = P["number per file"]
         n_configurations = len(configurations)
