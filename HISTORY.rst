@@ -1,6 +1,8 @@
 =======
 History
 =======
+2025.1.15 -- Added ability to write using an arbitrary list of structures.
+
 2025.1.3.1 -- Bugfix: Issue with reading XYZ files
   * If the XYZ file had the charge and spin multiplicity encoded in the comment line,
     and the spin multiplicity came before the charge, the spin multiplicity was not
