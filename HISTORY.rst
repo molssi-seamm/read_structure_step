@@ -1,6 +1,11 @@
 =======
 History
 =======
+2025.3.4 -- Improved handling of system names in SDF files
+  * Switched to new handling of system and configuration names as properties in SDF
+    files, rather than encoded in the title. This avoids problems with special
+    characters in name, for example when using SMILES as the name.
+    
 2025.1.15 -- Added ability to write using an arbitrary list of structures.
 
 2025.1.3.1 -- Bugfix: Issue with reading XYZ files
