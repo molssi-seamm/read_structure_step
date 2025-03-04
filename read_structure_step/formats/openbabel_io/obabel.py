@@ -1,5 +1,4 @@
-"""Implementation of the chemical file reader/write using Open Babel
-"""
+"""Implementation of the chemical file reader/write using Open Babel"""
 
 from pathlib import Path
 import shutil

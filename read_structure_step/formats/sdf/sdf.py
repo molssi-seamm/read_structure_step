@@ -189,21 +189,20 @@ def load_sdf(
 
             obConversion.ReadString(obMol, text)
 
-            # See if the system and configuration names are encoded in the title
-            title = obMol.GetTitle()
-            sysname = title
-            confname = title
-            have_sysname = False
-            if "SEAMM=" in title:
-                for tmp in title.split("|"):
-                    if "SEAMM=" in tmp and "/" in tmp:
-                        sysname, confname = tmp.split("=", 1)[1].split("/", 1)
-                        sysname = sysname.strip()
-                        confname = confname.strip()
-                        have_sysname = True
-
             if add_hydrogens:
                 obMol.AddHydrogens()
+
+            # See if the system and configuration names are given
+            have_sysname = False
+            sysname = None
+            confname = None
+            for item in obMol.GetData():
+                key = item.GetAttribute()
+                if key == "SEAMM|system name|str|":
+                    sysname = item.GetValue()
+                    have_sysname = True
+                elif key == "SEAMM|configuration name|str|":
+                    confname = item.GetValue()
 
             structure_no += 1
 
@@ -227,6 +226,7 @@ def load_sdf(
                         configuration = system.create_configuration()
             elif structure_no > 1:
                 if subsequent_as_configurations:
+                    sysname = system.name
                     configuration = system.create_configuration()
                 else:
                     system = system_db.create_system()
@@ -258,12 +258,14 @@ def load_sdf(
             if system_name is not None and system_name != "":
                 lower_name = system_name.lower()
                 if lower_name in ("keep current name", "title"):
-                    if sysname != "":
+                    if sysname is not None:
                         system.name = sysname
                     else:
                         system.name = f"{path.stem}_{record_no}"
                 elif "canonical smiles" in lower_name:
                     system.name = configuration.canonical_smiles
+                elif "isomeric smiles" in lower_name:
+                    system.name = configuration.isomeric_smiles
                 elif "smiles" in lower_name:
                     system.name = configuration.smiles
                 elif "iupac" in lower_name:
