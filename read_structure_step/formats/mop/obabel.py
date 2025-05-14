@@ -15,6 +15,7 @@ from openbabel import openbabel
 
 import molsystem
 from read_structure_step.formats.registries import register_reader
+from .find_mopac import find_mopac  # noqa: F401
 
 logger = logging.getLogger("read_structure_step.read_structure")
 
