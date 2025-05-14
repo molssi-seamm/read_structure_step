@@ -523,7 +523,7 @@ def load_mop(
                 alias=f"openbabel_{i}",
                 module="read_structure_step",
                 level=1,
-                note=f"The principle citation #{i} for OpenBabel.",
+                note=f"The principal citation #{i} for OpenBabel.",
             )
 
     return [configuration]
