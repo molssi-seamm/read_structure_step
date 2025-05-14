@@ -1,6 +1,9 @@
 =======
 History
 =======
+2025.5.14 -- Standardized citations to OpenBabel
+  * Internal change which should not affect users.
+    
 2025.3.4 -- Improved handling of system names in SDF files
   * Switched to new handling of system and configuration names as properties in SDF
     files, rather than encoded in the title. This avoids problems with special
