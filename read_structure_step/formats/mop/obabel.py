@@ -10,17 +10,11 @@ import time
 import logging
 from pathlib import Path
 import re
-import shutil
-import string
-import subprocess
 
 from openbabel import openbabel
-from read_structure_step.formats.registries import register_reader
-from seamm_util import Q_
-from .find_mopac import find_mopac  # noqa: F401
 
-if "OpenBabel_version" not in globals():
-    OpenBabel_version = None
+import molsystem
+from read_structure_step.formats.registries import register_reader
 
 logger = logging.getLogger("read_structure_step.read_structure")
 
@@ -212,8 +206,6 @@ def load_mop(
     we'll first preprocess the file to extract extra data and also to fit it to the
     format that OpenBabel can handle.
     """
-    global OpenBabel_version
-
     # Get the text in the file
     if isinstance(file_name, str):
         path = Path(file_name)
@@ -240,12 +232,9 @@ def load_mop(
     # Finally, the MOPAC test data usually has three comment lines to start, with a
     # single number on the second line, which is the heat of formation calculated by
     # MOPAC. If this format is found the HOF is captured.
-    kcal2kJ = Q_(1, "kcal").m_as("kJ")
-
     run_mopac = False
     keywords = []
     description_lines = []
-    energy = None
     geometry_lines = []
     raw_geometry_lines = []
     line_no = 0
@@ -257,13 +246,6 @@ def load_mop(
         line = line.strip()
         if len(line) > 0 and line[0] == "*":
             comment_lines += 1
-            if line_no == 2 and comment_lines == 2 and len(line.split()) == 2:
-                try:
-                    tmp_energy = float(line.split()[1])
-                except ValueError:
-                    pass
-                else:
-                    energy = tmp_energy
         else:
             if section == "keywords":
                 tmp = line.split()
@@ -534,173 +516,14 @@ def load_mop(
 
     if references:
         # Add the citations for Open Babel
-        references.cite(
-            raw=bibliography["openbabel"],
-            alias="openbabel_jcinf",
-            module="read_structure_step",
-            level=1,
-            note="The principle Open Babel citation.",
-        )
-
-        # See if we can get the version of obabel
-        if OpenBabel_version is None:
-            path = shutil.which("obabel")
-            if path is not None:
-                path = Path(path).expanduser().resolve()
-                try:
-                    result = subprocess.run(
-                        [str(path), "--version"],
-                        stdin=subprocess.DEVNULL,
-                        capture_output=True,
-                        text=True,
-                    )
-                except Exception:
-                    OpenBabel_version = "unknown"
-                else:
-                    OpenBabel_version = "unknown"
-                    lines = result.stdout.splitlines()
-                    for line in lines:
-                        line = line.strip()
-                        tmp = line.split()
-                        if len(tmp) == 9 and tmp[0] == "Open":
-                            OpenBabel_version = {
-                                "version": tmp[2],
-                                "month": tmp[4],
-                                "year": tmp[6],
-                            }
-                        break
-
-        if isinstance(OpenBabel_version, dict):
-            try:
-                template = string.Template(bibliography["obabel"])
-
-                citation = template.substitute(
-                    month=OpenBabel_version["month"],
-                    version=OpenBabel_version["version"],
-                    year=OpenBabel_version["year"],
-                )
-
-                references.cite(
-                    raw=citation,
-                    alias="obabel-exe",
-                    module="read_structure_step",
-                    level=1,
-                    note="The principle citation for the Open Babel executables.",
-                )
-            except Exception:
-                pass
-
-    # Save keywords, description and any data encoded in the file to the database
-    if save_data:
-        properties = configuration.properties
-        system_properties = system.properties
-        if len(keywords) != 0:
-            key = "keywords#MOPAC"
-            properties.add(
-                key, "str", description="The keywords for MOPAC", noerror=True
+        citations = molsystem.openbabel_citations()
+        for i, citation in enumerate(citations, start=1):
+            references.cite(
+                raw=citation,
+                alias=f"openbabel_{i}",
+                module="read_structure_step",
+                level=1,
+                note=f"The principle citation #{i} for OpenBabel.",
             )
-            properties.put(key, " ".join(keywords))
-        if len(description_lines) > 0:
-            key = "description#MOPAC"
-            properties.add(
-                key,
-                "str",
-                description="The description in the MOPAC input",
-                noerror=True,
-            )
-            properties.put(key, "\n".join(description_lines))
-        if energy is not None:
-            key = "reference energy#MOPAC"
-            properties.add(
-                key,
-                "float",
-                description="The reference energy from MOPAC",
-                units="kJ/mol",
-                noerror=True,
-            )
-            properties.put(key, energy * kcal2kJ)
-
-        # Handle properties encoded in the description
-        if len(description_lines) == 2 and "=" in description_lines[1]:
-            # Don't handle geometry lines yet.
-            if "GR=" not in description_lines[1] and "gr=" not in description_lines[1]:
-                for key in description_lines[1].split():
-                    if "=" in key:
-                        try:
-                            keyword, value = key.split("=")
-                            keyword = keyword.upper()
-                            if keyword in ("WT", "DWT", "IWT", "HWT", "GWT", "ROOT"):
-                                continue
-                            if keyword not in metadata:
-                                if printer is not None:
-                                    printer(
-                                        f"Missing keyword={keyword} in MOPAC metadata\n"
-                                    )
-                                    printer(
-                                        "\t" + "\n\t".join(description_lines) + "\n"
-                                    )
-                                else:
-                                    print("\n".join(description_lines))
-                                    print(f"Missing keyword={keyword}")
-                                    print()
-                                continue
-                            keyword = metadata[keyword]
-                            if value == "":
-                                if printer is not None:
-                                    printer(
-                                        f"Value for {keyword} missing in MOPAC .mop "
-                                        "file"
-                                    )
-                                    printer(
-                                        "\t" + "\n\t".join(description_lines) + "\n"
-                                    )
-                                else:
-                                    print(
-                                        f"Value for {keyword} missing in MOPAC .mop "
-                                        "file"
-                                    )
-                                    print("\n\t".join(description_lines))
-                                continue
-                            if "reference" in keyword:
-                                description = keyword.split(",")[0]
-                                system_properties.add(
-                                    keyword,
-                                    "str",
-                                    description=f"Reference for the {description}.",
-                                    noerror=True,
-                                )
-                            elif "," in value:
-                                # value , stderr
-                                tmp = value.split(",")
-                                value = tmp[0].strip()
-                                stderr = tmp[1].strip()
-                                tmp = keyword.split("#")
-                                tmp[0] = tmp[0] + ",stderr"
-                                new_keyword = "#".join(tmp)
-                                system_properties.add(
-                                    new_keyword,
-                                    "float",
-                                    description=f"stderr for the {keyword}.",
-                                    noerror=True,
-                                )
-                                if (
-                                    "heat capacity" in keyword
-                                    or "enthalpy" in keyword
-                                    or "entropy" in keyword
-                                ):
-                                    stderr = float(stderr) * kcal2kJ
-                                system_properties.put(new_keyword, stderr)
-                            if "reference" not in keyword and (
-                                "heat capacity" in keyword
-                                or "enthalpy" in keyword
-                                or "entropy" in keyword
-                            ):
-                                value = float(value) * kcal2kJ
-                            system_properties.put(keyword, value)
-                        except Exception as e:
-                            if printer is not None:
-                                printer(f"Error -- {e}: {key}")
-                            else:
-                                print(f"Error -- {e}: {key}")
 
     return [configuration]

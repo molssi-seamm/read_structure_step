@@ -1,14 +1,10 @@
 """Implementation of the chemical file reader/write using Open Babel"""
 
 from pathlib import Path
-import shutil
-import string
-import subprocess
 
 from openbabel import openbabel
 
-if "OpenBabel_version" not in globals():
-    OpenBabel_version = None
+import molsystem
 
 # Get the list of file formats from Open Babel
 obConversion = openbabel.OBConversion()
@@ -89,8 +85,6 @@ def load_file(
     [Configuration]
         The list of configurations created.
     """
-    global OpenBabel_version
-
     if isinstance(path, str):
         path = Path(path)
 
@@ -159,61 +153,15 @@ def load_file(
 
     if references:
         # Add the citations for Open Babel
-        references.cite(
-            raw=bibliography["openbabel"],
-            alias="openbabel_jcinf",
-            module="read_structure_step",
-            level=1,
-            note="The principle Open Babel citation.",
-        )
-
-        # See if we can get the version of obabel
-        if OpenBabel_version is None:
-            path = shutil.which("obabel")
-            if path is not None:
-                path = Path(path).expanduser().resolve()
-                try:
-                    result = subprocess.run(
-                        [str(path), "--version"],
-                        stdin=subprocess.DEVNULL,
-                        capture_output=True,
-                        text=True,
-                    )
-                except Exception:
-                    OpenBabel_version = "unknown"
-                else:
-                    OpenBabel_version = "unknown"
-                    lines = result.stdout.splitlines()
-                    for line in lines:
-                        line = line.strip()
-                        tmp = line.split()
-                        if len(tmp) == 9 and tmp[0] == "Open":
-                            OpenBabel_version = {
-                                "version": tmp[2],
-                                "month": tmp[4],
-                                "year": tmp[6],
-                            }
-                        break
-
-        if isinstance(OpenBabel_version, dict):
-            try:
-                template = string.Template(bibliography["obabel"])
-
-                citation = template.substitute(
-                    month=OpenBabel_version["month"],
-                    version=OpenBabel_version["version"],
-                    year=OpenBabel_version["year"],
-                )
-
-                references.cite(
-                    raw=citation,
-                    alias="obabel-exe",
-                    module="read_structure_step",
-                    level=1,
-                    note="The principle citation for the Open Babel executables.",
-                )
-            except Exception:
-                pass
+        citations = molsystem.openbabel_citations()
+        for i, citation in enumerate(citations, start=1):
+            references.cite(
+                raw=citation,
+                alias=f"openbabel_{i}",
+                module="read_structure_step",
+                level=1,
+                note=f"The principle citation #{i} for OpenBabel.",
+            )
 
     return [configuration]
 
@@ -262,8 +210,6 @@ def write_file(
     [Configuration]
         The list of configurations created.
     """
-    global OpenBabel_version
-
     if isinstance(path, str):
         path = Path(path)
 
@@ -289,60 +235,14 @@ def write_file(
 
     if references:
         # Add the citations for Open Babel
-        references.cite(
-            raw=bibliography["openbabel"],
-            alias="openbabel_jcinf",
-            module="read_structure_step",
-            level=1,
-            note="The principle Open Babel citation.",
-        )
-
-        # See if we can get the version of obabel
-        if OpenBabel_version is None:
-            path = shutil.which("obabel")
-            if path is not None:
-                path = Path(path).expanduser().resolve()
-                try:
-                    result = subprocess.run(
-                        [str(path), "--version"],
-                        stdin=subprocess.DEVNULL,
-                        capture_output=True,
-                        text=True,
-                    )
-                except Exception:
-                    OpenBabel_version = "unknown"
-                else:
-                    OpenBabel_version = "unknown"
-                    lines = result.stdout.splitlines()
-                    for line in lines:
-                        line = line.strip()
-                        tmp = line.split()
-                        if len(tmp) == 9 and tmp[0] == "Open":
-                            OpenBabel_version = {
-                                "version": tmp[2],
-                                "month": tmp[4],
-                                "year": tmp[6],
-                            }
-                        break
-
-        if isinstance(OpenBabel_version, dict):
-            try:
-                template = string.Template(bibliography["obabel"])
-
-                citation = template.substitute(
-                    month=OpenBabel_version["month"],
-                    version=OpenBabel_version["version"],
-                    year=OpenBabel_version["year"],
-                )
-
-                references.cite(
-                    raw=citation,
-                    alias="obabel-exe",
-                    module="read_structure_step",
-                    level=1,
-                    note="The principle citation for the Open Babel executables.",
-                )
-            except Exception:
-                pass
+        citations = molsystem.openbabel_citations()
+        for i, citation in enumerate(citations, start=1):
+            references.cite(
+                raw=citation,
+                alias=f"openbabel_{i}",
+                module="read_structure_step",
+                level=1,
+                note=f"The principle citation #{i} for OpenBabel.",
+            )
 
     return [configuration]
