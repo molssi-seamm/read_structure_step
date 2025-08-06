@@ -1,6 +1,10 @@
 =======
 History
 =======
+2025.8.6 -- Bugfix: Corrected handling of paths relative to the home directory
+  * The code did not correctly handle reading structures from files relative to home
+    directories.
+
 2025.5.14 -- Standardized citations to OpenBabel
   * Internal change which should not affect users.
     

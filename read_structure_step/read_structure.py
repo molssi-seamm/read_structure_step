@@ -192,11 +192,11 @@ class ReadStructure(seamm.Node):
         if isinstance(P["file"], Path):
             path = P["file"].expanduser().resolve()
         else:
-            filename = P["file"]
-            if filename.startswith("/"):
-                path = Path(P["file"].strip()).expanduser().resolve()
+            filename = P["file"].strip()
+            if filename.startswith("/") or filename.startswith("~"):
+                path = Path(filename).expanduser().resolve()
                 if not path.exists():
-                    path = Path(self.flowchart.root_directory) / filename
+                    path = Path(self.flowchart.root_directory) / filename[1:]
             elif filename.lower().startswith("job://"):
                 tmp = filename[6:]
                 if tmp[0] == "/":
@@ -220,6 +220,8 @@ class ReadStructure(seamm.Node):
                         raise RuntimeError(f"Found multiple jobs {job_no}: {paths}")
             else:
                 path = wd / filename
+            if not path.exists():
+                raise RuntimeError(f"Read Structure: file {str(path)} does not exist.")
 
         extensions = path.suffixes
         if ".tar" in extensions or ".tgz" in extensions:
