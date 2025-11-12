@@ -21,6 +21,7 @@ set_format_metadata(
     bonds=True,
     is_complete=False,
     add_hydrogens=True,
+    append=False,
 )
 
 

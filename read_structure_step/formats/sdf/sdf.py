@@ -26,6 +26,7 @@ set_format_metadata(
     bonds=True,
     is_complete=False,
     add_hydrogens=True,
+    append=True,
 )
 
 
@@ -347,6 +348,8 @@ def write_sdf(
     printer=None,
     references=None,
     bibliography=None,
+    append=False,
+    **kwargs,
 ):
     """Write an MDL structure-data (SDF) file.
 
@@ -376,6 +379,9 @@ def write_sdf(
 
     bibliography : dict
         The bibliography as a dictionary.
+
+    append : bool
+        Whether to append to the file.
     """
     if isinstance(path, str):
         path = Path(path)
@@ -389,8 +395,18 @@ def write_sdf(
     last_percent = 0
     last_t = t0 = time.time()
     structure_no = 1
-    compress = path.suffix == ".gz"
-    with gzip.open(path, mode="wb") if compress else open(path, "w") as fd:
+
+    compress = path.suffix in (".gz", ".bz")
+    mode = "a" if append else "w"
+    with (
+        gzip.open(path, mode=mode + "b")
+        if path.suffix == ".gz"
+        else (
+            bz2.open(path, mode=mode + "b")
+            if path.suffix == ".bz2"
+            else open(path, mode)
+        )
+    ) as fd:
         for configuration in configurations:
             obMol = configuration.to_OBMol(properties="*")
 

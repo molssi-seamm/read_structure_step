@@ -242,6 +242,8 @@ class WriteStructure(seamm.Node):
                 printer=printer.important,
                 references=self.references,
                 bibliography=self._bibliography,
+                append=P["append"],
+                extra_attributes=P["extra attributes"],
             )
         else:
             n_per_file = int(n_per_file)
@@ -266,6 +268,7 @@ class WriteStructure(seamm.Node):
                     printer=printer.important,
                     references=self.references,
                     bibliography=self._bibliography,
+                    append=P["append"],
                 )
 
         # Finish the output

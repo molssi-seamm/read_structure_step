@@ -14,6 +14,8 @@ def write(
     printer=None,
     references=None,
     bibliography=None,
+    append=False,
+    extra_attributes="",
 ):
     """
     Calls the appropriate functions to parse the requested file.
@@ -40,7 +42,17 @@ def write(
 
     bibliography : dict
         The bibliography as a dictionary.
-        The list of configurations created.
+
+    append : bool
+        Whether to append to the file.
+
+    extra_attributes : str
+        Extra attributes of the configuration as a string with key="value" ...
+        Where quotes are needed if the value contains blanks.
+
+    Returns
+    -------
+    The list of configurations created.
     """
 
     if type(file_name) is not str:
@@ -76,4 +88,6 @@ def write(
         printer=printer,
         references=references,
         bibliography=bibliography,
+        append=append,
+        extra_attributes=extra_attributes,
     )

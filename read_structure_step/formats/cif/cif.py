@@ -26,6 +26,7 @@ set_format_metadata(
     bonds=True,
     is_complete=True,
     add_hydrogens=False,
+    append=True,
 )
 
 
@@ -335,6 +336,8 @@ def write_cif(
     printer=None,
     references=None,
     bibliography=None,
+    append=False,
+    **kwargs,
 ):
     """Write to CIF files.
 
@@ -360,6 +363,9 @@ def write_cif(
 
     bibliography : dict
         The bibliography as a dictionary.
+
+    append : bool
+        Whether to append to the file
     """
 
     if isinstance(path, str):
@@ -371,10 +377,16 @@ def write_cif(
     last_t = t0 = time.time()
     structure_no = 0
     compress = path.suffix in (".gz", ".bz")
+
+    mode = "a" if append else "w"
     with (
-        gzip.open(path, mode="wb")
+        gzip.open(path, mode=mode + "b")
         if path.suffix == ".gz"
-        else bz2.open(path, mode="wb") if path.suffix == ".bz2" else open(path, "w")
+        else (
+            bz2.open(path, mode=mode + "b")
+            if path.suffix == ".bz2"
+            else open(path, mode)
+        )
     ) as fd:
         for configuration in configurations:
             text = configuration.to_cif_text()

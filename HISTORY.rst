@@ -1,6 +1,13 @@
 =======
 History
 =======
+2025.11.11 -- Added support for ASE style .extxyz files.
+  * Added the ability to read and write .extxyz files compatible with ASE. The units are
+    those used in ASE: eV, Å, and time = Å*amu^0.5/eV^0.5
+  * Added an option to specify extra attributes for the configuration in .extxyz files
+  * Added option to append to files when writing, if appropriate for the file type.
+  * Added ability to read SDF files from bz2 files.
+    
 2025.8.6 -- Bugfix: Corrected handling of paths relative to the home directory
   * The code did not correctly handle reading structures from files relative to home
     directories.
