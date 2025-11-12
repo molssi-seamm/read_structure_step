@@ -131,6 +131,8 @@ def load_extxyz(
     [Configuration]
         The list of configurations created.
     """
+    configurations = []
+
     if isinstance(path, str):
         path = Path(path)
 
@@ -157,10 +159,9 @@ def load_extxyz(
     indices = parse_indices(indices, n_records)
     n_structures = len(indices)
     if n_structures == 0:
-        return
+        return configurations
     stop = indices[-1]
 
-    configurations = []
     record_no = 0
     structure_no = 0
     line_no = 0
@@ -220,9 +221,9 @@ def load_extxyz(
                         if kind == "S":
                             data[key].append(tmp[i0])
                         elif kind == "R":
-                            data[key].append([float(v) for v in tmp[i0]])
+                            data[key].append(float(tmp[i0]))
                         elif kind == "I":
-                            data[key].append([int(v) for v in tmp[i0]])
+                            data[key].append(int(tmp[i0]))
                     else:
                         if kind == "S":
                             data[key].append(tmp[i0:i])
@@ -417,14 +418,14 @@ def write_extxyz(
 
     if isinstance(path, str):
         path = Path(path)
-    path.expanduser().resolve()
+    path = path.expanduser().resolve()
 
     n_structures = len(configurations)
     last_percent = 0
     last_t = t0 = time.time()
     structure_no = 0
 
-    compress = path.suffix in (".gz", ".bz")
+    compress = path.suffix in (".gz", ".bz2")
     mode = "a" if append else "w"
     with (
         gzip.open(path, mode=mode + "b")
@@ -533,7 +534,7 @@ def write_extxyz(
                     have_gradients
                 ]["value"]
                 units = configuration.properties.units(have_gradients)
-                factor = Q_(units).m_as("Å/fs")
+                factor = Q_(units).m_as("eV/Å")
                 forces = (-np.array(gradients) * factor).tolist()
 
             if have_velocities == "no":
@@ -550,7 +551,7 @@ def write_extxyz(
                 ]["value"]
                 units = configuration.properties.units(have_velocities)
                 factor = Q_(units).m_as("Å*amu^0.5/eV^0.5")
-                forces = (np.array(velocities) * factor).tolist()
+                velocities = (np.array(velocities) * factor).tolist()
 
             for symbol, xyz, force, velocity in zip(symbols, xyzs, forces, velocities):
                 line = f"{symbol:<2} "

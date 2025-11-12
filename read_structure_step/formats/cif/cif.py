@@ -376,7 +376,7 @@ def write_cif(
     last_percent = 0
     last_t = t0 = time.time()
     structure_no = 0
-    compress = path.suffix in (".gz", ".bz")
+    compress = path.suffix in (".gz", ".bz2")
 
     mode = "a" if append else "w"
     with (

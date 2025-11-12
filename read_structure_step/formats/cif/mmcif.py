@@ -298,7 +298,7 @@ def write_mmcif(
     last_t = t0 = time.time()
     structure_no = 0
 
-    compress = path.suffix in (".gz", ".bz")
+    compress = path.suffix in (".gz", ".bz2")
     mode = "a" if append else "w"
     with (
         gzip.open(path, mode=mode + "b")
