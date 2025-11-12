@@ -1,10 +1,13 @@
 =======
 History
 =======
-2025.11.11 -- This release adds support for ASE (Atomic Simulation Environment) style
-extended XYZ files (.extxyz) with appropriate unit handling (eV, Å, and
-time = Å*amu^0.5/eV^0.5). The changes also introduce file appending capabilities
-and support for reading compressed (bz2) SDF files.
+2025.11.11 -- Added support for ASE style .extxyz files.
+
+    This release adds support for ASE (Atomic Simulation Environment) style
+    extended XYZ files (.extxyz) with appropriate unit handling (eV, Å, and
+    time = Å*amu^0.5/eV^0.5). The changes also introduce file appending capabilities
+    and support for reading compressed (bz2) SDF files.
+
     * Added complete .extxyz format reader and writer with ASE compatibility
     * Added append mode option for file writers where applicable
     * Added extra_attributes parameter for .extxyz files to include custom metadata
