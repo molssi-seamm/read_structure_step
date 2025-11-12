@@ -174,6 +174,7 @@ def write_file(
     printer=None,
     references=None,
     bibliography=None,
+    append=False,
     **kwargs,
 ):
     """Use Open Babel for reading any of the formats it supports.

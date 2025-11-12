@@ -34,6 +34,8 @@ default_metadata = {
     "bonds": False,
     "is_complete": True,
     "add_hydrogens": False,
+    "append": False,
+    "extra_attributes": False,
 }
 
 

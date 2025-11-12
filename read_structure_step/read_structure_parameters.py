@@ -45,7 +45,7 @@ class ReadStructureParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": "s",
             "description": "Structure file:",
-            "help_text": ("The file containing the structure."),
+            "help_text": "The file containing the structure.",
         },
         "file type": {
             "default": "from extension",
@@ -54,7 +54,7 @@ class ReadStructureParameters(seamm.Parameters):
             "enumeration": ("from extension", *_filetypes),
             "format_string": "s",
             "description": "Type of file:",
-            "help_text": ("The type of file, overrides the extension"),
+            "help_text": "The type of file, overrides the extension",
         },
         "add hydrogens": {
             "default": "no",
@@ -63,7 +63,7 @@ class ReadStructureParameters(seamm.Parameters):
             "enumeration": ("yes", "no"),
             "format_string": "s",
             "description": "Add hydrogens:",
-            "help_text": ("Whether to add missing hydrogen atoms."),
+            "help_text": "Whether to add missing hydrogen atoms.",
         },
         "indices": {
             "default": "1-end",
@@ -72,7 +72,7 @@ class ReadStructureParameters(seamm.Parameters):
             "enumeration": ("1-end",),
             "format_string": "s",
             "description": "Structures to read:",
-            "help_text": ("The set of structures to read"),
+            "help_text": "The set of structures to read",
         },
     }
 

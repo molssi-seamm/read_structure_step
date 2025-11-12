@@ -45,7 +45,7 @@ class WriteStructureParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": "s",
             "description": "File:",
-            "help_text": ("The file to write."),
+            "help_text": "The file to write.",
         },
         "file type": {
             "default": "from extension",
@@ -54,7 +54,27 @@ class WriteStructureParameters(seamm.Parameters):
             "enumeration": ("from extension", *_filetypes),
             "format_string": "s",
             "description": "Type of file:",
-            "help_text": ("The type of file, overrides the extension"),
+            "help_text": "The type of file, overrides the extension",
+        },
+        "append": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "s",
+            "description": "Append to the file:",
+            "help_text": "Whether to append to the file rather than overwrite.",
+        },
+        "extra attributes": {
+            "default": "",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "s",
+            "description": "Extra attributes:",
+            "help_text": (
+                "Other attributes to add to the 'comment' line in the xyz file."
+            ),
         },
         "remove hydrogens": {
             "default": "no",

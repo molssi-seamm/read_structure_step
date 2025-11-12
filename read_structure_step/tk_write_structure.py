@@ -92,7 +92,14 @@ class TkWriteStructure(seamm.TkNode):
         # and put the correct ones back in.
         row = 0
         widgets = []
-        for item in ("file", "file type"):
+        keys = ["file", "file type"]
+        if extension == "all" or ("append" in metadata and metadata["append"]):
+            keys.append("append")
+        if extension == "all" or (
+            "extra_attributes" in metadata and metadata["extra_attributes"]
+        ):
+            keys.append("extra attributes")
+        for item in keys:
             self[item].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[item])
             row += 1
