@@ -480,12 +480,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                   
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
-<p>2025.11.11 – This release adds support for ASE (Atomic Simulation Environment) style
+<p>2025.11.11 – Added support for ASE style .extxyz files.</p>
+<blockquote>
+<div><p>This release adds support for ASE (Atomic Simulation Environment) style
 extended XYZ files (.extxyz) with appropriate unit handling (eV, Å, and
 time = Å*amu^0.5/eV^0.5). The changes also introduce file appending capabilities
 and support for reading compressed (bz2) SDF files.</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>Added complete .extxyz format reader and writer with ASE compatibility</p></li>
 <li><p>Added append mode option for file writers where applicable</p></li>
 <li><p>Added extra_attributes parameter for .extxyz files to include custom metadata</p></li>
