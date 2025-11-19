@@ -237,13 +237,48 @@ def load_extxyz(
                     # Last atom ... create the configuration
                     if record_no not in indices:
                         continue
+
                     structure_no += 1
-                    if structure_no > 1:
+
+                    # See if the system and configuration names are given
+                    if "SEAMM/system_name" in header:
+                        sysname = header["SEAMM/system_name"]
+                        have_sysname = True
+                    else:
+                        have_sysname = False
+                        sysname = None
+                    if "SEAMM/configuration_name" in header:
+                        confname = header["SEAMM/configuration_name"]
+                    else:
+                        confname = None
+
+                    # See if either the system or configuration names are "title"
+                    if (
+                        system_name is not None
+                        and system_name.lower() in ("keep current name", "title")
+                        and have_sysname
+                    ):
+                        # Reuse the system if it exists
+                        if system_db.system_exists(sysname):
+                            system = system_db.get_system(sysname)
+                        elif structure_no > 1:
+                            system = system_db.create_system(name=sysname)
+                        if configuration_name.lower() in ("keep current name", "title"):
+                            names = system.configuration_names
+                            if confname in names:
+                                cid = system.get_configuration_id(confname)
+                                configuration = system.get_configuration(cid)
+                            elif structure_no > 1:
+                                configuration = system.create_configuration(
+                                    name=confname
+                                )
+                    elif structure_no > 1:
                         if subsequent_as_configurations:
                             configuration = system.create_configuration()
                         else:
                             system = system_db.create_system()
                             configuration = system.create_configuration()
+
                     # Periodic
                     if "pbc" in header and header["pbc"] == "T T T":
                         configuration.periodicity = 3
@@ -316,9 +351,24 @@ def load_extxyz(
 
                     # Set the system name
                     if system_name is not None and system_name != "":
-                        lower_name = str(system_name).lower()
-                        if "from file" in lower_name:
-                            system.name = str(record_no)
+                        lower_name = system_name.lower()
+                        if lower_name in ("keep current name", "title"):
+                            if sysname is not None:
+                                system.name = sysname
+                            else:
+                                system.name = f"{path.stem}_{record_no}"
+                        elif "canonical smiles" in lower_name:
+                            system.name = configuration.canonical_smiles
+                        elif "isomeric smiles" in lower_name:
+                            system.name = configuration.isomeric_smiles
+                        elif "smiles" in lower_name:
+                            system.name = configuration.smiles
+                        elif "iupac" in lower_name:
+                            system.name = configuration.PC_iupac_name
+                        elif "inchikey" in lower_name:
+                            system.name = configuration.inchikey
+                        elif "inchi" in lower_name:
+                            system.name = configuration.inchi
                         elif "file name" in lower_name:
                             system.name = path.stem
                         elif "formula" in lower_name:
@@ -326,12 +376,27 @@ def load_extxyz(
                         elif "empirical formula" in lower_name:
                             system.name = configuration.formula()[1]
                         else:
-                            system.name = str(system_name)
+                            system.name = system_name
 
                     # And the configuration name
                     if configuration_name is not None and configuration_name != "":
-                        lower_name = str(configuration_name).lower()
-                        if "from file" in lower_name:
+                        lower_name = configuration_name.lower()
+                        if lower_name in ("keep current name", "title"):
+                            if confname:
+                                configuration.name = confname
+                            else:
+                                configuration.name = f"{path.stem}_{record_no}"
+                        elif "canonical smiles" in lower_name:
+                            configuration.name = configuration.canonical_smiles
+                        elif "smiles" in lower_name:
+                            configuration.name = configuration.smiles
+                        elif "iupac" in lower_name:
+                            configuration.name = configuration.PC_iupac_name
+                        elif "inchikey" in lower_name:
+                            configuration.name = configuration.inchikey
+                        elif "inchi" in lower_name:
+                            configuration.name = configuration.inchi
+                        elif lower_name == "sequential":
                             configuration.name = str(record_no)
                         elif "file name" in lower_name:
                             configuration.name = path.stem
@@ -340,7 +405,7 @@ def load_extxyz(
                         elif "empirical formula" in lower_name:
                             configuration.name = configuration.formula()[1]
                         else:
-                            configuration.name = str(configuration_name)
+                            configuration.name = configuration_name
                     logger.debug(f"   added system {system_db.n_systems}: {record_no}")
 
                     if printer:
@@ -364,8 +429,17 @@ def load_extxyz(
         rate = structure_no / (t1 - t0)
         printer(
             f"    Read {structure_no} structures in {t1 - t0:.1f} "
-            f"seconds = {rate:.2f} per second"
+            f"seconds = {rate:.2f} per second."
         )
+
+        ns = len({c.system.name for c in configurations})
+        nc = len({c.name for c in configurations})
+        printer(
+            f"    {ns} systems and {nc} configurations store the trajectory. The last"
+            " is"
+        )
+        printer(f"               system = {configurations[-1].system.name}")
+        printer(f"        configuration = {configurations[-1].name}")
 
     return configurations
 
@@ -425,13 +499,12 @@ def write_extxyz(
     last_t = t0 = time.time()
     structure_no = 0
 
-    compress = path.suffix in (".gz", ".bz2")
     mode = "a" if append else "w"
     with (
-        gzip.open(path, mode=mode + "b")
+        gzip.open(path, mode=mode + "t")
         if path.suffix == ".gz"
         else (
-            bz2.open(path, mode=mode + "b")
+            bz2.open(path, mode=mode + "t")
             if path.suffix == ".bz2"
             else open(path, mode)
         )
@@ -470,9 +543,9 @@ def write_extxyz(
 
             # See if the energy exists as a property. May be "potential energy"
             for prop in (
-                "potential energy*",
-                "enthalpy of formation*",
                 "DfE0*",
+                "enthalpy of formation*",
+                "potential energy*",
                 "E#*",
                 "total energy*",
                 "energy*",
@@ -509,11 +582,15 @@ def write_extxyz(
                     header += " ".join(stresses)
                     header += '"'
 
+            if "model=" not in extra_attributes and model != "":
+                header += f' model="{model}"'
+
+            header += f' SEAMM/system_name="{configuration.system.name}"'
+            header += f' SEAMM/configuration_name="{configuration.name}"'
+
             if extra_attributes != "":
                 header += " "
                 header += extra_attributes
-                if "model=" not in extra_attributes and model != "":
-                    header += f" model={model}"
 
             text.append(header)
 
@@ -543,14 +620,14 @@ def write_extxyz(
                 velocities = configuration.atoms.get_velocities(
                     fractionals=False, as_array=True
                 )
-                factor = Q_("Å/s").m_as("Å*amu^0.5/eV^0.5")
+                factor = Q_("Å/fs").m_as("eV^0.5/amu^0.5")
                 velocities = (velocities * factor).tolist()
             else:
                 velocities = configuration.properties.get(have_velocities)[
                     have_velocities
                 ]["value"]
                 units = configuration.properties.units(have_velocities)
-                factor = Q_(units).m_as("Å*amu^0.5/eV^0.5")
+                factor = Q_(units).m_as("eV^0.5/amu^0.5")
                 velocities = (np.array(velocities) * factor).tolist()
 
             for symbol, xyz, force, velocity in zip(symbols, xyzs, forces, velocities):
@@ -570,10 +647,8 @@ def write_extxyz(
 
             structure_no += 1
 
-            if compress:
-                fd.write(bytes(text, "utf-8"))
-            else:
-                fd.write(text)
+            fd.write(text)
+            fd.write("\n")
 
             if printer:
                 percent = int(100 * structure_no / n_structures)
