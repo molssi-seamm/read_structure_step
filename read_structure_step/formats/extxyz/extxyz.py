@@ -382,7 +382,7 @@ def load_extxyz(
                     if configuration_name is not None and configuration_name != "":
                         lower_name = configuration_name.lower()
                         if lower_name in ("keep current name", "title"):
-                            if confname != "":
+                            if confname:
                                 configuration.name = confname
                             else:
                                 configuration.name = f"{path.stem}_{record_no}"
@@ -627,7 +627,7 @@ def write_extxyz(
                     have_velocities
                 ]["value"]
                 units = configuration.properties.units(have_velocities)
-                factor = Q_("Å/fs").m_as("eV^0.5/amu^0.5")
+                factor = Q_(units).m_as("eV^0.5/amu^0.5")
                 velocities = (np.array(velocities) * factor).tolist()
 
             for symbol, xyz, force, velocity in zip(symbols, xyzs, forces, velocities):
