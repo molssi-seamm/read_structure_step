@@ -1,6 +1,13 @@
 =======
 History
 =======
+2025.11.19 -- Finalized support for ASE style .extxyz files
+    * Added handling of the system and configuration names encoded in the header of the
+      files, both on writing and reading.
+    * Fixed errors in units for velocities
+    * Cleaned up and standardized handling of compressed (gzip and bzip2) files across
+      the formats that support compression, currently CIF, SDF, and extended XYZ.
+
 2025.11.11 -- Added support for ASE style .extxyz files.
 
     This release adds support for ASE (Atomic Simulation Environment) style

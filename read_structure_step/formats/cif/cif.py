@@ -376,14 +376,13 @@ def write_cif(
     last_percent = 0
     last_t = t0 = time.time()
     structure_no = 0
-    compress = path.suffix in (".gz", ".bz2")
 
     mode = "a" if append else "w"
     with (
-        gzip.open(path, mode=mode + "b")
+        gzip.open(path, mode=mode + "t")
         if path.suffix == ".gz"
         else (
-            bz2.open(path, mode=mode + "b")
+            bz2.open(path, mode=mode + "t")
             if path.suffix == ".bz2"
             else open(path, mode)
         )
@@ -392,11 +391,7 @@ def write_cif(
             text = configuration.to_cif_text()
 
             structure_no += 1
-
-            if compress:
-                fd.write(bytes(text, "utf-8"))
-            else:
-                fd.write(text)
+            fd.write(text)
 
             if printer:
                 percent = int(100 * structure_no / n_structures)

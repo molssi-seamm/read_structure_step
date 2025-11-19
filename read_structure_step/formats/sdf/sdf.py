@@ -396,13 +396,12 @@ def write_sdf(
     last_t = t0 = time.time()
     structure_no = 1
 
-    compress = path.suffix in (".gz", ".bz2")
     mode = "a" if append else "w"
     with (
-        gzip.open(path, mode=mode + "b")
+        gzip.open(path, mode=mode + "t")
         if path.suffix == ".gz"
         else (
-            bz2.open(path, mode=mode + "b")
+            bz2.open(path, mode=mode + "t")
             if path.suffix == ".bz2"
             else open(path, mode)
         )
@@ -428,10 +427,7 @@ def write_sdf(
             if text is None or text == "":
                 raise RuntimeError("Error writing file")
 
-            if compress:
-                fd.write(bytes(text, "utf-8"))
-            else:
-                fd.write(text)
+            fd.write(text)
 
             structure_no += 1
             if printer:
