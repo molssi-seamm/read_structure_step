@@ -62,7 +62,7 @@ class TkReadStructure(seamm.TkNode):
 
         # Create the widgets
         P = self.node.parameters
-        for key in ("file", "file type", "indices", "add hydrogens"):
+        for key in ("file", "file type", "indices", "save properties", "add hydrogens"):
             self[key] = P[key].widget(frame1)
         for key in (
             "structure handling",
@@ -119,7 +119,7 @@ class TkReadStructure(seamm.TkNode):
                 if filename != "":
                     path = PurePath(filename)
                     extension = path.suffix
-                    if extension == ".gz":
+                    if extension in (".gz", "bz2"):
                         extension = path.with_suffix("").suffix
 
         # Get the metadata for the format
@@ -137,6 +137,8 @@ class TkReadStructure(seamm.TkNode):
         items = []
         if extension == "all" or not metadata["single_structure"]:
             items.append("indices")
+        if extension == "all" or metadata["property_data"]:
+            items.append("save properties")
         if extension == "all" or metadata["add_hydrogens"]:
             items.append("add hydrogens")
         if len(items) > 0:

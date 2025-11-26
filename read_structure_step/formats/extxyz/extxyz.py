@@ -16,6 +16,7 @@ from ..registries import register_reader
 from ..registries import register_writer
 from ..registries import set_format_metadata
 from ...utils import parse_indices
+import seamm
 from seamm_util import Q_
 
 logger = logging.getLogger(__name__)
@@ -73,6 +74,7 @@ def load_extxyz(
     printer=None,
     references=None,
     bibliography=None,
+    step=None,
     **kwargs,
 ):
     """Read an extended XYZ File
@@ -126,11 +128,18 @@ def load_extxyz(
     bibliography : dict
         The bibliography as a dictionary.
 
+    step : seamm.Node
+        The step running, so we can access parameters, etc.
+
     Returns
     -------
     [Configuration]
         The list of configurations created.
     """
+    # Get the values of the parameters, dereferencing any variables
+    P = step.parameters.current_values_to_dict(context=seamm.flowchart_variables._data)
+    save_properties = P["save properties"]
+
     configurations = []
 
     if isinstance(path, str):
@@ -292,7 +301,7 @@ def load_extxyz(
                         configuration.cell.from_vectors(vectors)
 
                         # Stresses?
-                        if "stress" in header:
+                        if save_properties and "stress" in header:
                             prop = (
                                 "stress"
                                 if "model" not in header
@@ -314,11 +323,11 @@ def load_extxyz(
 
                     configuration.atoms.append(symbol=data["species"])
                     configuration.atoms.set_coordinates(data["pos"], fractionals=False)
-                    if "forces" in data:
+                    if save_properties and "forces" in data:
                         factor = Q_("eV/Å").m_as("kJ/mol/Å")
                         g = -factor * np.array(data["forces"])
                         configuration.atoms.set_gradients(g, fractionals=False)
-                    if "velocities" in data:
+                    if save_properties and "velocities" in data:
                         factor = Q_("Å*amu^0.5/eV^0.5").m_as("Å/fs")
                         velocities = factor * np.array(data["velocities"])
                         configuration.atoms.set_velocities(
@@ -326,7 +335,7 @@ def load_extxyz(
                         )
 
                     # Add other properties from the header
-                    if "energy" in header:
+                    if save_properties and "energy" in header:
                         prop = (
                             "energy"
                             if "model" not in header
@@ -524,7 +533,7 @@ def write_extxyz(
             else:
                 available = configuration.properties.list("gradients*")
                 if len(available) > 0:
-                    key = available[0]
+                    key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     header += ":REF_forces:R:3"
@@ -539,7 +548,7 @@ def write_extxyz(
                 available = configuration.properties.list("velocities*")
                 if len(available) > 0:
                     header += ":velocities:R:3"
-                    have_velocities = available[0]
+                    have_velocities = available[-1]
 
             # See if the energy exists as a property. May be "potential energy"
             for prop in (
@@ -552,11 +561,11 @@ def write_extxyz(
             ):
                 available = configuration.properties.list(prop)
                 if len(available) > 0:
-                    key = available[0]
+                    key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     E = configuration.properties.get(key)[key]["value"]
-                    units = configuration.properties.units(available[0])
+                    units = configuration.properties.units(available[-1])
                     E *= Q_(units).m_as("eV")
                     header += f" REF_energy={E:.5f}"
                     break
@@ -571,7 +580,7 @@ def write_extxyz(
                 # See if the stress exists as a property
                 available = configuration.properties.list("stress*")
                 if len(available) > 0:
-                    key = available[0]
+                    key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     stresses = configuration.properties.get(key)[key]["value"]
