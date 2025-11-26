@@ -119,7 +119,7 @@ class TkReadStructure(seamm.TkNode):
                 if filename != "":
                     path = PurePath(filename)
                     extension = path.suffix
-                    if extension in (".gz", "bz2"):
+                    if extension in (".gz", ".bz2"):
                         extension = path.with_suffix("").suffix
 
         # Get the metadata for the format

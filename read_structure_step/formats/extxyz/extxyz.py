@@ -533,6 +533,8 @@ def write_extxyz(
             else:
                 available = configuration.properties.list("gradients*")
                 if len(available) > 0:
+                    # If there are more than one, take the latest as it is the most
+                    # likely one the user wants.
                     key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
@@ -547,6 +549,8 @@ def write_extxyz(
             else:
                 available = configuration.properties.list("velocities*")
                 if len(available) > 0:
+                    # If there are more than one, take the latest as it is the most
+                    # likely one the user wants.
                     header += ":velocities:R:3"
                     have_velocities = available[-1]
 
@@ -561,6 +565,8 @@ def write_extxyz(
             ):
                 available = configuration.properties.list(prop)
                 if len(available) > 0:
+                    # If there are more than one, take the latest as it is the most
+                    # likely one the user wants.
                     key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
@@ -580,6 +586,8 @@ def write_extxyz(
                 # See if the stress exists as a property
                 available = configuration.properties.list("stress*")
                 if len(available) > 0:
+                    # If there are more than one, take the latest as it is the most
+                    # likely one the user wants.
                     key = available[-1]
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
