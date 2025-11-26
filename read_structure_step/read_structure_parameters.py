@@ -65,6 +65,17 @@ class ReadStructureParameters(seamm.Parameters):
             "description": "Add hydrogens:",
             "help_text": "Whether to add missing hydrogen atoms.",
         },
+        "save properties": {
+            "default": "yes",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "s",
+            "description": "Save properties:",
+            "help_text": (
+                "Whether to save the properties with structure, or just the structure."
+            ),
+        },
         "indices": {
             "default": "1-end",
             "kind": "string",

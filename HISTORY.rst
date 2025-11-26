@@ -1,6 +1,11 @@
 =======
 History
 =======
+2025.11.26 -- Added an option for whether to save properties and forces when reading
+    * The new option "Save properties" determines whether to save any properties,
+      gradients, or velocities in the file to the configuration. If False, only the
+      structure is loaded into the configuration.
+
 2025.11.19 -- Finalized support for ASE style .extxyz files
     * Added handling of the system and configuration names encoded in the header of the
       files, both on writing and reading.
