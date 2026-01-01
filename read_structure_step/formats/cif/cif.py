@@ -179,6 +179,7 @@ def load_cif(
                         lines = []
                         break
                     if record_no not in indices:
+                        block_name = line[5:].strip()
                         lines = []
                         lines.append(line)
                         continue
