@@ -187,7 +187,12 @@ def load_extxyz(
                 record_no += 1
                 if record_no > stop:
                     break
-                natoms = int(line)
+                try:
+                    natoms = int(line)
+                except Exception as e:
+                    print(e)
+                    print(f"{line_no}: {line}")
+                    raise
                 section = "header"
                 atom = 0
             elif section == "header":
