@@ -1,6 +1,11 @@
 =======
 History
 =======
+2026.1.6 -- Bugfix: Fixed error reading multiple structure from .extxyz file
+    * Fixes a crash on reading multiple structures from a .extxyz file when using the
+      system name from the file ("keep current name" or "title") with a given
+      configuration name, like "initial".
+
 2026.1.1 -- Bugfix: Incorrect blockname used when reading CIF files
     * The blockname, which can be used as the name of the system and/or configuration
       was incorrect when only some structures where read from a mult-block CIF file.
