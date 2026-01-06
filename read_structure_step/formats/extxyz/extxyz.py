@@ -277,6 +277,8 @@ def load_extxyz(
                             system = system_db.get_system(sysname)
                         elif structure_no > 1:
                             system = system_db.create_system(name=sysname)
+                            # Must create a configuration!
+                            configuration = system.create_configuration()
                         if configuration_name.lower() in ("keep current name", "title"):
                             names = system.configuration_names
                             if confname in names:
