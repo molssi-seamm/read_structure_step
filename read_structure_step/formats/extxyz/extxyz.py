@@ -340,6 +340,17 @@ def load_extxyz(
                         configuration.atoms.set_velocities(
                             velocities, fractionals=False
                         )
+                    if save_properties and "charge" in data:
+                        # Per-atom charges (a 'charge:R:1' column) go onto the
+                        # structure's standard 'charge' attribute.
+                        atoms = configuration.atoms
+                        if "charge" not in atoms:
+                            atoms.add_attribute(
+                                "charge",
+                                coltype="float",
+                                configuration_dependent=True,
+                            )
+                        atoms["charge"][0:] = data["charge"]
 
                     # Add other properties from the header
                     if save_properties and "energy" in header:
