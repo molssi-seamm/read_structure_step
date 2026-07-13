@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.7.13 -- Read and write per-atom charges in extended XYZ
+    * Extended-XYZ (.extxyz) files now round-trip per-atom charges. On writing,
+      charges carried by the structure (the standard ``charge`` attribute, e.g.
+      set by the Atomic Charges step) are emitted as a ``charge:R:1`` column, to
+      export charges for machine-learning training; no column is written when the
+      structure has no charges. On reading, a ``charge:R:1`` column is loaded back
+      onto the structure's ``charge`` attribute (when 'save properties' is on).
+
 2026.1.6 -- Bugfix: Fixed error reading multiple structure from .extxyz file
     * Fixes a crash on reading multiple structures from a .extxyz file when using the
       system name from the file ("keep current name" or "title") with a given
