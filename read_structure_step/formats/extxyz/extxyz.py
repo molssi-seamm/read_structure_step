@@ -561,6 +561,14 @@ def write_extxyz(
                     header += ":velocities:R:3"
                     have_velocities = available[-1]
 
+            # Per-atom charges, if the structure carries them (e.g. set by the
+            # Atomic Charges step). Written as a 'charge:R:1' column, in elementary
+            # charge units. Only the 'charge' Properties column is added here; it
+            # must precede the space-separated attributes (pbc/Lattice/...) below.
+            have_charges = "charge" in configuration.atoms
+            if have_charges:
+                header += ":charge:R:1"
+
             # See if the energy exists as a property. May be "potential energy"
             for prop in (
                 "DfE0*",
@@ -654,7 +662,14 @@ def write_extxyz(
                 factor = Q_(units).m_as("eV^0.5/amu^0.5")
                 velocities = (np.array(velocities) * factor).tolist()
 
-            for symbol, xyz, force, velocity in zip(symbols, xyzs, forces, velocities):
+            if have_charges:
+                charges = list(configuration.atoms["charge"])
+            else:
+                charges = [0.0] * natoms
+
+            for symbol, xyz, force, velocity, charge in zip(
+                symbols, xyzs, forces, velocities, charges
+            ):
                 line = f"{symbol:<2} "
                 line += " ".join([f"{v:14.8f}" for v in xyz])
 
@@ -665,6 +680,9 @@ def write_extxyz(
                 if have_velocities != "no":
                     line += " "
                     line += " ".join([f"{v:14.8f}" for v in velocity])
+
+                if have_charges:
+                    line += f" {charge:14.8f}"
 
                 text.append(line)
             text = "\n".join(text)

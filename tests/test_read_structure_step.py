@@ -41,3 +41,39 @@ def test_unregistered_reader(configuration):
     with pytest.raises(KeyError):
         xyz_file = build_filenames.build_data_filename("spc.xyz")
         read_structure_step.read(xyz_file, configuration, extension=".mp3")
+
+
+def test_write_extxyz_charges(tmp_path):
+    """Per-atom charges are written as a 'charge:R:1' column when present."""
+    from molsystem.system_db import SystemDB
+    from read_structure_step.formats.extxyz.extxyz import write_extxyz
+
+    db = SystemDB(filename="file:cq_test?mode=memory&cache=shared")
+    system = db.create_system(name="s")
+    conf = system.create_configuration(name="c")
+    conf.atoms.append(symbol=["H", "H"], x=[0.0, 0.0], y=[0.0, 0.0], z=[0.0, 0.74])
+    conf.atoms.add_attribute("charge", coltype="float", configuration_dependent=True)
+    conf.atoms["charge"][0:] = [-0.13, 0.13]
+
+    path = tmp_path / "out.extxyz"
+    write_extxyz(str(path), [conf])
+    lines = path.read_text().strip().splitlines()
+
+    assert "charge:R:1" in lines[1]  # header Properties column
+    assert lines[2].split()[-1] == f"{-0.13:14.8f}".strip()  # first atom's charge
+    assert lines[3].split()[-1] == f"{0.13:14.8f}".strip()  # second atom's charge
+
+
+def test_write_extxyz_no_charges(tmp_path):
+    """No charge column is written when the structure has no charges."""
+    from molsystem.system_db import SystemDB
+    from read_structure_step.formats.extxyz.extxyz import write_extxyz
+
+    db = SystemDB(filename="file:cq_test2?mode=memory&cache=shared")
+    system = db.create_system(name="s")
+    conf = system.create_configuration(name="c")
+    conf.atoms.append(symbol=["H", "H"], x=[0.0, 0.0], y=[0.0, 0.0], z=[0.0, 0.74])
+
+    path = tmp_path / "out.extxyz"
+    write_extxyz(str(path), [conf])
+    assert "charge:R:1" not in path.read_text()

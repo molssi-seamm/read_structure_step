@@ -81,17 +81,12 @@ def read(
     """
 
     if type(file_name) is not str:
-        raise TypeError(
-            """read_structure_step: The file name must be a string, but a
-            %s was given. """
-            % str(type(file_name))
-        )
+        raise TypeError("""read_structure_step: The file name must be a string, but a
+            %s was given. """ % str(type(file_name)))
 
     if file_name == "":
-        raise NameError(
-            """read_structure_step: The file name for the structure file
-            was not specified."""
-        )
+        raise NameError("""read_structure_step: The file name for the structure file
+            was not specified.""")
 
     file_name = os.path.abspath(file_name)
 
