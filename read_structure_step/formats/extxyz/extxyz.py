@@ -471,7 +471,6 @@ def load_extxyz(
     return configurations
 
 
-@register_writer(".extxyz -- ASE style extended XYZ file")
 def _latest_property(properties, pattern):
     """The most recent property matching ``pattern``, ignoring its statistics.
 
@@ -501,6 +500,7 @@ def _latest_property(properties, pattern):
     return matches[-1]
 
 
+@register_writer(".extxyz -- ASE style extended XYZ file")
 def write_extxyz(
     path,
     configurations,

@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.9.15.1 -- Bugfix: writing any extended XYZ file failed
+    * The helper added in 2026.9.15 was placed between the ``@register_writer``
+      decorator and the function it decorates, so the decorator bound the helper
+      instead. Every attempt to write an extxyz file then failed with
+      "TypeError: _latest_property() got an unexpected keyword argument 'extension'".
+      The tests did not catch it because they call the helper directly and never go
+      through the writer registry; there are now checks that the registered writer is
+      the writer, and that a file can actually be written end to end.
+
 2026.9.15 -- Bugfix: wrong property written as REF_energy in extended XYZ
     * A quantity averaged over an MD trajectory is stored alongside its statistics,
       named with a comma: 'potential energy#LAMMPS#oplsaa+' comes with
