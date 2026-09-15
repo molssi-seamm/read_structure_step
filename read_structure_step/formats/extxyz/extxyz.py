@@ -472,6 +472,35 @@ def load_extxyz(
 
 
 @register_writer(".extxyz -- ASE style extended XYZ file")
+def _latest_property(properties, pattern):
+    """The most recent property matching ``pattern``, ignoring its statistics.
+
+    A quantity averaged over an MD trajectory is stored alongside its
+    statistics, named with a comma: ``potential energy#LAMMPS#oplsaa+`` comes
+    with ``potential energy, stderr#...``, ``, tau#...`` and
+    ``, inefficiency#...``. The trailing ``*`` in a pattern matches those too,
+    so taking the last match picked ``inefficiency`` -- a dimensionless
+    diagnostic rather than the energy.
+
+    That surfaced as a crash, because ``inefficiency`` carries no units and
+    ``Q_("")`` raises. The quieter danger is the same selection landing on
+    ``stderr``, which *is* an energy in the right units: the standard error
+    would then have been written as ``REF_energy`` with nothing to show for
+    it. Reference data is the last place to guess.
+
+    The base quantity never has a comma in its name, which is what separates
+    it from its statistics. Anything after ``#`` is the code and model and is
+    left alone.
+
+    Returns the property key, or None when nothing matches.
+    """
+    matches = [key for key in properties.list(pattern) if "," not in key.split("#")[0]]
+    if len(matches) == 0:
+        return None
+    # More than one means several models; the most recent is the likely one.
+    return matches[-1]
+
+
 def write_extxyz(
     path,
     configurations,
@@ -549,11 +578,8 @@ def write_extxyz(
                 header += ":REF_forces:R:3"
                 have_gradients = "atoms"
             else:
-                available = configuration.properties.list("gradients*")
-                if len(available) > 0:
-                    # If there are more than one, take the latest as it is the most
-                    # likely one the user wants.
-                    key = available[-1]
+                key = _latest_property(configuration.properties, "gradients*")
+                if key is not None:
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     header += ":REF_forces:R:3"
@@ -565,12 +591,10 @@ def write_extxyz(
                 header += ":velocities:R:3"
                 have_velocities = "atoms"
             else:
-                available = configuration.properties.list("velocities*")
-                if len(available) > 0:
-                    # If there are more than one, take the latest as it is the most
-                    # likely one the user wants.
+                key = _latest_property(configuration.properties, "velocities*")
+                if key is not None:
                     header += ":velocities:R:3"
-                    have_velocities = available[-1]
+                    have_velocities = key
 
             # Per-atom charges, if the structure carries them (e.g. set by the
             # Atomic Charges step). Written as a 'charge:R:1' column, in elementary
@@ -589,15 +613,21 @@ def write_extxyz(
                 "total energy*",
                 "energy*",
             ):
-                available = configuration.properties.list(prop)
-                if len(available) > 0:
-                    # If there are more than one, take the latest as it is the most
-                    # likely one the user wants.
-                    key = available[-1]
+                key = _latest_property(configuration.properties, prop)
+                if key is not None:
+                    units = configuration.properties.units(key)
+                    if units is None or units == "":
+                        # Without units the value cannot be converted, and
+                        # writing it unconverted would put an unknown scale in
+                        # a reference-data file. Say so and keep looking.
+                        logger.warning(
+                            f"Not writing REF_energy from '{key}': the property "
+                            "carries no units, so it cannot be converted to eV."
+                        )
+                        continue
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     E = configuration.properties.get(key)[key]["value"]
-                    units = configuration.properties.units(available[-1])
                     E *= Q_(units).m_as("eV")
                     header += f" REF_energy={E:.5f}"
                     break
@@ -610,11 +640,8 @@ def write_extxyz(
                 header += '"'
 
                 # See if the stress exists as a property
-                available = configuration.properties.list("stress*")
-                if len(available) > 0:
-                    # If there are more than one, take the latest as it is the most
-                    # likely one the user wants.
-                    key = available[-1]
+                key = _latest_property(configuration.properties, "stress*")
+                if key is not None and configuration.properties.units(key):
                     if "#" in key:
                         model = key.split("#", maxsplit=1)[1]
                     stresses = configuration.properties.get(key)[key]["value"]

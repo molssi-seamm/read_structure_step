@@ -1,6 +1,22 @@
 =======
 History
 =======
+2026.9.15 -- Bugfix: wrong property written as REF_energy in extended XYZ
+    * A quantity averaged over an MD trajectory is stored alongside its statistics,
+      named with a comma: 'potential energy#LAMMPS#oplsaa+' comes with
+      'potential energy, stderr#...', ', tau#...' and ', inefficiency#...'. When
+      searching for the energy, the pattern matched those too and the last match was
+      taken, which selected 'inefficiency'. That has no units, so writing an extxyz
+      file at the end of an MD run failed with "Expression to parse as PlainQuantity
+      cannot be an empty string".
+    * The crash was the fortunate case. Had the ordering put 'stderr' last it would
+      have been converted and written as REF_energy without complaint, putting the
+      standard error of the energy into a reference-data file in place of the energy.
+      The statistics are now excluded when choosing any property, for the energy,
+      the stress, the gradients and the velocities alike.
+    * A property carrying no units is no longer written at all, with a warning saying
+      why, rather than guessing at its scale.
+
 2026.7.13 -- Read and write per-atom charges in extended XYZ
     * Extended-XYZ (.extxyz) files now round-trip per-atom charges. On writing,
       charges carried by the structure (the standard ``charge`` attribute, e.g.
