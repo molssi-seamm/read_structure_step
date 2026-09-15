@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.9.15 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.9.15.1 documentation</title>
   
   
   
@@ -49,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=3713ace6"></script>
+    <script src="_static/documentation_options.js?v=f6a62181"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.9.15" />
+  <meta name="docsearch:version" content="2026.9.15.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.9.15.1 – Bugfix: writing any extended XYZ file failed</dt><dd><ul class="simple">
+<li><p>The helper added in 2026.9.15 was placed between the <code class="docutils literal notranslate"><span class="pre">&#64;register_writer</span></code>
+decorator and the function it decorates, so the decorator bound the helper
+instead. Every attempt to write an extxyz file then failed with
+“TypeError: _latest_property() got an unexpected keyword argument ‘extension’”.
+The tests did not catch it because they call the helper directly and never go
+through the writer registry; there are now checks that the registered writer is
+the writer, and that a file can actually be written end to end.</p></li>
+</ul>
+</dd>
 <dt>2026.9.15 – Bugfix: wrong property written as REF_energy in extended XYZ</dt><dd><ul class="simple">
 <li><p>A quantity averaged over an MD trajectory is stored alongside its statistics,
 named with a comma: ‘potential energy#LAMMPS#oplsaa+’ comes with
