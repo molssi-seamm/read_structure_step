@@ -81,3 +81,20 @@ def test_no_match_returns_none():
 def test_a_bare_name_without_a_model_still_works():
     props = FakeProperties(["energy", "energy, stderr"])
     assert _latest_property(props, "energy*") == "energy"
+
+
+def test_the_writer_is_still_the_registered_writer():
+    """The helper was first added between @register_writer and the function it
+    decorates, so the decorator bound the helper instead: writing any extxyz
+    file then died with
+
+        TypeError: _latest_property() got an unexpected keyword argument 'extension'
+
+    The unit tests above all passed, because they import the helper directly
+    and never go through the registry.
+    """
+    import read_structure_step.formats.extxyz.extxyz  # noqa: F401 - registers it
+    from read_structure_step.formats.registries import REGISTERED_WRITERS
+
+    registered = REGISTERED_WRITERS[".extxyz"]["function"]
+    assert registered.__name__ == "write_extxyz", registered.__name__
