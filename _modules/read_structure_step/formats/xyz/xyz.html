@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.xyz.xyz &#8212; SEAMM Read Structure Plug-in 2026.7.13 documentation</title>
+    <title>read_structure_step.formats.xyz.xyz &#8212; SEAMM Read Structure Plug-in 2026.9.15 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=a047d0be"></script>
+    <script src="../../../../_static/documentation_options.js?v=3713ace6"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.13" />
+  <meta name="docsearch:version" content="2026.9.15" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -486,9 +486,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <article class="bd-article">
                   
   <h1>Source code for read_structure_step.formats.xyz.xyz</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Implementation of the reader for XYZ files using OpenBabel</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">bz2</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
@@ -506,18 +506,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">read_structure_step.formats.registries</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_reader</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_indices</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;read_structure_step.read_structure&quot;</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"read_structure_step.read_structure"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="OutputGrabber">
 <a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">OutputGrabber</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class used to grab standard output or another stream.</span>
+<span class="w">    </span><span class="sd">"""Class used to grab standard output or another stream.</span>
 
 <span class="sd">    see https://stackoverflow.com/questions/24277488/in-python-how-to-capture-the-stdout-from-a-c-shared-library-to-a-variable/29834357#29834357  # noqa: E501</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="n">escape_char</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\b</span><span class="s2">&quot;</span>
+    <span class="n">escape_char</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\b</span><span class="s2">"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threaded</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="o">=</span> <span class="n">stream</span>
@@ -525,7 +525,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="c1"># Create a pipe so the stream can be captured:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipe_in</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">pipe</span><span class="p">()</span>
 
@@ -539,10 +539,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="viewcode-block" id="OutputGrabber.start">
 <a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.start">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Start capturing the stream data.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="c1"># Save a copy of the stream:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">streamfd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">dup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstreamfd</span><span class="p">)</span>
         <span class="c1"># Replace the original stream with our write pipe:</span>
@@ -558,9 +558,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="viewcode-block" id="OutputGrabber.stop">
 <a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.stop">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Stop capturing the stream data and save the text in `capturedtext`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Print the escape character to make the readOutput method stop:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span><span class="p">)</span>
         <span class="c1"># Flush the stream to make sure all our data goes in before</span>
@@ -584,10 +584,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="viewcode-block" id="OutputGrabber.readOutput">
 <a class="viewcode-back" href="../../../../api/read_structure_step.formats.xyz.html#read_structure_step.formats.xyz.xyz.OutputGrabber.readOutput">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">readOutput</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Read the stream data (one byte at a time)</span>
 <span class="sd">        and save the text in `capturedtext`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">char</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span> <span class="ow">in</span> <span class="n">char</span><span class="p">:</span>
@@ -603,24 +603,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
 
-<span class="nd">@register_reader</span><span class="p">(</span><span class="s2">&quot;.xyz&quot;</span><span class="p">)</span>
+<span class="nd">@register_reader</span><span class="p">(</span><span class="s2">".xyz"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_xyz</span><span class="p">(</span>
     <span class="n">file_name</span><span class="p">,</span>
     <span class="n">configuration</span><span class="p">,</span>
-    <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.xyz&quot;</span><span class="p">,</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s2">".xyz"</span><span class="p">,</span>
     <span class="n">add_hydrogens</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">system_db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">indices</span><span class="o">=</span><span class="s2">&quot;1-end&quot;</span><span class="p">,</span>
+    <span class="n">indices</span><span class="o">=</span><span class="s2">"1-end"</span><span class="p">,</span>
     <span class="n">subsequent_as_configurations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Canonical SMILES&quot;</span><span class="p">,</span>
-    <span class="n">configuration_name</span><span class="o">=</span><span class="s2">&quot;sequential&quot;</span><span class="p">,</span>
+    <span class="n">system_name</span><span class="o">=</span><span class="s2">"Canonical SMILES"</span><span class="p">,</span>
+    <span class="n">configuration_name</span><span class="o">=</span><span class="s2">"sequential"</span><span class="p">,</span>
     <span class="n">printer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">references</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">bibliography</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read an XYZ input file.</span>
+<span class="w">    </span><span class="sd">"""Read an XYZ input file.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -642,7 +642,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    system : System = None</span>
 <span class="sd">        The system to use if adding subsequent structures as configurations.</span>
 
-<span class="sd">    indices : str = &quot;1-end&quot;</span>
+<span class="sd">    indices : str = "1-end"</span>
 <span class="sd">        The generalized indices (slices, SMARTS, etc.) to select structures</span>
 <span class="sd">        from a file containing multiple structures.</span>
 
@@ -650,13 +650,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        Normally and subsequent structures are loaded into new systems; however,</span>
 <span class="sd">        if this option is True, they will be added as configurations.</span>
 
-<span class="sd">    system_name : str = &quot;from file&quot;</span>
-<span class="sd">        The name for systems. Can be directives like &quot;SMILES&quot; or</span>
-<span class="sd">        &quot;Canonical SMILES&quot;. If None, no name is given.</span>
+<span class="sd">    system_name : str = "from file"</span>
+<span class="sd">        The name for systems. Can be directives like "SMILES" or</span>
+<span class="sd">        "Canonical SMILES". If None, no name is given.</span>
 
-<span class="sd">    configuration_name : str = &quot;sequential&quot;</span>
-<span class="sd">        The name for configurations. Can be directives like &quot;SMILES&quot; or</span>
-<span class="sd">        &quot;Canonical SMILES&quot;. If None, no name is given.</span>
+<span class="sd">    configuration_name : str = "sequential"</span>
+<span class="sd">        The name for configurations. Can be directives like "SMILES" or</span>
+<span class="sd">        "Canonical SMILES". If None, no name is given.</span>
 
 <span class="sd">    printer : Logger or Printer</span>
 <span class="sd">        A function that prints to the appropriate place, used for progress.</span>
@@ -673,11 +673,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        The list of configurations created.</span>
 
 
-<span class="sd">    We&#39;ll use OpenBabel to read the file; however, OpenBabel is somewhat limited, so</span>
-<span class="sd">    we&#39;ll first preprocess the file to extract extra data and also to fit it to the</span>
+<span class="sd">    We'll use OpenBabel to read the file; however, OpenBabel is somewhat limited, so</span>
+<span class="sd">    we'll first preprocess the file to extract extra data and also to fit it to the</span>
 <span class="sd">    format that OpenBabel can handle.</span>
 
-<span class="sd">    A &quot;standard&quot; .xyz file the following structure:</span>
+<span class="sd">    A "standard" .xyz file the following structure:</span>
 
 <span class="sd">        #. The number of atoms on the first line</span>
 <span class="sd">        #. A comment on the second, often the structure name</span>
@@ -688,7 +688,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="sd">        CSD_code = WIXKOE | q = 0 | S = 0 | Stoichiometry = C47H65LaN2O | MND = 7</span>
 
-<span class="sd">    We&#39;ll try to handle this type of comment.</span>
+<span class="sd">    We'll try to handle this type of comment.</span>
 
 <span class="sd">    The Minnesota Solvation database uses a slightly modified form:</span>
 
@@ -701,9 +701,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    so three header lines, and it includes the charge and multiplicity which is very</span>
 <span class="sd">    useful.</span>
 
-<span class="sd">    OpenBabel appears to only work with &quot;standard&quot; files which have the number of atoms</span>
+<span class="sd">    OpenBabel appears to only work with "standard" files which have the number of atoms</span>
 <span class="sd">    so this method will transform the MN standard to that.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Get the text in the file</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
@@ -715,20 +715,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">n_records</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">last_line</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">with</span> <span class="p">(</span>
-        <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.gz&quot;</span>
-        <span class="k">else</span> <span class="n">bz2</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.bz2&quot;</span> <span class="k">else</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rt"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".gz"</span>
+        <span class="k">else</span> <span class="n">bz2</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rt"</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".bz2"</span> <span class="k">else</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fd</span><span class="p">:</span>
             <span class="n">last_line</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                 <span class="n">n_records</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="c1"># may not have blank line at end</span>
-    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
         <span class="n">n_records</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">if</span> <span class="n">printer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">printer</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    The XYZ file contains </span><span class="si">{</span><span class="n">n_records</span><span class="si">}</span><span class="s2"> structures.&quot;</span><span class="p">)</span>
+        <span class="n">printer</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    The XYZ file contains </span><span class="si">{</span><span class="n">n_records</span><span class="si">}</span><span class="s2"> structures."</span><span class="p">)</span>
         <span class="n">last_percent</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">last_t</span> <span class="o">=</span> <span class="n">t0</span>
@@ -741,7 +741,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">stop</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="n">obConversion</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBConversion</span><span class="p">()</span>
-    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">&quot;xyz&quot;</span><span class="p">)</span>
+    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInFormat</span><span class="p">(</span><span class="s2">"xyz"</span><span class="p">)</span>
 
     <span class="n">configurations</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">record_no</span> <span class="o">=</span> <span class="mi">0</span>
@@ -751,9 +751,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <span class="n">total_lines</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">with</span> <span class="p">(</span>
-        <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.gz&quot;</span>
-        <span class="k">else</span> <span class="n">bz2</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rt&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.bz2&quot;</span> <span class="k">else</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rt"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".gz"</span>
+        <span class="k">else</span> <span class="n">bz2</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rt"</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">".bz2"</span> <span class="k">else</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">line_no</span> <span class="o">=</span> <span class="mi">0</span>
@@ -762,7 +762,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">total_lines</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">line_no</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">total_lines</span> <span class="o">==</span> <span class="n">last_line</span> <span class="ow">or</span> <span class="n">line_no</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">total_lines</span> <span class="o">==</span> <span class="n">last_line</span> <span class="ow">or</span> <span class="n">line_no</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
                 <span class="n">record_no</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="k">if</span> <span class="n">record_no</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
                     <span class="k">break</span>
@@ -770,7 +770,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="k">continue</span>
 
                 <span class="c1"># End of block, so examine the first lines and see which format</span>
-                <span class="n">file_type</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+                <span class="n">file_type</span> <span class="o">=</span> <span class="s2">"unknown"</span>
                 <span class="n">n_lines</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
                 <span class="n">line1</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="n">fields1</span> <span class="o">=</span> <span class="n">line1</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -794,7 +794,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">fields3</span> <span class="o">=</span> <span class="n">line3</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
                     <span class="n">n_fields3</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields3</span><span class="p">)</span>
 
-                <span class="c1"># Check for &quot;standard&quot; file</span>
+                <span class="c1"># Check for "standard" file</span>
                 <span class="k">if</span> <span class="n">n_fields1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">n_atoms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fields1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -803,11 +803,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="k">else</span><span class="p">:</span>
                         <span class="c1"># Might be traditional file. Check 3rd line for atom</span>
                         <span class="k">if</span> <span class="n">n_fields3</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                            <span class="n">file_type</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span>
+                            <span class="n">file_type</span> <span class="o">=</span> <span class="s2">"standard"</span>
                 <span class="k">elif</span> <span class="n">n_fields1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="c1"># Might be standard file without atom count.</span>
                     <span class="k">if</span> <span class="n">n_fields3</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
-                        <span class="n">file_type</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span>
+                        <span class="n">file_type</span> <span class="o">=</span> <span class="s2">"standard"</span>
                         <span class="n">n_atoms</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
                             <span class="n">n_fields</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
@@ -826,11 +826,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                         <span class="k">pass</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">file_type</span> <span class="o">=</span> <span class="s2">&quot;Minnesota&quot;</span>
+                        <span class="n">file_type</span> <span class="o">=</span> <span class="s2">"Minnesota"</span>
                         <span class="k">if</span> <span class="n">n_fields2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                                <span class="s2">&quot;Minnesota style XYZ file, 2nd line is not blank:&quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="si">{</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                                <span class="s2">"Minnesota style XYZ file, 2nd line is not blank:"</span>
+                                <span class="sa">f</span><span class="s2">"</span><span class="se">\n\t</span><span class="si">{</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
                             <span class="p">)</span>
                         <span class="c1"># Count atoms</span>
                         <span class="n">n_atoms</span> <span class="o">=</span> <span class="mi">0</span>
@@ -843,14 +843,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="c1"># Move comment to 2nd line</span>
                         <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                         <span class="c1"># Put the count in line 1</span>
-                        <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+                        <span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
                         <span class="c1"># Remove 3rd line with charge and multiplicity</span>
                         <span class="k">del</span> <span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
                 <span class="c1"># Reassemble an input file.</span>
-                <span class="n">input_data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+                <span class="n">input_data</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input data:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">input_data</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Input data:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">input_data</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="n">title</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
@@ -862,7 +862,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="k">with</span> <span class="n">out</span><span class="p">:</span>
                     <span class="n">success</span> <span class="o">=</span> <span class="n">obConversion</span><span class="o">.</span><span class="n">ReadString</span><span class="p">(</span><span class="n">obMol</span><span class="p">,</span> <span class="n">input_data</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;obConversion failed&quot;</span><span class="p">)</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"obConversion failed"</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">add_hydrogens</span><span class="p">:</span>
                         <span class="n">obMol</span><span class="o">.</span><span class="n">AddHydrogens</span><span class="p">()</span>
@@ -879,110 +879,110 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
 
                 <span class="c1"># Check any stderr information from obabel.</span>
-                <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="n">tmp</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">capturedtext</span>
                     <span class="k">if</span> <span class="p">(</span>
-                        <span class="s2">&quot;Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders&quot;</span>
+                        <span class="s2">"Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders"</span>
                         <span class="ow">not</span> <span class="ow">in</span> <span class="n">tmp</span>
                     <span class="p">):</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">structure_no</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">structure_no</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="c1"># Extract any additional information from the title</span>
                 <span class="n">extra</span> <span class="o">=</span> <span class="p">{}</span>
 
-                <span class="k">if</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s2">&quot;Minnesota&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s2">"Minnesota"</span><span class="p">:</span>
                     <span class="c1"># Record the charge, and the spin state</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="n">charge</span>
                     <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="n">multiplicity</span>
 
-                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">charge</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">multiplicity</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="s2">&quot;|&quot;</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">charge</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">multiplicity</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="s2">"|"</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
                     <span class="c1"># Careful! Setting charge sets spin to 0, so remember if we set</span>
                     <span class="c1"># spin first</span>
                     <span class="n">spin</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;|&quot;</span><span class="p">):</span>
-                        <span class="k">if</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
-                            <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">tmp</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"|"</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="s2">"="</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                            <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                             <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                             <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"q"</span><span class="p">:</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="n">configuration</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                                     <span class="k">if</span> <span class="n">spin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                                         <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="n">spin</span>
                                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                                     <span class="k">pass</span>
-                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"S"</span><span class="p">:</span>
                                 <span class="k">try</span><span class="p">:</span>
                                     <span class="n">spin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                                     <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span> <span class="o">=</span> <span class="n">spin</span>
                                 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                                     <span class="k">pass</span>
-                            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;CSD_code&quot;</span><span class="p">,</span> <span class="s2">&quot;title&quot;</span><span class="p">):</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"CSD_code"</span><span class="p">,</span> <span class="s2">"title"</span><span class="p">):</span>
                                 <span class="n">title</span> <span class="o">=</span> <span class="n">val</span>
-                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;model&quot;</span><span class="p">:</span>
-                                <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
-                                <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;symmetry&quot;</span><span class="p">:</span>
-                                <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;symmetry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"model"</span><span class="p">:</span>
+                                <span class="n">extra</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"name"</span><span class="p">:</span>
+                                <span class="n">extra</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"symmetry"</span><span class="p">:</span>
+                                <span class="n">extra</span><span class="p">[</span><span class="s2">"symmetry"</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">tmp</span> <span class="o">==</span> <span class="s2">&quot;TS&quot;</span><span class="p">:</span>
-                                <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;TS&quot;</span>
+                            <span class="k">if</span> <span class="n">tmp</span> <span class="o">==</span> <span class="s2">"TS"</span><span class="p">:</span>
+                                <span class="n">extra</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"TS"</span>
 
                 <span class="c1"># Set the system name</span>
-                <span class="k">if</span> <span class="n">system_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">system_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system_name</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="n">lower_name</span> <span class="o">=</span> <span class="n">system_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"title"</span><span class="p">:</span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">title</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
-                    <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"canonical smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
-                    <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
-                    <span class="k">elif</span> <span class="s2">&quot;iupac&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"iupac"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">PC_iupac_name</span>
-                    <span class="k">elif</span> <span class="s2">&quot;inchikey&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"inchikey"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchikey</span>
-                    <span class="k">elif</span> <span class="s2">&quot;inchi&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"inchi"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchi</span>
-                    <span class="k">elif</span> <span class="s2">&quot;formula&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"formula"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
-                        <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="s2">&quot;model&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">&quot;model&quot;</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
-                        <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="s2">"name"</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">"name"</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+                        <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="s2">"model"</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">"model"</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+                        <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">system_name</span>
 
                 <span class="c1"># And the configuration name</span>
-                <span class="k">if</span> <span class="n">configuration_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">configuration_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">configuration_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">configuration_name</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
                     <span class="n">lower_name</span> <span class="o">=</span> <span class="n">configuration_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"title"</span><span class="p">:</span>
                         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">title</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
-                    <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"canonical smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
-                    <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
-                    <span class="k">elif</span> <span class="s2">&quot;iupac&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"iupac"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">PC_iupac_name</span>
-                    <span class="k">elif</span> <span class="s2">&quot;inchikey&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"inchikey"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchikey</span>
-                    <span class="k">elif</span> <span class="s2">&quot;inchi&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"inchi"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchi</span>
-                    <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"sequential"</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">structure_no</span><span class="p">)</span>
-                    <span class="k">elif</span> <span class="s2">&quot;formula&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+                    <span class="k">elif</span> <span class="s2">"formula"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">&quot;name&quot;</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
-                        <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-                    <span class="k">elif</span> <span class="s2">&quot;model&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">&quot;model&quot;</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
-                        <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="s2">"name"</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">"name"</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+                        <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+                    <span class="k">elif</span> <span class="s2">"model"</span> <span class="ow">in</span> <span class="n">lower_name</span> <span class="ow">and</span> <span class="s2">"model"</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+                        <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">extra</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration_name</span>
 
@@ -995,8 +995,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span class="n">rate</span> <span class="o">=</span> <span class="n">structure_no</span> <span class="o">/</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
                             <span class="n">t_left</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">n_structures</span> <span class="o">-</span> <span class="n">structure_no</span><span class="p">)</span> <span class="o">/</span> <span class="n">rate</span><span class="p">)</span>
                             <span class="n">printer</span><span class="p">(</span>
-                                <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">structure_no</span><span class="si">:</span><span class="s2">6</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">percent</span><span class="si">}</span><span class="s2">%) structures read in &quot;</span>
-                                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> seconds. About </span><span class="si">{</span><span class="n">t_left</span><span class="si">}</span><span class="s2"> seconds remaining.&quot;</span>
+                                <span class="sa">f</span><span class="s2">"</span><span class="se">\t</span><span class="si">{</span><span class="n">structure_no</span><span class="si">:</span><span class="s2">6</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">percent</span><span class="si">}</span><span class="s2">%) structures read in "</span>
+                                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2"> seconds. About </span><span class="si">{</span><span class="n">t_left</span><span class="si">}</span><span class="s2"> seconds remaining."</span>
                             <span class="p">)</span>
                             <span class="n">last_t</span> <span class="o">=</span> <span class="n">t1</span>
                             <span class="n">last_percent</span> <span class="o">=</span> <span class="n">percent</span>
@@ -1005,11 +1005,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">rate</span> <span class="o">=</span> <span class="n">structure_no</span> <span class="o">/</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
         <span class="n">printer</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;    Read </span><span class="si">{</span><span class="n">structure_no</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n_errors</span><span class="si">}</span><span class="s2"> structures in </span><span class="si">{</span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;seconds = </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> per second&quot;</span>
+            <span class="sa">f</span><span class="s2">"    Read </span><span class="si">{</span><span class="n">structure_no</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">n_errors</span><span class="si">}</span><span class="s2"> structures in </span><span class="si">{</span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"seconds = </span><span class="si">{</span><span class="n">rate</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> per second"</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">n_errors</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    </span><span class="si">{</span><span class="n">n_errors</span><span class="si">}</span><span class="s2"> structures could not be read due to errors.&quot;</span><span class="p">)</span>
+            <span class="n">printer</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    </span><span class="si">{</span><span class="n">n_errors</span><span class="si">}</span><span class="s2"> structures could not be read due to errors."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">references</span><span class="p">:</span>
         <span class="c1"># Add the citations for Open Babel</span>
@@ -1017,10 +1017,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">citation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">citations</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
-                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;read_structure_step&quot;</span><span class="p">,</span>
+                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">"openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">"read_structure_step"</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel.&quot;</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">"The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel."</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">configurations</span>
@@ -1053,8 +1053,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1066,7 +1066,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

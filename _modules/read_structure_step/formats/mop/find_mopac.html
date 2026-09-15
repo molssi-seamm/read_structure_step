@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.mop.find_mopac &#8212; SEAMM Read Structure Plug-in 2026.7.13 documentation</title>
+    <title>read_structure_step.formats.mop.find_mopac &#8212; SEAMM Read Structure Plug-in 2026.9.15 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=a047d0be"></script>
+    <script src="../../../../_static/documentation_options.js?v=3713ace6"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.13" />
+  <meta name="docsearch:version" content="2026.9.15" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -501,11 +501,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">parser</span> <span class="o">=</span> <span class="n">seamm_util</span><span class="o">.</span><span class="n">getParser</span><span class="p">()</span>
     <span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">get_options</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="s2">&quot;mopac-step&quot;</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
-        <span class="n">mopac_options</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;mopac-step&quot;</span><span class="p">]</span>
-        <span class="n">exe</span> <span class="o">=</span> <span class="n">mopac_options</span><span class="p">[</span><span class="s2">&quot;mopac_exe&quot;</span><span class="p">]</span>
-        <span class="n">mopac_path</span> <span class="o">=</span> <span class="n">mopac_options</span><span class="p">[</span><span class="s2">&quot;mopac_path&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">mopac_path</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"mopac-step"</span> <span class="ow">in</span> <span class="n">options</span><span class="p">:</span>
+        <span class="n">mopac_options</span> <span class="o">=</span> <span class="n">options</span><span class="p">[</span><span class="s2">"mopac-step"</span><span class="p">]</span>
+        <span class="n">exe</span> <span class="o">=</span> <span class="n">mopac_options</span><span class="p">[</span><span class="s2">"mopac_exe"</span><span class="p">]</span>
+        <span class="n">mopac_path</span> <span class="o">=</span> <span class="n">mopac_options</span><span class="p">[</span><span class="s2">"mopac_path"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">mopac_path</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
             <span class="n">exe</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">mopac_path</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span> <span class="o">/</span> <span class="n">exe</span><span class="p">)</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -517,37 +517,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <span class="c1"># Next try common locations</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">mopac_exe</span> <span class="o">=</span> <span class="s2">&quot;/opt/mopac/mopac&quot;</span>
+        <span class="n">mopac_exe</span> <span class="o">=</span> <span class="s2">"/opt/mopac/mopac"</span>
 
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mopac_exe</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                <span class="s1">&#39;The directory &quot;/opt/mopac/&quot; exists, but the executable </span><span class="se">\</span>
-<span class="s1">                &quot;mopac&quot; is not there&#39;</span>
+                <span class="s1">'The directory "/opt/mopac/" exists, but the executable </span><span class="se">\</span>
+<span class="s1">                "mopac" is not there'</span>
             <span class="p">)</span>
     <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">mopac_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;mopac&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">mopac_path</span> <span class="o">+</span> <span class="s2">&quot;mopac&quot;</span>
+            <span class="n">mopac_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"mopac"</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">mopac_path</span> <span class="o">+</span> <span class="s2">"mopac"</span>
 
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mopac_exe</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                    <span class="s1">&#39;The environment variable &quot;mopac&quot; is defined, but </span><span class="se">\</span>
-<span class="s1">                            the executable &quot;mopac&quot; is not there&#39;</span>
+                    <span class="s1">'The environment variable "mopac" is defined, but </span><span class="se">\</span>
+<span class="s1">                            the executable "mopac" is not there'</span>
                 <span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MOPAC_LICENSE&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="s2">&quot;mopac&quot;</span>
+                <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"MOPAC_LICENSE"</span><span class="p">])</span> <span class="o">/</span> <span class="s2">"mopac"</span>
                 <span class="n">mopac_exe</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">mopac_exe</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">mopac_exe</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
-                        <span class="s1">&#39;The environment variable &quot;mopac&quot; is defined, but the </span><span class="se">\</span>
-<span class="s1">                                executable &quot;mopac&quot; is not there&#39;</span>
+                        <span class="s1">'The environment variable "mopac" is defined, but the </span><span class="se">\</span>
+<span class="s1">                                executable "mopac" is not there'</span>
                     <span class="p">)</span>
 
             <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">seamm_util</span><span class="o">.</span><span class="n">check_executable</span><span class="p">(</span><span class="s2">&quot;mopac&quot;</span><span class="p">)</span>
+                    <span class="n">mopac_exe</span> <span class="o">=</span> <span class="n">seamm_util</span><span class="o">.</span><span class="n">check_executable</span><span class="p">(</span><span class="s2">"mopac"</span><span class="p">)</span>
                 <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
                     <span class="k">return</span> <span class="kc">None</span>
 
@@ -582,8 +582,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -595,7 +595,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

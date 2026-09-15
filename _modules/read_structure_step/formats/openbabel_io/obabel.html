@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.openbabel_io.obabel &#8212; SEAMM Read Structure Plug-in 2026.7.13 documentation</title>
+    <title>read_structure_step.formats.openbabel_io.obabel &#8212; SEAMM Read Structure Plug-in 2026.9.15 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +35,10 @@
     <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=a047d0be"></script>
+    <script src="../../../../_static/documentation_options.js?v=3713ace6"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.7.13" />
+  <meta name="docsearch:version" content="2026.9.15" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -486,7 +486,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <article class="bd-article">
                   
   <h1>Source code for read_structure_step.formats.openbabel_io.obabel</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Implementation of the chemical file reader/write using Open Babel&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""Implementation of the chemical file reader/write using Open Babel"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
@@ -506,20 +506,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="k">def</span><span class="w"> </span><span class="nf">load_file</span><span class="p">(</span>
     <span class="n">path</span><span class="p">,</span>
     <span class="n">configuration</span><span class="p">,</span>
-    <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.sdf&quot;</span><span class="p">,</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s2">".sdf"</span><span class="p">,</span>
     <span class="n">add_hydrogens</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">system_db</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">system</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">indices</span><span class="o">=</span><span class="s2">&quot;1:end&quot;</span><span class="p">,</span>
+    <span class="n">indices</span><span class="o">=</span><span class="s2">"1:end"</span><span class="p">,</span>
     <span class="n">subsequent_as_configurations</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">system_name</span><span class="o">=</span><span class="s2">&quot;Canonical SMILES&quot;</span><span class="p">,</span>
-    <span class="n">configuration_name</span><span class="o">=</span><span class="s2">&quot;sequential&quot;</span><span class="p">,</span>
+    <span class="n">system_name</span><span class="o">=</span><span class="s2">"Canonical SMILES"</span><span class="p">,</span>
+    <span class="n">configuration_name</span><span class="o">=</span><span class="s2">"sequential"</span><span class="p">,</span>
     <span class="n">printer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">references</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">bibliography</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use Open Babel for reading any of the formats it supports.</span>
+<span class="w">    </span><span class="sd">"""Use Open Babel for reading any of the formats it supports.</span>
 
 <span class="sd">    See https://en.wikipedia.org/wiki/Chemical_table_file for a description of the</span>
 <span class="sd">    format. This function is using Open Babel to handle the file, so trusts that Open</span>
@@ -545,7 +545,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    system : System = None</span>
 <span class="sd">        The system to use if adding subsequent structures as configurations.</span>
 
-<span class="sd">    indices : str = &quot;1:end&quot;</span>
+<span class="sd">    indices : str = "1:end"</span>
 <span class="sd">        The generalized indices (slices, SMARTS, etc.) to select structures</span>
 <span class="sd">        from a file containing multiple structures.</span>
 
@@ -553,13 +553,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        Normally and subsequent structures are loaded into new systems; however,</span>
 <span class="sd">        if this option is True, they will be added as configurations.</span>
 
-<span class="sd">    system_name : str = &quot;from file&quot;</span>
-<span class="sd">        The name for systems. Can be directives like &quot;SMILES&quot; or</span>
-<span class="sd">        &quot;Canonical SMILES&quot;. If None, no name is given.</span>
+<span class="sd">    system_name : str = "from file"</span>
+<span class="sd">        The name for systems. Can be directives like "SMILES" or</span>
+<span class="sd">        "Canonical SMILES". If None, no name is given.</span>
 
-<span class="sd">    configuration_name : str = &quot;sequential&quot;</span>
-<span class="sd">        The name for configurations. Can be directives like &quot;SMILES&quot; or</span>
-<span class="sd">        &quot;Canonical SMILES&quot;. If None, no name is given.</span>
+<span class="sd">    configuration_name : str = "sequential"</span>
+<span class="sd">        The name for configurations. Can be directives like "SMILES" or</span>
+<span class="sd">        "Canonical SMILES". If None, no name is given.</span>
 
 <span class="sd">    printer : Logger or Printer</span>
 <span class="sd">        A function that prints to the appropriate place, used for progress.</span>
@@ -574,14 +574,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    -------</span>
 <span class="sd">    [Configuration]</span>
 <span class="sd">        The list of configurations created.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
     <span class="n">obConversion</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBConversion</span><span class="p">()</span>
-    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInAndOutFormats</span><span class="p">(</span><span class="n">extension</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">),</span> <span class="s2">&quot;smi&quot;</span><span class="p">)</span>
+    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInAndOutFormats</span><span class="p">(</span><span class="n">extension</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"."</span><span class="p">),</span> <span class="s2">"smi"</span><span class="p">)</span>
 
     <span class="n">obMol</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBMol</span><span class="p">()</span>
     <span class="n">obConversion</span><span class="o">.</span><span class="n">ReadFile</span><span class="p">(</span><span class="n">obMol</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
@@ -592,51 +592,51 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">configuration</span><span class="o">.</span><span class="n">from_OBMol</span><span class="p">(</span><span class="n">obMol</span><span class="p">)</span>
 
     <span class="c1"># Set the system name</span>
-    <span class="k">if</span> <span class="n">system_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">system_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">system_name</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
         <span class="n">lower_name</span> <span class="o">=</span> <span class="n">system_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"title"</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">obMol</span><span class="o">.</span><span class="n">GetTitle</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">tmp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmp</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
                 <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">tmp</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
-        <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"canonical smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
-        <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
-        <span class="k">elif</span> <span class="s2">&quot;iupac&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"iupac"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">PC_iupac_name</span>
-        <span class="k">elif</span> <span class="s2">&quot;inchikey&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"inchikey"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchikey</span>
-        <span class="k">elif</span> <span class="s2">&quot;inchi&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"inchi"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchi</span>
-        <span class="k">elif</span> <span class="s2">&quot;formula&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"formula"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">system</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">system_name</span>
 
     <span class="c1"># And the configuration name</span>
-    <span class="k">if</span> <span class="n">configuration_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">configuration_name</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">configuration_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">configuration_name</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
         <span class="n">lower_name</span> <span class="o">=</span> <span class="n">configuration_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;title&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"title"</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">obMol</span><span class="o">.</span><span class="n">GetTitle</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">tmp</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tmp</span> <span class="o">!=</span> <span class="s2">""</span><span class="p">:</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">tmp</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
-        <span class="k">elif</span> <span class="s2">&quot;canonical smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"canonical smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">canonical_smiles</span>
-        <span class="k">elif</span> <span class="s2">&quot;smiles&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"smiles"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">smiles</span>
-        <span class="k">elif</span> <span class="s2">&quot;iupac&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"iupac"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">PC_iupac_name</span>
-        <span class="k">elif</span> <span class="s2">&quot;inchikey&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"inchikey"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchikey</span>
-        <span class="k">elif</span> <span class="s2">&quot;inchi&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="s2">"inchi"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">inchi</span>
-        <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
-            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
-        <span class="k">elif</span> <span class="s2">&quot;formula&quot;</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">lower_name</span> <span class="o">==</span> <span class="s2">"sequential"</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"1"</span>
+        <span class="k">elif</span> <span class="s2">"formula"</span> <span class="ow">in</span> <span class="n">lower_name</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration_name</span>
@@ -647,10 +647,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">citation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">citations</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
-                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;read_structure_step&quot;</span><span class="p">,</span>
+                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">"openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">"read_structure_step"</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel.&quot;</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">"The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel."</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">configuration</span><span class="p">]</span></div>
@@ -662,15 +662,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="k">def</span><span class="w"> </span><span class="nf">write_file</span><span class="p">(</span>
     <span class="n">path</span><span class="p">,</span>
     <span class="n">configurations</span><span class="p">,</span>
-    <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.sdf&quot;</span><span class="p">,</span>
-    <span class="n">remove_hydrogens</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span>
+    <span class="n">extension</span><span class="o">=</span><span class="s2">".sdf"</span><span class="p">,</span>
+    <span class="n">remove_hydrogens</span><span class="o">=</span><span class="s2">"no"</span><span class="p">,</span>
     <span class="n">printer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">references</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">bibliography</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Use Open Babel for reading any of the formats it supports.</span>
+<span class="w">    </span><span class="sd">"""Use Open Babel for reading any of the formats it supports.</span>
 
 <span class="sd">    See https://en.wikipedia.org/wiki/Chemical_table_file for a description of the</span>
 <span class="sd">    format. This function is using Open Babel to handle the file, so trusts that Open</span>
@@ -687,7 +687,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    extension : str, optional, default: None</span>
 <span class="sd">        The extension, including initial dot, defining the format.</span>
 
-<span class="sd">    remove_hydrogens : str = &quot;no&quot;</span>
+<span class="sd">    remove_hydrogens : str = "no"</span>
 <span class="sd">        Whether to remove any hydrogen atoms before writing the file.</span>
 
 <span class="sd">    printer : Logger or Printer</span>
@@ -703,27 +703,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    -------</span>
 <span class="sd">    [Configuration]</span>
 <span class="sd">        The list of configurations created.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
     <span class="n">obConversion</span> <span class="o">=</span> <span class="n">openbabel</span><span class="o">.</span><span class="n">OBConversion</span><span class="p">()</span>
-    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInAndOutFormats</span><span class="p">(</span><span class="s2">&quot;smi&quot;</span><span class="p">,</span> <span class="n">extension</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+    <span class="n">obConversion</span><span class="o">.</span><span class="n">SetInAndOutFormats</span><span class="p">(</span><span class="s2">"smi"</span><span class="p">,</span> <span class="n">extension</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">"."</span><span class="p">))</span>
 
     <span class="n">configuration</span> <span class="o">=</span> <span class="n">configurations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">system</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">system</span>
     <span class="n">obMol</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">to_OBMol</span><span class="p">()</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
     <span class="n">obMol</span><span class="o">.</span><span class="n">SetTitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">remove_hydrogens</span> <span class="o">==</span> <span class="s2">&quot;nonpolar&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">remove_hydrogens</span> <span class="o">==</span> <span class="s2">"nonpolar"</span><span class="p">:</span>
         <span class="n">obMol</span><span class="o">.</span><span class="n">DeleteNonPolarHydrogens</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">remove_hydrogens</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">remove_hydrogens</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
         <span class="n">obMol</span><span class="o">.</span><span class="n">DeleteHydrogens</span><span class="p">()</span>
 
-    <span class="n">obMol</span><span class="o">.</span><span class="n">SetTitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">obMol</span><span class="o">.</span><span class="n">SetTitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="n">obConversion</span><span class="o">.</span><span class="n">WriteFile</span><span class="p">(</span><span class="n">obMol</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
 
@@ -733,10 +733,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">citation</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">citations</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
             <span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">=</span><span class="n">citation</span><span class="p">,</span>
-                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">=</span><span class="s2">&quot;read_structure_step&quot;</span><span class="p">,</span>
+                <span class="n">alias</span><span class="o">=</span><span class="sa">f</span><span class="s2">"openbabel_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">"read_structure_step"</span><span class="p">,</span>
                 <span class="n">level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel.&quot;</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="sa">f</span><span class="s2">"The principal citation #</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> for OpenBabel."</span><span class="p">,</span>
             <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">configuration</span><span class="p">]</span></div>
@@ -770,8 +770,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -783,7 +783,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
