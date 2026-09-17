@@ -65,6 +65,20 @@ class ReadStructureParameters(seamm.Parameters):
             "description": "Add hydrogens:",
             "help_text": "Whether to add missing hydrogen atoms.",
         },
+        "perceive bonds": {
+            "default": "yes",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "s",
+            "description": "Perceive bonds:",
+            "help_text": (
+                "For file formats that carry no bonds, such as extended XYZ, "
+                "whether to find the bonds from the geometry (covalent radii, with "
+                "the periodic cell taken into account) so that molecules can be "
+                "identified."
+            ),
+        },
         "save properties": {
             "default": "yes",
             "kind": "boolean",

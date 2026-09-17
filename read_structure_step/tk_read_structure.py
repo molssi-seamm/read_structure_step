@@ -62,7 +62,14 @@ class TkReadStructure(seamm.TkNode):
 
         # Create the widgets
         P = self.node.parameters
-        for key in ("file", "file type", "indices", "save properties", "add hydrogens"):
+        for key in (
+            "file",
+            "file type",
+            "indices",
+            "save properties",
+            "add hydrogens",
+            "perceive bonds",
+        ):
             self[key] = P[key].widget(frame1)
         for key in (
             "structure handling",
@@ -141,6 +148,8 @@ class TkReadStructure(seamm.TkNode):
             items.append("save properties")
         if extension == "all" or metadata["add_hydrogens"]:
             items.append("add hydrogens")
+        if extension == "all" or metadata.get("perceive_bonds", False):
+            items.append("perceive bonds")
         if len(items) > 0:
             widgets = []
             for item in items:

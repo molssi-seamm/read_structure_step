@@ -32,6 +32,7 @@ default_metadata = {
     "coordinate_dimensionality": 3,
     "property_data": False,
     "bonds": False,
+    "perceive_bonds": False,
     "is_complete": True,
     "add_hydrogens": False,
     "append": False,

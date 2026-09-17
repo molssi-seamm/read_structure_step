@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.9.17 -- Perceive bonds when reading extended XYZ files
+    * Extended XYZ files carry no connectivity, so structures read from them had
+      atoms but no bonds and anything working with molecules (finding molecules,
+      keeping them whole across a periodic boundary, extracting clusters) had
+      nothing to go on. Read Structure now perceives the bonds from the geometry
+      for such files, using molsystem's ``perceive_bonds`` (covalent radii, with
+      the periodic cell taken into account). The new "Perceive bonds" option,
+      shown only for formats that need it, defaults to yes; set it to no to keep
+      the structure bond-free. Requires molsystem 2026.9.17 or later.
+
 2026.9.15.1 -- Bugfix: writing any extended XYZ file failed
     * The helper added in 2026.9.15 was placed between the ``@register_writer``
       decorator and the function it decorates, so the decorator bound the helper

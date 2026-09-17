@@ -27,7 +27,8 @@ set_format_metadata(
     dimensionality=3,
     coordinate_dimensionality=3,
     property_data=True,
-    bonds=True,
+    bonds=False,
+    perceive_bonds=True,
     is_complete=True,
     add_hydrogens=False,
     append=True,
@@ -75,6 +76,7 @@ def load_extxyz(
     references=None,
     bibliography=None,
     step=None,
+    perceive_bonds=True,
     **kwargs,
 ):
     """Read an extended XYZ File
@@ -172,6 +174,8 @@ def load_extxyz(
     stop = indices[-1]
 
     record_no = 0
+    n_perceived = 0
+    n_perceived_structures = 0
     structure_no = 0
     line_no = 0
     section = None
@@ -330,6 +334,11 @@ def load_extxyz(
 
                     configuration.atoms.append(symbol=data["species"])
                     configuration.atoms.set_coordinates(data["pos"], fractionals=False)
+                    # Extended XYZ carries no connectivity, so perceive the bonds
+                    # from the geometry if asked (molsystem >= 2026.9.17).
+                    if perceive_bonds and configuration.bonds.n_bonds == 0:
+                        n_perceived += configuration.perceive_bonds()
+                        n_perceived_structures += 1
                     if save_properties and "forces" in data:
                         factor = Q_("eV/Å").m_as("kJ/mol/Å")
                         g = -factor * np.array(data["forces"])
@@ -458,6 +467,11 @@ def load_extxyz(
             f"    Read {structure_no} structures in {t1 - t0:.1f} "
             f"seconds = {rate:.2f} per second."
         )
+        if n_perceived_structures > 0:
+            printer(
+                f"    Perceived {n_perceived} bonds from the geometry in "
+                f"{n_perceived_structures} structures."
+            )
 
         ns = len({c.system.name for c in configurations})
         nc = len({c.name for c in configurations})
