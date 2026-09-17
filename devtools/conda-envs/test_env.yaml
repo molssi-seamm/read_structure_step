@@ -37,5 +37,10 @@ dependencies:
     # SEAMM (pulls in seamm-util, seamm-widgets, ... from PyPI)
     - seamm
     - molsystem>=2026.9.17.1
+    # molsystem imports these but (before 2026.9.17.2) did not declare them
+    - pubchempy
+    - requests
+    - seekpath
+    - spglib
     # Documentation
     - sphinx-copybutton
