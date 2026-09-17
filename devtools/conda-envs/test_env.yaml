@@ -11,7 +11,6 @@ dependencies:
   # SEAMM
   - libsqlite!=3.49.1
   - seamm
-  - molsystem>=2026.9.17
 
   # Testing
   - black
@@ -26,5 +25,7 @@ dependencies:
 
   # Pip-only installs
   - pip:
+    # conda-forge lags PyPI; perceive_bonds needs the 2026.9.17 release
+    - molsystem>=2026.9.17
     # Documentation
     - sphinx-copybutton
