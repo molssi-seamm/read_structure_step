@@ -143,6 +143,11 @@ class ReadStructure(seamm.Node):
             P = self.parameters.values_to_dict()
 
         text = f"Read structure from {P['file']}. "
+        if P["perceive bonds"] is True or P["perceive bonds"] == "yes":
+            text += (
+                "For formats that carry no bonds, such as extended XYZ, the bonds "
+                "will be perceived from the geometry. "
+            )
 
         # What type of file?
         extension = ""
@@ -254,6 +259,7 @@ class ReadStructure(seamm.Node):
                 configuration,
                 extension=extension,
                 add_hydrogens=P["add hydrogens"],
+                perceive_bonds=P["perceive bonds"],
                 system_db=system_db,
                 system=system,
                 indices=P["indices"],
@@ -369,6 +375,7 @@ class ReadStructure(seamm.Node):
                         configuration,
                         extension=extension,
                         add_hydrogens=P["add hydrogens"],
+                        perceive_bonds=P["perceive bonds"],
                         system_db=system_db,
                         system=system,
                         indices=P["indices"],

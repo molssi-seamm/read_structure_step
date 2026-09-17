@@ -22,6 +22,7 @@ def read(
     references=None,
     bibliography=None,
     step=None,
+    perceive_bonds=True,
 ):
     """
     Calls the appropriate functions to parse the requested file.
@@ -124,6 +125,7 @@ def read(
         references=references,
         bibliography=bibliography,
         step=step,
+        perceive_bonds=perceive_bonds,
     )
 
     return configurations
