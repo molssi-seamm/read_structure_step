@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.9.17.1 -- Internal: CI takes the pure-Python dependencies from PyPI
+    * The CI environment now installs the SEAMM packages from PyPI, which has a new
+      release within minutes of the tag, rather than from conda-forge, which can take
+      hours to build and propagate. Only the compiled packages (numpy, openbabel,
+      rdkit) still come from conda-forge. No effect on users.
+
 2026.9.17 -- Perceive bonds when reading extended XYZ files
     * Extended XYZ files carry no connectivity, so structures read from them had
       atoms but no bonds and anything working with molecules (finding molecules,
