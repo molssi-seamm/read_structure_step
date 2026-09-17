@@ -26,6 +26,6 @@ dependencies:
   # Pip-only installs
   - pip:
     # conda-forge lags PyPI; perceive_bonds needs the 2026.9.17 release
-    - molsystem>=2026.9.17
+    - molsystem>=2026.9.17.1
     # Documentation
     - sphinx-copybutton

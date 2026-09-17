@@ -9,7 +9,7 @@ History
       for such files, using molsystem's ``perceive_bonds`` (covalent radii, with
       the periodic cell taken into account). The new "Perceive bonds" option,
       shown only for formats that need it, defaults to yes; set it to no to keep
-      the structure bond-free. Requires molsystem 2026.9.17 or later.
+      the structure bond-free. Requires molsystem 2026.9.17.1 or later.
 
 2026.9.15.1 -- Bugfix: writing any extended XYZ file failed
     * The helper added in 2026.9.15 was placed between the ``@register_writer``

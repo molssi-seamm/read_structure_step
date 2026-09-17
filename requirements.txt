@@ -1,2 +1,2 @@
-molsystem>=2026.9.17
+molsystem>=2026.9.17.1
 seamm
