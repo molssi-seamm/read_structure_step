@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.9.15.1 documentation</title>
+    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.9.17 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f6a62181"></script>
+    <script src="../../_static/documentation_options.js?v=a493a295"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.9.15.1" />
+  <meta name="docsearch:version" content="2026.9.17" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -638,6 +638,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
         <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Read structure from </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"perceive bonds"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">"perceive bonds"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"yes"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">"For formats that carry no bonds, such as extended XYZ, the bonds "</span>
+                <span class="s2">"will be perceived from the geometry. "</span>
+            <span class="p">)</span>
 
         <span class="c1"># What type of file?</span>
         <span class="n">extension</span> <span class="o">=</span> <span class="s2">""</span>
@@ -752,6 +757,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">configuration</span><span class="p">,</span>
                 <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
                 <span class="n">add_hydrogens</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"add hydrogens"</span><span class="p">],</span>
+                <span class="n">perceive_bonds</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"perceive bonds"</span><span class="p">],</span>
                 <span class="n">system_db</span><span class="o">=</span><span class="n">system_db</span><span class="p">,</span>
                 <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span>
                 <span class="n">indices</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"indices"</span><span class="p">],</span>
@@ -870,6 +876,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <span class="n">configuration</span><span class="p">,</span>
                         <span class="n">extension</span><span class="o">=</span><span class="n">extension</span><span class="p">,</span>
                         <span class="n">add_hydrogens</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"add hydrogens"</span><span class="p">],</span>
+                        <span class="n">perceive_bonds</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"perceive bonds"</span><span class="p">],</span>
                         <span class="n">system_db</span><span class="o">=</span><span class="n">system_db</span><span class="p">,</span>
                         <span class="n">system</span><span class="o">=</span><span class="n">system</span><span class="p">,</span>
                         <span class="n">indices</span><span class="o">=</span><span class="n">P</span><span class="p">[</span><span class="s2">"indices"</span><span class="p">],</span>

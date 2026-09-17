@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.tk_read_structure &#8212; SEAMM Read Structure Plug-in 2026.9.15.1 documentation</title>
+    <title>read_structure_step.tk_read_structure &#8212; SEAMM Read Structure Plug-in 2026.9.17 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f6a62181"></script>
+    <script src="../../_static/documentation_options.js?v=a493a295"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.9.15.1" />
+  <meta name="docsearch:version" content="2026.9.17" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -554,7 +554,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Create the widgets</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"file"</span><span class="p">,</span> <span class="s2">"file type"</span><span class="p">,</span> <span class="s2">"indices"</span><span class="p">,</span> <span class="s2">"save properties"</span><span class="p">,</span> <span class="s2">"add hydrogens"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">"file"</span><span class="p">,</span>
+            <span class="s2">"file type"</span><span class="p">,</span>
+            <span class="s2">"indices"</span><span class="p">,</span>
+            <span class="s2">"save properties"</span><span class="p">,</span>
+            <span class="s2">"add hydrogens"</span><span class="p">,</span>
+            <span class="s2">"perceive bonds"</span><span class="p">,</span>
+        <span class="p">):</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">frame1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
             <span class="s2">"structure handling"</span><span class="p">,</span>
@@ -636,6 +643,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"save properties"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">"all"</span> <span class="ow">or</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"add_hydrogens"</span><span class="p">]:</span>
             <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"add hydrogens"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">extension</span> <span class="o">==</span> <span class="s2">"all"</span> <span class="ow">or</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"perceive_bonds"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"perceive bonds"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
