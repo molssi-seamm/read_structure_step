@@ -2,6 +2,8 @@ from pathlib import Path
 from . import formats
 import re
 
+from seamm_util.list_definition import parse_list
+
 
 def guess_extension(file_name, use_file_name=False):
     """
@@ -77,40 +79,39 @@ def sanitize_file_format(file_format):
 
 
 def parse_indices(text, maximum):
-    """Return a list of values in the given index expression.
+    """Return the sorted list of 1-based indices in a SEAMM list expression.
 
-    Handles expressions like "1-10 by 2, 20-end" which would result in
-    1,3,5,7,9,20,21,22,23,24,25 if there were 25 items in the list.
+    The syntax is that of ``seamm_util.parse_list``: values and ranges
+    ``start:stop[:step]`` separated by commas, with the stop value included, e.g.
+    ``"1:10:2, 20:end"`` giving 1, 3, 5, 7, 9, 20, ..., ``maximum``. The words
+    ``end`` and ``last`` stand for ``maximum``.
+
+    Parameters
+    ----------
+    text : str
+        The list expression.
+    maximum : int
+        The number of items available (the value of ``end``).
+
+    Returns
+    -------
+    [int]
+        The sorted, unique indices, each between 1 and ``maximum``.
     """
+    text = re.sub(r"\b(end|last)\b", str(maximum), str(text).strip(), flags=re.I)
+    if text == "":
+        raise ValueError("The list of structures to read is empty.")
+    values = parse_list(text)
     result = set()
-    for indices in text.split(","):
-        increment = 1
-        if "to" in indices:
-            tmp = indices.split("to")
-        else:
-            if ":" in indices:
-                tmp = indices.split(":")
-                increment = 0
-            else:
-                tmp = indices.split("-")
-        if len(tmp) == 1:
-            if tmp[0].strip() == "end":
-                result.add(maximum)
-            else:
-                result.add(int(tmp[0].strip()))
-        else:
-            start = int(tmp[0].strip())
-            end = tmp[1]
-            if "by" in end:
-                end, by = end.split("by")
-                by = int(by.strip())
-            else:
-                by = 1
-            end = end.strip()
-            if end == "end":
-                end = maximum
-                increment = 1
-            else:
-                end = int(end)
-            result.update(range(start, end + increment, by))
+    for value in values:
+        if isinstance(value, float):
+            if not value.is_integer():
+                raise ValueError(f"Structure indices must be integers, not {value}.")
+            value = int(value)
+        if value < 1 or value > maximum:
+            raise ValueError(
+                f"Structure index {value} is out of range: there are {maximum} "
+                "structures in the file (use 'end' for the last)."
+            )
+        result.add(value)
     return sorted(result)

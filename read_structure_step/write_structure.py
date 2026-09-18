@@ -79,75 +79,27 @@ class WriteStructure(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        structures = P["structures"]
-        configs = P["configurations"]
         ignore_missing = P["ignore missing"]
         if isinstance(ignore_missing, bool):
-            if ignore_missing:
-                ignore_missing = "yes"
-            else:
-                ignore_missing = "no"
+            ignore_missing = "yes" if ignore_missing else "no"
 
         n_per_file = P["number per file"]
 
-        if structures == "current configuration":
-            text = f"The current configuration will be written to {P['file']}. "
-        elif structures == "current system":
-            if configs == "all":
-                text = (
-                    "All the configurations of the current system will be written to "
-                    f"{P['file']}. "
-                )
-            else:
-                text = (
-                    f"Configuration '{configs}' of the current system will be written "
-                    f"to {P['file']}. "
-                )
-            if n_per_file != "all":
-                text += (
-                    " The output will be broken into multiple files containing no "
-                    f"more than {n_per_file} structures each."
-                )
-        elif structures == "all systems":
-            if configs == "all":
-                text = (
-                    "All the configurations of all the systems will be written to "
-                    f"{P['file']}. "
-                )
-            else:
-                text = (
-                    f"Configuration '{configs}' of all systems will be written "
-                    f"to {P['file']}. "
-                )
-                if ignore_missing == "yes":
-                    pass
-                elif ignore_missing == "no":
-                    text += (
-                        "It will be an error if a system does not have the named "
-                        "configuration."
-                    )
-                else:
-                    text += (
-                        f"The value of {ignore_missing} will determine whether it is"
-                        " an error if a system does not have the named configuration."
-                    )
-            if n_per_file != "all":
-                text += (
-                    " The output will be broken into multiple files containing no "
-                    f"more than {n_per_file} structures each."
-                )
-        else:
-            if isinstance(structures, str):
-                text = (
-                    f"The variable {structures} will determine which systems to write."
-                )
-            else:
-                text = "The list of configurations in 'structures' will be written out."
-            if n_per_file != "all":
-                text += (
-                    " The output will be broken into multiple files containing no "
-                    f"more than {n_per_file} structures each."
-                )
+        text = seamm.standard_parameters.structure_selection_description(P).replace(
+            "will be used", f"will be written to {P['file']}"
+        )
+        if ignore_missing == "no":
+            text += " It will be an error if the selection matches no structures."
+        elif ignore_missing != "yes":
+            text += (
+                f" The value of {ignore_missing} will determine whether it is an "
+                "error if the selection matches no structures."
+            )
+        if n_per_file != "all":
+            text += (
+                " The output will be broken into multiple files containing no "
+                f"more than {n_per_file} structures each."
+            )
 
         text = textwrap.fill(text, initial_indent=4 * " ", subsequent_indent=4 * " ")
         return self.header + "\n" + text
@@ -188,40 +140,9 @@ class WriteStructure(seamm.Node):
         printer.important(self.description_text(P))
 
         # Write the file into the system
-        system_db = self.get_variable("_system_db")
-        system, configuration = self.get_system_configuration()
-
-        structures = P["structures"]
-        configs = P["configurations"]
         errors = not P["ignore missing"]
-        configurations = []
-        if structures == "current configuration":
-            n_systems = 1
-            configurations.append(configuration)
-        elif structures == "current system":
-            n_systems = 1
-            if configs == "all":
-                for configuration in system.configurations:
-                    configurations.append(configuration)
-            else:
-                cid = system.get_configuration_id(configs, errors=errors)
-                if cid is not None:
-                    configurations.append(system.get_configuration(cid))
-        elif structures == "all systems":
-            n_systems = system_db.n_systems
-            if configs == "all":
-                for system in system_db.systems:
-                    for configuration in system.configurations:
-                        configurations.append(configuration)
-            else:
-                for system in system_db.systems:
-                    cid = system.get_configuration_id(configs, errors=errors)
-                    if cid is not None:
-                        configurations.append(system.get_configuration(cid))
-        else:
-            configurations = structures
-            tmp = set([c.system.id for c in configurations])
-            n_systems = len(tmp)
+        configurations = self.select_configurations(P, errors=errors)
+        n_systems = len({c.system.id for c in configurations})
 
         n_per_file = P["number per file"]
         n_configurations = len(configurations)
@@ -273,11 +194,12 @@ class WriteStructure(seamm.Node):
 
         # Finish the output
         if n_configurations == 1:
+            configuration = configurations[0]
             printer.important(
                 __(
                     f"\n    Wrote the structure with {configuration.n_atoms} "
                     "atoms."
-                    f"\n           System name = {system.name}"
+                    f"\n           System name = {configuration.system.name}"
                     f"\n    Configuration name = {configuration.name}",
                     indent=4 * " ",
                 )

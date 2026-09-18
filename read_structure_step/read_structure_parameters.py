@@ -91,13 +91,18 @@ class ReadStructureParameters(seamm.Parameters):
             ),
         },
         "indices": {
-            "default": "1-end",
+            "default": "1:end",
             "kind": "string",
             "default_units": "",
-            "enumeration": ("1-end",),
+            "enumeration": ("1:end",),
             "format_string": "s",
             "description": "Structures to read:",
-            "help_text": "The set of structures to read",
+            "help_text": (
+                "Which structures to read from a file holding several, as a "
+                "comma-separated list of indices and ranges start:stop[:step] "
+                "counting from 1 with the stop included, e.g. '1:10:2, 20:end'. "
+                "'end' (or 'last') is the last structure in the file."
+            ),
         },
     }
 

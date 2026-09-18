@@ -46,7 +46,7 @@ class TkWriteStructure(seamm.TkNode):
             self[key] = P[key].widget(frame)
 
         # Set bindings
-        for name in ("file", "file type", "structures"):
+        for name in ("file", "file type", "source systems", "source configurations"):
             combobox = self[name].combobox
             combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
             combobox.bind("<Return>", self.reset_dialog)
@@ -72,7 +72,6 @@ class TkWriteStructure(seamm.TkNode):
         extension = ""
         filename = self["file"].get().strip()
         file_type = self["file type"].get()
-        structures = self["structures"].get()
 
         if self.is_expr(filename) or self.is_expr(file_type):
             extension = "all"
@@ -106,24 +105,24 @@ class TkWriteStructure(seamm.TkNode):
         sw.align_labels(widgets)
 
         items = []
+        widgets = []
         if extension == "all" or not metadata["single_structure"]:
-            items.append("structures")
-            if structures in ("current system", "all systems"):
-                items.append("configurations")
+            # Which structures: the standard SEAMM selection
+            row, selection_widgets = self.layout_structure_selection(row=row, column=1)
+            widgets.extend(selection_widgets)
             items.append("ignore missing")
             items.append("number per file")
         items.append("remove hydrogens")
-        if len(items) > 0:
-            widgets = []
-            for item in items:
-                self[item].grid(row=row, column=1, sticky=tk.EW)
-                widgets.append(self[item])
-                row += 1
-            sw.align_labels(widgets)
+        for item in items:
+            self[item].grid(row=row, column=1, sticky=tk.EW)
+            widgets.append(self[item])
+            row += 1
+        sw.align_labels(widgets)
 
         # Set the widths and expansion
         frame.columnconfigure(0, minsize=50)
         frame.columnconfigure(1, weight=1)
+        frame.columnconfigure(2, weight=1)
 
     def right_click(self, event):
         """Probably need to add our dialog..."""
