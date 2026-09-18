@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.9.18 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.9.18.1 documentation</title>
   
   
   
@@ -49,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=4c890157"></script>
+    <script src="_static/documentation_options.js?v=a31f1ab7"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.9.18" />
+  <meta name="docsearch:version" content="2026.9.18.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.9.18.1 – Standard structure selection in Write Structure; list syntax for reading</dt><dd><ul class="simple">
+<li><p>Write Structure now uses SEAMM’s standard structure selection: the current
+configuration (the default, as before), all or the last or first configurations
+of the current system, of all systems, or of systems chosen by name, or a
+variable holding a list of configurations. Flowcharts saved with the old
+“Structures to write” / “Configuration(s) to write” options are translated when
+loaded.</p></li>
+<li><p>Read Structure’s “Structures to read” now uses the standard SEAMM list syntax
+(<code class="docutils literal notranslate"><span class="pre">seamm_util.parse_list</span></code>): comma-separated indices and ranges
+<code class="docutils literal notranslate"><span class="pre">start:stop[:step]</span></code> with the stop included, e.g. <code class="docutils literal notranslate"><span class="pre">1:10:2,</span> <span class="pre">20:end</span></code>, where
+<code class="docutils literal notranslate"><span class="pre">end</span></code> (or <code class="docutils literal notranslate"><span class="pre">last</span></code>) is the last structure in the file. The previous ad hoc
+syntax (<code class="docutils literal notranslate"><span class="pre">1-10</span> <span class="pre">by</span> <span class="pre">2,</span> <span class="pre">20-end</span></code>) is no longer accepted; the default is now
+<code class="docutils literal notranslate"><span class="pre">1:end</span></code>. Out-of-range indices are reported instead of silently ignored.</p></li>
+<li><p>Requires seamm 2026.9.18.1 and molsystem 2026.9.17.2 or later.</p></li>
+</ul>
+</dd>
 <dt>2026.9.18 – Internal: CI takes the pure-Python dependencies from PyPI</dt><dd><ul class="simple">
 <li><p>The CI environment now installs the SEAMM packages from PyPI, which has a new
 release within minutes of the tag, rather than from conda-forge, which can take

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.write_structure &#8212; SEAMM Read Structure Plug-in 2026.9.18 documentation</title>
+    <title>read_structure_step.write_structure &#8212; SEAMM Read Structure Plug-in 2026.9.18.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=4c890157"></script>
+    <script src="../../_static/documentation_options.js?v=a31f1ab7"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.9.18" />
+  <meta name="docsearch:version" content="2026.9.18.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -571,75 +571,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
-        <span class="n">structures</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"structures"</span><span class="p">]</span>
-        <span class="n">configs</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"configurations"</span><span class="p">]</span>
         <span class="n">ignore_missing</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"ignore missing"</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ignore_missing</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">ignore_missing</span><span class="p">:</span>
-                <span class="n">ignore_missing</span> <span class="o">=</span> <span class="s2">"yes"</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">ignore_missing</span> <span class="o">=</span> <span class="s2">"no"</span>
+            <span class="n">ignore_missing</span> <span class="o">=</span> <span class="s2">"yes"</span> <span class="k">if</span> <span class="n">ignore_missing</span> <span class="k">else</span> <span class="s2">"no"</span>
 
         <span class="n">n_per_file</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"number per file"</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"current configuration"</span><span class="p">:</span>
-            <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"The current configuration will be written to </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
-        <span class="k">elif</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"current system"</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">configs</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="s2">"All the configurations of the current system will be written to "</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Configuration '</span><span class="si">{</span><span class="n">configs</span><span class="si">}</span><span class="s2">' of the current system will be written "</span>
-                    <span class="sa">f</span><span class="s2">"to </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
-                <span class="p">)</span>
-            <span class="k">if</span> <span class="n">n_per_file</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">" The output will be broken into multiple files containing no "</span>
-                    <span class="sa">f</span><span class="s2">"more than </span><span class="si">{</span><span class="n">n_per_file</span><span class="si">}</span><span class="s2"> structures each."</span>
-                <span class="p">)</span>
-        <span class="k">elif</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"all systems"</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">configs</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="s2">"All the configurations of all the systems will be written to "</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"Configuration '</span><span class="si">{</span><span class="n">configs</span><span class="si">}</span><span class="s2">' of all systems will be written "</span>
-                    <span class="sa">f</span><span class="s2">"to </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">. "</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">ignore_missing</span> <span class="o">==</span> <span class="s2">"yes"</span><span class="p">:</span>
-                    <span class="k">pass</span>
-                <span class="k">elif</span> <span class="n">ignore_missing</span> <span class="o">==</span> <span class="s2">"no"</span><span class="p">:</span>
-                    <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="s2">"It will be an error if a system does not have the named "</span>
-                        <span class="s2">"configuration."</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">"The value of </span><span class="si">{</span><span class="n">ignore_missing</span><span class="si">}</span><span class="s2"> will determine whether it is"</span>
-                        <span class="s2">" an error if a system does not have the named configuration."</span>
-                    <span class="p">)</span>
-            <span class="k">if</span> <span class="n">n_per_file</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">" The output will be broken into multiple files containing no "</span>
-                    <span class="sa">f</span><span class="s2">"more than </span><span class="si">{</span><span class="n">n_per_file</span><span class="si">}</span><span class="s2"> structures each."</span>
-                <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">structures</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The variable </span><span class="si">{</span><span class="n">structures</span><span class="si">}</span><span class="s2"> will determine which systems to write."</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="s2">"The list of configurations in 'structures' will be written out."</span>
-            <span class="k">if</span> <span class="n">n_per_file</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
-                    <span class="s2">" The output will be broken into multiple files containing no "</span>
-                    <span class="sa">f</span><span class="s2">"more than </span><span class="si">{</span><span class="n">n_per_file</span><span class="si">}</span><span class="s2"> structures each."</span>
-                <span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_selection_description</span><span class="p">(</span><span class="n">P</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="s2">"will be used"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"will be written to </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ignore_missing</span> <span class="o">==</span> <span class="s2">"no"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">" It will be an error if the selection matches no structures."</span>
+        <span class="k">elif</span> <span class="n">ignore_missing</span> <span class="o">!=</span> <span class="s2">"yes"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">" The value of </span><span class="si">{</span><span class="n">ignore_missing</span><span class="si">}</span><span class="s2"> will determine whether it is an "</span>
+                <span class="s2">"error if the selection matches no structures."</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_per_file</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="s2">" The output will be broken into multiple files containing no "</span>
+                <span class="sa">f</span><span class="s2">"more than </span><span class="si">{</span><span class="n">n_per_file</span><span class="si">}</span><span class="s2"> structures each."</span>
+            <span class="p">)</span>
 
         <span class="n">text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">initial_indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span> <span class="n">subsequent_indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">text</span></div>
@@ -683,40 +635,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
 
         <span class="c1"># Write the file into the system</span>
-        <span class="n">system_db</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"_system_db"</span><span class="p">)</span>
-        <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
-
-        <span class="n">structures</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"structures"</span><span class="p">]</span>
-        <span class="n">configs</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"configurations"</span><span class="p">]</span>
         <span class="n">errors</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">P</span><span class="p">[</span><span class="s2">"ignore missing"</span><span class="p">]</span>
-        <span class="n">configurations</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"current configuration"</span><span class="p">:</span>
-            <span class="n">n_systems</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"current system"</span><span class="p">:</span>
-            <span class="n">n_systems</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">configs</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">configuration</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">configurations</span><span class="p">:</span>
-                    <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">cid</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_configuration_id</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">cid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="n">cid</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="n">structures</span> <span class="o">==</span> <span class="s2">"all systems"</span><span class="p">:</span>
-            <span class="n">n_systems</span> <span class="o">=</span> <span class="n">system_db</span><span class="o">.</span><span class="n">n_systems</span>
-            <span class="k">if</span> <span class="n">configs</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">system_db</span><span class="o">.</span><span class="n">systems</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">configuration</span> <span class="ow">in</span> <span class="n">system</span><span class="o">.</span><span class="n">configurations</span><span class="p">:</span>
-                        <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">configuration</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">system</span> <span class="ow">in</span> <span class="n">system_db</span><span class="o">.</span><span class="n">systems</span><span class="p">:</span>
-                    <span class="n">cid</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">get_configuration_id</span><span class="p">(</span><span class="n">configs</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">cid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">configurations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">get_configuration</span><span class="p">(</span><span class="n">cid</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">configurations</span> <span class="o">=</span> <span class="n">structures</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">c</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">configurations</span><span class="p">])</span>
-            <span class="n">n_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="n">configurations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">select_configurations</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+        <span class="n">n_systems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">({</span><span class="n">c</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">configurations</span><span class="p">})</span>
 
         <span class="n">n_per_file</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"number per file"</span><span class="p">]</span>
         <span class="n">n_configurations</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configurations</span><span class="p">)</span>
@@ -768,11 +689,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Finish the output</span>
         <span class="k">if</span> <span class="n">n_configurations</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">configuration</span> <span class="o">=</span> <span class="n">configurations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
                 <span class="n">__</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Wrote the structure with </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span><span class="si">}</span><span class="s2"> "</span>
                     <span class="s2">"atoms."</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">           System name = </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">           System name = </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
                     <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Configuration name = </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                     <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
                 <span class="p">)</span>
