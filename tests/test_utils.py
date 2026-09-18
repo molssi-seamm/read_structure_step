@@ -53,3 +53,29 @@ def test_extensions(configuration, file_name, extension):
 def test_sanitize_file_format_regex_validation(configuration):
     with pytest.raises(NameError):
         read_structure_step.read("spc.xyz", configuration, extension=".xy-z")
+
+
+@pytest.mark.parametrize(
+    "text, maximum, expected",
+    [
+        ("1:end", 5, [1, 2, 3, 4, 5]),
+        ("3", 5, [3]),
+        ("1:10:2, 20:end", 25, [1, 3, 5, 7, 9, 20, 21, 22, 23, 24, 25]),
+        ("end", 7, [7]),
+        ("last, 1", 7, [1, 7]),
+        ("2, 2, 1:3", 5, [1, 2, 3]),
+        (" 4 : 6 ", 6, [4, 5, 6]),
+    ],
+)
+def test_parse_indices(text, maximum, expected):
+    from read_structure_step.utils import parse_indices
+
+    assert parse_indices(text, maximum) == expected
+
+
+@pytest.mark.parametrize("text", ["0", "6", "1:8", "", "1.5", "1-3"])
+def test_parse_indices_errors(text):
+    from read_structure_step.utils import parse_indices
+
+    with pytest.raises(ValueError):
+        parse_indices(text, 5)

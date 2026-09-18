@@ -34,14 +34,7 @@ dependencies:
 
   # Pure-Python packages: from PyPI
   - pip:
-    # SEAMM (pulls in seamm-util, seamm-widgets, ... from PyPI)
-    - seamm
-    - molsystem>=2026.9.17.1
-    # imported but not declared before molsystem 2026.9.17.2 / seamm 2026.9.17.1
-    - pubchempy
-    - pyperclip
-    - requests
-    - seekpath
-    - spglib
+    - seamm>=2026.9.18.1
+    - molsystem>=2026.9.17.2
     # Documentation
     - sphinx-copybutton

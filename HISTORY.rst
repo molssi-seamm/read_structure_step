@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.9.18.1 -- Standard structure selection in Write Structure; list syntax for reading
+    * Write Structure now uses SEAMM's standard structure selection: the current
+      configuration (the default, as before), all or the last or first configurations
+      of the current system, of all systems, or of systems chosen by name, or a
+      variable holding a list of configurations. Flowcharts saved with the old
+      "Structures to write" / "Configuration(s) to write" options are translated when
+      loaded.
+    * Read Structure's "Structures to read" now uses the standard SEAMM list syntax
+      (``seamm_util.parse_list``): comma-separated indices and ranges
+      ``start:stop[:step]`` with the stop included, e.g. ``1:10:2, 20:end``, where
+      ``end`` (or ``last``) is the last structure in the file. The previous ad hoc
+      syntax (``1-10 by 2, 20-end``) is no longer accepted; the default is now
+      ``1:end``. Out-of-range indices are reported instead of silently ignored.
+    * Requires seamm 2026.9.18.1 and molsystem 2026.9.17.2 or later.
+
 2026.9.18 -- Internal: CI takes the pure-Python dependencies from PyPI
     * The CI environment now installs the SEAMM packages from PyPI, which has a new
       release within minutes of the tag, rather than from conda-forge, which can take

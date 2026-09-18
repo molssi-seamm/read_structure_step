@@ -111,7 +111,7 @@ def load_xyz(
     add_hydrogens=True,
     system_db=None,
     system=None,
-    indices="1-end",
+    indices="1:end",
     subsequent_as_configurations=False,
     system_name="Canonical SMILES",
     configuration_name="sequential",
@@ -142,7 +142,7 @@ def load_xyz(
     system : System = None
         The system to use if adding subsequent structures as configurations.
 
-    indices : str = "1-end"
+    indices : str = "1:end"
         The generalized indices (slices, SMARTS, etc.) to select structures
         from a file containing multiple structures.
 
