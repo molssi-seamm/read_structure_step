@@ -11,7 +11,9 @@ will do in the initial summary of the job.
 directory, and is used for all normal output from this step.
 """
 
+import json
 import logging
+import os
 from pathlib import Path
 import textwrap
 
@@ -104,6 +106,55 @@ class WriteStructure(seamm.Node):
         text = textwrap.fill(text, initial_indent=4 * " ", subsequent_indent=4 * " ")
         return self.header + "\n" + text
 
+    @staticmethod
+    def _target_files(path, n_per_file, n_configurations):
+        """The files that will be written, as run() names them."""
+        if n_per_file == "all" or n_configurations <= n_per_file:
+            return [path]
+        n_per_file = int(n_per_file)
+        if path.suffix == ".gz":
+            base = path.with_suffix("")
+            suffix = base.suffix + ".gz"
+            stem = str(base.with_suffix(""))
+        else:
+            suffix = path.suffix
+            stem = str(path.with_suffix(""))
+        return [
+            Path(stem + f"_{first}" + suffix)
+            for first in range(1, n_configurations + 1, n_per_file)
+        ]
+
+    def _undo_earlier_appends(self, paths):
+        """Make appending safe to repeat.
+
+        The first time this step appends to a file in this directory it records
+        the file's size; if the step runs here again (a job resumed after being
+        stopped part way through it, or rerun in place), it first cuts each file
+        back to that size, so the structures are not appended twice.
+        """
+        record = Path(self.directory) / "appended_files.json"
+        sizes = {}
+        if record.exists():
+            try:
+                sizes = json.loads(record.read_text())
+            except ValueError:
+                sizes = {}
+        for path in paths:
+            key = str(path)
+            if key in sizes:
+                size = sizes[key]
+                if size < 0:
+                    path.unlink(missing_ok=True)
+                elif path.exists() and path.stat().st_size > size:
+                    with open(path, "r+b") as fd:
+                        fd.truncate(size)
+            else:
+                sizes[key] = path.stat().st_size if path.exists() else -1
+        record.parent.mkdir(parents=True, exist_ok=True)
+        tmp = record.with_suffix(".tmp")
+        tmp.write_text(json.dumps(sizes, indent=2))
+        os.replace(tmp, record)
+
     def run(self):
         """Run a Write Structure step."""
         next_node = super().run(printer)
@@ -154,6 +205,11 @@ class WriteStructure(seamm.Node):
                     indent=4 * " ",
                 )
             )
+        if P["append"]:
+            self._undo_earlier_appends(
+                self._target_files(path, n_per_file, n_configurations)
+            )
+
         if n_per_file == "all" or n_configurations <= n_per_file:
             write(
                 str(path),
