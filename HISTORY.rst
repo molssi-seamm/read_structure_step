@@ -1,6 +1,13 @@
 =======
 History
 =======
+2026.10.4.1 -- Bugfix: appending structures is safe to repeat
+    * When Write Structure appends to a file and runs again in the same directory (a
+      job resumed after stopping part way through the step, or rerun in place), it
+      first removes what it appended before, so the structures are not in the file
+      twice. Loop iterations have their own directories, so their appends accumulate
+      as before.
+
 2026.10.4 -- Bugfix: extended XYZ over an existing structure, and without Properties
     * Reading an extended XYZ file into a configuration that already has a structure
       ("Overwrite the current configuration", or rerunning a job in its directory)
