@@ -156,9 +156,24 @@ def load_extxyz(
         if path.suffix == ".gz"
         else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
-        for line in fd:
-            if "Properties=" in line:
-                n_records += 1
+        # A frame is a line with the number of atoms, a comment line, and the
+        # atoms. Count frames that way: the comment line need not say Properties=.
+        lines = iter(fd)
+        for line in lines:
+            if line.strip() == "":
+                continue
+            try:
+                natoms = int(line.strip())
+            except ValueError:
+                break
+            if next(lines, None) is None:
+                break
+            for _ in range(natoms):
+                if next(lines, None) is None:
+                    break
+            n_records += 1
+    if n_records == 0:
+        raise ValueError(f"The file {path} contains no structures.")
     if printer is not None:
         printer("")
         printer(f"    The .extxyz file contains {n_records} data blocks.")
@@ -207,15 +222,16 @@ def load_extxyz(
                 s.whitespace_split = True
                 header = {}
                 for tmp in s:
-                    key, value = tmp.split("=")
+                    if "=" not in tmp:
+                        # A plain word in the comment line
+                        continue
+                    key, value = tmp.split("=", 1)
                     if key.startswith("REF_"):
                         key = key[4:]
                     header[key] = value
                 if "Properties" not in header:
-                    raise ValueError(
-                        f"No property definition found in the header line for record "
-                        f"{record_no}\n\t{line}"
-                    )
+                    # As ASE: just the element symbols and positions
+                    header["Properties"] = "species:S:1:pos:R:3"
                 tmp = header["Properties"].replace("REF_", "").split(":")
                 meta = [
                     (key, kind, int(n))
@@ -299,8 +315,19 @@ def load_extxyz(
                             system = system_db.create_system()
                             configuration = system.create_configuration()
 
-                    # Periodic
-                    if "pbc" in header and header["pbc"] == "T T T":
+                    # A frame read over a periodic configuration must not stay
+                    # periodic. (Before clearing: molsystem cannot change the
+                    # periodicity of an empty periodic configuration.)
+                    periodic = "pbc" in header and header["pbc"] == "T T T"
+                    if not periodic and configuration.periodicity != 0:
+                        configuration.periodicity = 0
+
+                    # Overwriting a configuration that has a structure: start
+                    # from an empty one, as the other readers do.
+                    if configuration.n_atoms > 0:
+                        configuration.clear()
+
+                    if periodic:
                         configuration.periodicity = 3
                         if "Lattice" not in header:
                             raise ValueError(
