@@ -6,7 +6,8 @@ History
       ("Overwrite the current configuration", or rerunning a job in its directory)
       replaces the structure, as the other formats do. It failed with "The number of
       values ... must be 1 or the size of the slice" when the sizes differed, and a
-      non-periodic structure read over a periodic one stayed periodic.
+      non-periodic structure read over a periodic one stayed periodic
+      (seamm_exec#41).
     * A file whose comment line has no ``Properties=`` is read as element symbols and
       positions, as ASE does; it was read as containing no structures (#81). A file
       with no structures now says so plainly.
