@@ -127,18 +127,25 @@ class WriteStructure(seamm.Node):
     def _undo_earlier_appends(self, paths):
         """Make appending safe to repeat.
 
-        The first time this step appends to a file in this directory it records
-        the file's size; if the step runs here again (a job resumed after being
-        stopped part way through it, or rerun in place), it first cuts each file
-        back to that size, so the structures are not appended twice.
+        The first time this step appends to a file in this directory, in this
+        run of the job, it records the file's size; if the step runs here again
+        in the same run (the job resumed after stopping part way through it), it
+        first cuts each file back to that size, so the structures are not
+        appended twice. The run is the checkpoint's: a resume continues it, a
+        rerun from the top is a new one, whose appends start from the files as
+        they are.
         """
+        checkpointer = seamm.checkpoint.get_checkpointer()
+        run = None if checkpointer is None else checkpointer.run_id
         record = Path(self.directory) / "appended_files.json"
         sizes = {}
-        if record.exists():
+        if run is not None and record.exists():
             try:
-                sizes = json.loads(record.read_text())
+                saved = json.loads(record.read_text())
             except ValueError:
-                sizes = {}
+                saved = {}
+            if isinstance(saved, dict) and saved.get("run") == run:
+                sizes = saved.get("sizes", {})
         for path in paths:
             key = str(path)
             if key in sizes:
@@ -152,7 +159,7 @@ class WriteStructure(seamm.Node):
                 sizes[key] = path.stat().st_size if path.exists() else -1
         record.parent.mkdir(parents=True, exist_ok=True)
         tmp = record.with_suffix(".tmp")
-        tmp.write_text(json.dumps(sizes, indent=2))
+        tmp.write_text(json.dumps({"run": run, "sizes": sizes}, indent=2))
         os.replace(tmp, record)
 
     def run(self):

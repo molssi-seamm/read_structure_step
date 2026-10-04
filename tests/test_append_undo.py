@@ -5,9 +5,25 @@
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+import seamm
+
 from read_structure_step.write_structure import WriteStructure
 
 undo = WriteStructure._undo_earlier_appends
+
+
+class FakeCheckpointer:
+    def __init__(self, run_id):
+        self.run_id = run_id
+
+
+@pytest.fixture(autouse=True)
+def a_run():
+    """Write Structure inside a checkpointed run, as in a job."""
+    seamm.checkpoint.set_checkpointer(FakeCheckpointer("run-1"))
+    yield
+    seamm.checkpoint.set_checkpointer(None)
 
 
 def test_first_time_records_sizes(tmp_path):
@@ -41,3 +57,27 @@ def test_target_files_split():
     assert WriteStructure._target_files(Path("/j/out.sdf"), "all", 5) == [
         Path("/j/out.sdf")
     ]
+
+
+def test_another_run_starts_afresh(tmp_path):
+    """A rerun from the top (a new run) must not cut back to sizes the previous
+    run recorded: its iterations' outputs may differ in length."""
+    step = SimpleNamespace(directory=str(tmp_path / "iter_1" / "1"))
+    target = tmp_path / "all.sdf"
+    undo(step, [target])
+    target.write_text("frame from run 1\n")
+    # Run 2, from the top in the same directory; the file has grown since
+    seamm.checkpoint.set_checkpointer(FakeCheckpointer("run-2"))
+    target.write_text("frame from run 1\nand more from run 1's later steps\n")
+    undo(step, [target])
+    assert target.read_text().endswith("later steps\n")  # left as it is
+
+
+def test_without_a_checkpoint_nothing_is_cut(tmp_path):
+    seamm.checkpoint.set_checkpointer(None)
+    step = SimpleNamespace(directory=str(tmp_path / "1"))
+    target = tmp_path / "all.sdf"
+    undo(step, [target])
+    target.write_text("frame\n")
+    undo(step, [target])
+    assert target.read_text() == "frame\n"
