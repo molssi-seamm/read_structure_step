@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.4.1 -- Bugfix: appending structures is safe to repeat
+    * When Write Structure appends to a file and a job resumed from its checkpoint
+      (seamm 2026.10.4) runs the step again, it first removes what that step
+      appended before the job stopped, so the structures are not in the file twice.
+      A rerun from the top is a new run and appends as before; loop iterations have
+      their own directories, so their appends accumulate as before.
+    * Requires seamm 2026.10.4.
+
 2026.10.4 -- Bugfix: extended XYZ over an existing structure, and without Properties
     * Reading an extended XYZ file into a configuration that already has a structure
       ("Overwrite the current configuration", or rerunning a job in its directory)
