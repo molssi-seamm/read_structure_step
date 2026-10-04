@@ -1,6 +1,17 @@
 =======
 History
 =======
+2026.10.4 -- Bugfix: extended XYZ over an existing structure, and without Properties
+    * Reading an extended XYZ file into a configuration that already has a structure
+      ("Overwrite the current configuration", or rerunning a job in its directory)
+      replaces the structure, as the other formats do. It failed with "The number of
+      values ... must be 1 or the size of the slice" when the sizes differed, and a
+      non-periodic structure read over a periodic one stayed periodic
+      (seamm_exec#41).
+    * A file whose comment line has no ``Properties=`` is read as element symbols and
+      positions, as ASE does; it was read as containing no structures (#81). A file
+      with no structures now says so plainly.
+
 2026.9.18.1 -- Standard structure selection in Write Structure; list syntax for reading
     * Write Structure now uses SEAMM's standard structure selection: the current
       configuration (the default, as before), all or the last or first configurations
