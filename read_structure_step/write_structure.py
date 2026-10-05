@@ -177,7 +177,7 @@ class WriteStructure(seamm.Node):
         # What type of file?
         filename = P["file"].strip()
         if filename.startswith("/"):
-            path = Path(self.flowchart.root_directory) / filename[1:]
+            path = self.job_path / filename[1:]
         else:
             path = wd / filename
         file_type = P["file type"]

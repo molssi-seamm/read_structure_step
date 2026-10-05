@@ -1,6 +1,11 @@
 =======
 History
 =======
+2026.10.5 -- Job-level files for parallel loops
+    * Files named ``/name`` are written to the job's own directory (``Node.job_path``)
+      and read from it or, in an iteration of a parallel loop (loop_step 2026.10.5),
+      from the enclosing iterations and the job. Nothing changes for other jobs.
+    * Requires seamm 2026.10.5.
 2026.10.4.1 -- Bugfix: appending structures is safe to repeat
     * When Write Structure appends to a file and a job resumed from its checkpoint
       (seamm 2026.10.4) runs the step again, it first removes what that step

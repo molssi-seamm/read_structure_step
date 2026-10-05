@@ -201,12 +201,12 @@ class ReadStructure(seamm.Node):
             if filename.startswith("/") or filename.startswith("~"):
                 path = Path(filename).expanduser().resolve()
                 if not path.exists():
-                    path = Path(self.flowchart.root_directory) / filename[1:]
+                    path = self.job_file(filename[1:])
             elif filename.lower().startswith("job://"):
                 tmp = filename[6:]
                 if tmp[0] == "/":
                     # Current job
-                    path = Path(self.flowchart.root_directory) / tmp[1:]
+                    path = self.job_file(tmp[1:])
                 else:
                     job_no, rest = tmp.split("/", 1)
                     job_no = int(job_no)
