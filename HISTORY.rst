@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.10.6 -- Bugfix: extended XYZ files with velocities could not be read
+    * Reading an extended XYZ file with a velocities column failed: the velocities,
+      in (eV/amu)^0.5 as the writer writes them, were converted from ASE's unit of
+      time instead. They are now read in Å/fs, and a file written by this step reads
+      back the same.
+
 2026.10.5 -- Job-level files for parallel loops
     * Files named ``/name`` are written to the job's own directory (``Node.job_path``)
       and read from it or, in an iteration of a parallel loop (loop_step 2026.10.5),

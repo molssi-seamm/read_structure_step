@@ -371,7 +371,9 @@ def load_extxyz(
                         g = -factor * np.array(data["forces"])
                         configuration.atoms.set_gradients(g, fractionals=False)
                     if save_properties and "velocities" in data:
-                        factor = Q_("Å*amu^0.5/eV^0.5").m_as("Å/fs")
+                        # Extended XYZ (ASE) velocities are in (eV/amu)^0.5, the
+                        # inverse of what the writer converts to
+                        factor = Q_("eV^0.5/amu^0.5").m_as("Å/fs")
                         velocities = factor * np.array(data["velocities"])
                         configuration.atoms.set_velocities(
                             velocities, fractionals=False
