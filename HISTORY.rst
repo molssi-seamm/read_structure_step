@@ -9,6 +9,7 @@ History
       apart. Now a system or configuration keeps its name, and one without a name yet
       takes the name in the file -- its title, else the file's name -- as SDF and
       extended XYZ files already did.
+    * Internal: requires Python 3.12.
 
 2026.10.6 -- Bugfix: extended XYZ files with velocities could not be read
     * Reading an extended XYZ file with a velocities column failed: the velocities,
