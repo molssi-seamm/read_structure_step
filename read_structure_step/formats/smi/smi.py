@@ -182,7 +182,9 @@ def load_mol2(
         # Set the system name
         if system_name is not None and system_name != "":
             lower_name = system_name.lower()
-            if lower_name == "title":
+            if lower_name == "keep current name" and system.name:
+                pass  # keep it (one without a name takes the file's)
+            elif lower_name in ("keep current name", "title"):
                 tmp = obMol.GetTitle()
                 if tmp != "":
                     system.name = tmp
@@ -206,7 +208,9 @@ def load_mol2(
         # And the configuration name
         if configuration_name is not None and configuration_name != "":
             lower_name = configuration_name.lower()
-            if lower_name == "title":
+            if lower_name == "keep current name" and configuration.name:
+                pass  # keep it (one without a name takes the file's)
+            elif lower_name in ("keep current name", "title"):
                 tmp = obMol.GetTitle()
                 if tmp != "":
                     configuration.name = tmp

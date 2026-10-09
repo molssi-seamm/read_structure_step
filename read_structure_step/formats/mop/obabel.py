@@ -473,7 +473,9 @@ def load_mop(
     # Set the system name
     if system_name is not None and system_name != "":
         lower_name = system_name.lower()
-        if lower_name == "title":
+        if lower_name == "keep current name" and system.name:
+            pass  # keep it (one without a name takes the file's)
+        elif lower_name in ("keep current name", "title"):
             if len(description_lines) > 0:
                 system.name = description_lines[0]
             else:
@@ -496,7 +498,9 @@ def load_mop(
     # And the configuration name
     if configuration_name is not None and configuration_name != "":
         lower_name = configuration_name.lower()
-        if lower_name == "title":
+        if lower_name == "keep current name" and configuration.name:
+            pass  # keep it (one without a name takes the file's)
+        elif lower_name in ("keep current name", "title"):
             configuration.name = obMol.GetTitle()
         elif "canonical smiles" in lower_name:
             configuration.name = configuration.canonical_smiles

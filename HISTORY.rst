@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.9 -- Bugfix: "keep current name" was used as the name itself
+    * Reading XYZ, SMILES, MOL2, MOPAC, CIF, mmCIF and other files through Open Babel
+      with the system or configuration name set to "keep current name" (the default
+      for the system) named the system "keep current name": every structure read that
+      way had the same name, and steps selecting systems by name could not tell them
+      apart. Now a system or configuration keeps its name, and one without a name yet
+      takes the name in the file -- its title, else the file's name -- as SDF and
+      extended XYZ files already did.
+
 2026.10.6 -- Bugfix: extended XYZ files with velocities could not be read
     * Reading an extended XYZ file with a velocities column failed: the velocities,
       in (eV/amu)^0.5 as the writer writes them, were converted from ASE's unit of

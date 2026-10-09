@@ -220,7 +220,12 @@ def load_cif(
                         # Set the system name
                         if system_name is not None and system_name != "":
                             lower_name = str(system_name).lower()
-                            if "from file" in lower_name:
+                            if lower_name == "keep current name" and system.name:
+                                pass  # keep it (one without a name takes the file's)
+                            elif (
+                                lower_name == "keep current name"
+                                or "from file" in lower_name
+                            ):
                                 system.name = block_name
                             elif "file name" in lower_name:
                                 system.name = path.stem
@@ -234,7 +239,12 @@ def load_cif(
                         # And the configuration name
                         if configuration_name is not None and configuration_name != "":
                             lower_name = str(configuration_name).lower()
-                            if "from file" in lower_name:
+                            if lower_name == "keep current name" and configuration.name:
+                                pass  # keep it (one without a name takes the file's)
+                            elif (
+                                lower_name == "keep current name"
+                                or "from file" in lower_name
+                            ):
                                 configuration.name = block_name
                             elif "file name" in lower_name:
                                 configuration.name = path.stem
@@ -290,7 +300,11 @@ def load_cif(
                 # Set the system name
                 if system_name is not None and system_name != "":
                     lower_name = str(system_name).lower()
-                    if "from file" in lower_name:
+                    if lower_name == "keep current name" and system.name:
+                        pass  # keep it (one without a name takes the file's)
+                    elif lower_name == "keep current name" or (
+                        "from file" in lower_name
+                    ):
                         system.name = block_name
                     elif "file name" in lower_name:
                         system.name = path.stem
@@ -304,7 +318,11 @@ def load_cif(
                 # And the configuration name
                 if configuration_name is not None and configuration_name != "":
                     lower_name = str(configuration_name).lower()
-                    if "from file" in lower_name:
+                    if lower_name == "keep current name" and configuration.name:
+                        pass  # keep it (one without a name takes the file's)
+                    elif lower_name == "keep current name" or (
+                        "from file" in lower_name
+                    ):
                         configuration.name = block_name
                     elif "file name" in lower_name:
                         configuration.name = path.stem
