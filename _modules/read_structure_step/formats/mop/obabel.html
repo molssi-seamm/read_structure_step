@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.10.9 documentation</title>
+    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.10.18 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=465c9eed"></script>
+    <script src="../../../../_static/documentation_options.js?v=16cc37ab"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.9" />
+  <meta name="docsearch:version" content="2026.10.18" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -899,10 +899,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <span class="n">result</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">run_mopac</span><span class="p">(</span><span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span> <span class="n">return_files</span><span class="o">=</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">])</span>
 
-            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"MOPAC failed: "</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">][</span><span class="s2">"exception"</span><span class="p">])</span>
-
-            <span class="n">text</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">"mopac.out"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
+            <span class="c1"># The executor leaves the returned files on disk</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"mopac.out"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"MOPAC failed: it wrote no output"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"exception"</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MOPAC failed: </span><span class="si">{</span><span class="n">entry</span><span class="p">[</span><span class="s1">'exception'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"path"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">Path</span><span class="p">(</span><span class="n">step</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"mopac.out"</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span>
 
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MOPAC output:</span><span class="se">\n\n</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
