@@ -399,10 +399,14 @@ def load_mop(
 
             result = step.run_mopac(files=files, return_files=["mopac.out"])
 
-            if result["mopac.out"]["data"] is None:
-                raise RuntimeError("MOPAC failed: " + result["mopac.out"]["exception"])
-
-            text = result["mopac.out"]["data"]
+            # The executor leaves the returned files on disk
+            entry = (result or {}).get("mopac.out")
+            if entry is None:
+                raise RuntimeError("MOPAC failed: it wrote no output")
+            if entry.get("exception") is not None:
+                raise RuntimeError(f"MOPAC failed: {entry['exception']}")
+            path = Path(entry.get("path") or Path(step.directory) / "mopac.out")
+            text = path.read_text(errors="replace")
 
             logger.debug(f"MOPAC output:\n\n{text}\n")
 

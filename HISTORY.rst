@@ -1,6 +1,12 @@
 =======
 History
 =======
+2026.10.18 -- Internal: read the output files from disk
+    * seamm-exec 2026.10.18 no longer reads the files a calculation returns into memory,
+      since they can be gigabytes. Reading MOPAC input through MOPAC now reads the ones
+      it needs from the step's directory, which works with earlier versions of seamm-
+      exec too.
+
 2026.10.9 -- Bugfix: "keep current name" was used as the name itself
     * Reading XYZ, SMILES, MOL2, MOPAC, CIF, mmCIF and other files through Open Babel
       with the system or configuration name set to "keep current name" (the default
