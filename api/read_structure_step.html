@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>read_structure_step package &#8212; SEAMM Read Structure Plug-in 2026.10.18 documentation</title>
+    <title>read_structure_step package &#8212; SEAMM Read Structure Plug-in 2026.10.20 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=16cc37ab"></script>
+    <script src="../_static/documentation_options.js?v=980f7468"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.18" />
+  <meta name="docsearch:version" content="2026.10.20" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -772,6 +772,28 @@ parameters.</p>
 
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="read_structure_step.read_structure.check_something_read">
+<span class="sig-prename descclassname"><span class="pre">read_structure_step.read_structure.</span></span><span class="sig-name descname"><span class="pre">check_something_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configurations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/read_structure_step/read_structure.html#check_something_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_structure_step.read_structure.check_something_read" title="Link to this definition">#</a></dt>
+<dd><p>Stop if a file gave no structure.</p>
+<p>Nothing read is an error, not something to carry on from: a step after it
+would work on an empty structure (science, 2026-10-20: an SDF entry that could
+not be read, and a Liquid Structure step that then started without atoms).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configurations</strong> (<em>[</em><em>molsystem._Configuration</em><em>] or </em><em>None</em>) – What the reader returned: the configurations read, or None from a reader
+of a single structure.</p></li>
+<li><p><strong>configuration</strong> (<em>molsystem._Configuration</em>) – The current configuration after reading.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The file, for the message.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If no structure was read.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="module-read_structure_step.read_structure_parameters">
 <span id="read-structure-step-read-structure-parameters-module"></span><h2>read_structure_step.read_structure_parameters module<a class="headerlink" href="#module-read_structure_step.read_structure_parameters" title="Link to this heading">#</a></h2>
@@ -1230,6 +1252,7 @@ A SEAMM plugin to read common formats in computational chemistry</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#read_structure_step.read_structure.ReadStructure.version"><code class="docutils literal notranslate"><span class="pre">ReadStructure.version</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#read_structure_step.read_structure.check_something_read"><code class="docutils literal notranslate"><span class="pre">check_something_read()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-read_structure_step.read_structure_parameters">read_structure_step.read_structure_parameters module</a><ul class="pst-show_toc_level nav section-nav flex-column">

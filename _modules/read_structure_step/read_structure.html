@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.10.18 documentation</title>
+    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.10.20 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=16cc37ab"></script>
+    <script src="../../_static/documentation_options.js?v=980f7468"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.18" />
+  <meta name="docsearch:version" content="2026.10.20" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -525,6 +525,41 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"Read Structure"</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="check_something_read">
+<a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.read_structure.check_something_read">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_something_read</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Stop if a file gave no structure.</span>
+
+<span class="sd">    Nothing read is an error, not something to carry on from: a step after it</span>
+<span class="sd">    would work on an empty structure (science, 2026-10-20: an SDF entry that could</span>
+<span class="sd">    not be read, and a Liquid Structure step that then started without atoms).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    configurations : [molsystem._Configuration] or None</span>
+<span class="sd">        What the reader returned: the configurations read, or None from a reader</span>
+<span class="sd">        of a single structure.</span>
+<span class="sd">    configuration : molsystem._Configuration</span>
+<span class="sd">        The current configuration after reading.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        The file, for the message.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError</span>
+<span class="sd">        If no structure was read.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">configurations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configurations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">empty</span> <span class="o">=</span> <span class="n">configuration</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">empty</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"No structure could be read from '</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">'. See the errors above."</span>
+        <span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="ReadStructure">
 <a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.read_structure.ReadStructure">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ReadStructure</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
@@ -774,6 +809,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <span class="c1"># Finish the output</span>
             <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
+
+            <span class="n">check_something_read</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">configurations</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">configurations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">configuration</span><span class="o">.</span><span class="n">periodicity</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
