@@ -37,6 +37,38 @@ job = printing.getPrinter()
 printer = printing.getPrinter("Read Structure")
 
 
+def check_something_read(configurations, configuration, filename):
+    """Stop if a file gave no structure.
+
+    Nothing read is an error, not something to carry on from: a step after it
+    would work on an empty structure (science, 2026-10-20: an SDF entry that could
+    not be read, and a Liquid Structure step that then started without atoms).
+
+    Parameters
+    ----------
+    configurations : [molsystem._Configuration] or None
+        What the reader returned: the configurations read, or None from a reader
+        of a single structure.
+    configuration : molsystem._Configuration
+        The current configuration after reading.
+    filename : str
+        The file, for the message.
+
+    Raises
+    ------
+    RuntimeError
+        If no structure was read.
+    """
+    if configurations is not None:
+        empty = len(configurations) == 0
+    else:
+        empty = configuration is None or configuration.n_atoms == 0
+    if empty:
+        raise RuntimeError(
+            f"No structure could be read from '{filename}'. See the errors above."
+        )
+
+
 class ReadStructure(seamm.Node):
     def __init__(self, flowchart=None, title="Read Structure", extension=None):
         """A step for Read Structure in a SEAMM flowchart.
@@ -276,6 +308,8 @@ class ReadStructure(seamm.Node):
 
             # Finish the output
             system, configuration = self.get_system_configuration()
+
+            check_something_read(configurations, configuration, filename)
 
             if configurations is None or len(configurations) == 1:
                 if configuration.periodicity == 3:

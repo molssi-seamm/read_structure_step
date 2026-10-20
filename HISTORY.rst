@@ -1,6 +1,10 @@
 =======
 History
 =======
+2026.10.20 -- Bugfix: reading no structure did not stop the flowchart
+    * When no structure in a file could be read, the step reported the errors and
+      the flowchart went on with an empty structure. It now stops with an error.
+
 2026.10.18 -- Internal: read the output files from disk
     * seamm-exec 2026.10.18 no longer reads the files a calculation returns into memory,
       since they can be gigabytes. Reading MOPAC input through MOPAC now reads the ones
