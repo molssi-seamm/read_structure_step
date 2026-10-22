@@ -79,3 +79,38 @@ def test_smiles_file(db, tmp_path):
     path.write_text("CO methanol\n")
     (conf,) = _read(path, configuration)
     assert conf.system.name == "methanol"
+
+
+SDF_WATER = """{title}
+  test
+
+  3  2  0  0  0  0  0  0  0  0999 V2000
+    0.0000    0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.9600    0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.2400    0.9300    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  3  1  0  0  0  0
+M  END
+$$$$
+"""
+
+
+def test_sdf_records_are_named_by_their_titles(db, tmp_path):
+    """The configurations of a multi-record SDF without SEAMM's data block are named
+    by their title lines (else the file and record), never "None" (science, job
+    5363, 2026-10-21: every configuration was named "None")."""
+    configuration = db.create_system().create_configuration()
+    path = tmp_path / "minima.sdf"
+    path.write_text(
+        "".join(SDF_WATER.format(title=t) for t in ("min_naw_00_xm", "", "min_naw_02"))
+    )
+    confs = _read(path, configuration, subsequent_as_configurations=True)
+    assert [c.name for c in confs] == ["min_naw_00_xm", "minima_2", "min_naw_02"]
+
+
+def test_sdf_keeps_a_current_name(db, tmp_path):
+    configuration = db.create_system(name="mine").create_configuration(name="c")
+    path = tmp_path / "one.sdf"
+    path.write_text(SDF_WATER.format(title="from the file"))
+    (conf,) = _read(path, configuration)
+    assert conf.system.name == "mine" and conf.name == "c"

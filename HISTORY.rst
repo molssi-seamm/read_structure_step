@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.22 -- Bugfix: the structures in an SDF file are named by their titles
+    * Reading an SDF file without SEAMM's data block, with "title" or "keep current
+      name", named every configuration "None". The systems and configurations are now
+      named by each record's title line, or the file's name and the record's number
+      when the title is empty.
+    * "keep current name" now keeps the name of a system or configuration that has
+      one, as for the other formats, rather than replacing it with the file's.
+
 2026.10.20 -- Bugfix: reading no structure did not stop the flowchart
     * When no structure in a file could be read, the step reported the errors and
       the flowchart went on with an empty structure. It now stops with an error.

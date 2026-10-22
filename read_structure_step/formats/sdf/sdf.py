@@ -200,6 +200,12 @@ def load_sdf(
 
             structure_no += 1
 
+            # The record's title line, unless it is SEAMM's own ("SEAMM=system/conf"),
+            # whose names are in the data above
+            title = obMol.GetTitle().strip()
+            if title.startswith("SEAMM="):
+                title = ""
+
             # See if either the system or configuration names are "title"
             if (
                 system_name is not None
@@ -251,11 +257,10 @@ def load_sdf(
             # Set the system name
             if system_name is not None and system_name != "":
                 lower_name = system_name.lower()
-                if lower_name in ("keep current name", "title"):
-                    if sysname is not None:
-                        system.name = sysname
-                    else:
-                        system.name = f"{path.stem}_{record_no}"
+                if lower_name == "keep current name" and system.name:
+                    pass  # keep it (one without a name takes the file's)
+                elif lower_name in ("keep current name", "title"):
+                    system.name = sysname or title or f"{path.stem}_{record_no}"
                 elif "canonical smiles" in lower_name:
                     system.name = configuration.canonical_smiles
                 elif "isomeric smiles" in lower_name:
@@ -276,11 +281,12 @@ def load_sdf(
             # And the configuration name
             if configuration_name is not None and configuration_name != "":
                 lower_name = configuration_name.lower()
-                if lower_name in ("keep current name", "title"):
-                    if confname != "":
-                        configuration.name = confname
-                    else:
-                        configuration.name = f"{path.stem}_{record_no}"
+                if lower_name == "keep current name" and configuration.name:
+                    pass  # keep it (one without a name takes the file's)
+                elif lower_name in ("keep current name", "title"):
+                    # SDFs without SEAMM's data block have no configuration name
+                    # (None): it was used as is, naming every configuration "None"
+                    configuration.name = confname or title or f"{path.stem}_{record_no}"
                 elif "canonical smiles" in lower_name:
                     configuration.name = configuration.canonical_smiles
                 elif "smiles" in lower_name:
