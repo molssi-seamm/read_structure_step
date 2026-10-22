@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.20 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.22 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=980f7468"></script>
+    <script src="_static/documentation_options.js?v=0b8f7a1b"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.20" />
+  <meta name="docsearch:version" content="2026.10.22" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.22 – Bugfix: the structures in an SDF file are named by their titles</dt><dd><ul class="simple">
+<li><p>Reading an SDF file without SEAMM’s data block, with “title” or “keep current
+name”, named every configuration “None”. The systems and configurations are now
+named by each record’s title line, or the file’s name and the record’s number
+when the title is empty.</p></li>
+<li><p>“keep current name” now keeps the name of a system or configuration that has
+one, as for the other formats, rather than replacing it with the file’s.</p></li>
+</ul>
+</dd>
 <dt>2026.10.20 – Bugfix: reading no structure did not stop the flowchart</dt><dd><ul class="simple">
 <li><p>When no structure in a file could be read, the step reported the errors and
 the flowchart went on with an empty structure. It now stops with an error.</p></li>
