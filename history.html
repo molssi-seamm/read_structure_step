@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.22 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.25 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=0b8f7a1b"></script>
+    <script src="_static/documentation_options.js?v=c006ead6"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.22" />
+  <meta name="docsearch:version" content="2026.10.25" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.25 – Bugfix: one failed calculation stopped an extxyz file part way</dt><dd><ul class="simple">
+<li><p>When the structures had per-atom charges (e.g. DDEC6) and one structure’s
+calculation had failed, writing an extended XYZ file stopped with a TypeError at
+that structure, and the ones after it were not written (job 5413: 19 of 36). The
+failed structure is now written without the charges, energy or forces it lacks,
+and the others in full.</p></li>
+<li><p>After writing, any structures that lack data the others in the file have are
+listed in a warning, e.g. “failed: no REF_energy, charges”, so a training set
+can leave them out.</p></li>
+</ul>
+</dd>
 <dt>2026.10.22 – Bugfix: the structures in an SDF file are named by their titles</dt><dd><ul class="simple">
 <li><p>Reading an SDF file without SEAMM’s data block, with “title” or “keep current
 name”, named every configuration “None”. The systems and configurations are now
