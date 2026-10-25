@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.10.25 -- Bugfix: one failed calculation stopped an extxyz file part way
+    * When the structures had per-atom charges (e.g. DDEC6) and one structure's
+      calculation had failed, writing an extended XYZ file stopped with a TypeError at
+      that structure, and the ones after it were not written (job 5413: 19 of 36). The
+      failed structure is now written without the charges, energy or forces it lacks,
+      and the others in full.
+    * After writing, any structures that lack data the others in the file have are
+      listed in a warning, e.g. "failed: no REF_energy, charges", so a training set
+      can leave them out.
+
 2026.10.22 -- Bugfix: the structures in an SDF file are named by their titles
     * Reading an SDF file without SEAMM's data block, with "title" or "keep current
       name", named every configuration "None". The systems and configurations are now

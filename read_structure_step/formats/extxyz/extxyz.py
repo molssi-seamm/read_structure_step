@@ -597,6 +597,7 @@ def write_extxyz(
     last_percent = 0
     last_t = t0 = time.time()
     structure_no = 0
+    present = []  # (name, the data written) for each structure
 
     mode = "a" if append else "w"
     with (
@@ -613,6 +614,7 @@ def write_extxyz(
             text = [str(natoms)]
             header = "Properties=species:S:1:pos:R:3"
             model = ""
+            has = set()
 
             # Other columns for the atoms...
             have_gradients = "no"
@@ -643,7 +645,11 @@ def write_extxyz(
             # Atomic Charges step). Written as a 'charge:R:1' column, in elementary
             # charge units. Only the 'charge' Properties column is added here; it
             # must precede the space-separated attributes (pbc/Lattice/...) below.
-            have_charges = "charge" in configuration.atoms
+            # A configuration whose calculation failed can have the column (from
+            # the others) but no values: then it has no charges
+            have_charges = "charge" in configuration.atoms and all(
+                q is not None for q in configuration.atoms["charge"]
+            )
             if have_charges:
                 header += ":charge:R:1"
 
@@ -673,6 +679,7 @@ def write_extxyz(
                     E = configuration.properties.get(key)[key]["value"]
                     E *= Q_(units).m_as("eV")
                     header += f" REF_energy={E:.5f}"
+                    has.add("REF_energy")
                     break
 
             if configuration.periodicity == 3:
@@ -768,6 +775,11 @@ def write_extxyz(
                 text.append(line)
             text = "\n".join(text)
 
+            if have_gradients != "no":
+                has.add("REF_forces")
+            if have_charges:
+                has.add("charges")
+            present.append((configuration.name, has))
             structure_no += 1
 
             fd.write(text)
@@ -795,4 +807,22 @@ def write_extxyz(
             f"    Wrote {structure_no} structures in {t1 - t0:.1f} seconds = "
             f"{rate:.2f} per second"
         )
+
+    # Structures without data that others in the file have, e.g. from a failed
+    # calculation: written, but said loudly, since a training set may need it
+    found = set().union(*(data for _, data in present))
+    lacking = [(name, sorted(found - data)) for name, data in present if found - data]
+    if lacking:
+        lines = [
+            f"Warning: {len(lacking)} of the {structure_no} structures written to "
+            f"{path.name} lack data that the others have:"
+        ]
+        for name, missing in lacking[:20]:
+            lines.append(f"    {name}: no {', '.join(missing)}")
+        if len(lacking) > 20:
+            lines.append(f"    ... and {len(lacking) - 20} more")
+        text = "\n".join(lines)
+        logger.warning(text)
+        if printer:
+            printer("    " + text.replace("\n", "\n    "))
     return configurations
