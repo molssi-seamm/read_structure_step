@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.29 -- Bugfix: names with quotes in extended XYZ files
+    * The system and configuration names and the model on the comment line of an
+      extended XYZ file were quoted but not escaped, so a name with a double quote or
+      a backslash in it broke the line. They are now escaped, so that any name --
+      with spaces, '=', quotes or backslashes -- reads back as itself, here and in
+      ASE. (ASE itself writes a value with '=' but no space without quotes, and then
+      reads 'a_toO= pbc="F F F"' as the one value 'a_toO=pbc=F F F'.)
+
 2026.10.25 -- Bugfix: one failed calculation stopped an extxyz file part way
     * When the structures had per-atom charges (e.g. DDEC6) and one structure's
       calculation had failed, writing an extended XYZ file stopped with a TypeError at
