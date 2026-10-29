@@ -103,6 +103,22 @@ def _find_charge(regex, input_file):
         return text.group(2)
 
 
+def _unbond_ions(configuration):
+    """Remove Open Babel's bonds to the alkali and alkaline-earth metals.
+
+    Open Babel bonds atoms by distance, so an Li+ 1.9 Å from a carbonyl O is
+    bonded to it, making an odd-electron "molecule". In molecular systems these
+    elements are ions, as molsystem's own bond perception (and so the periodic and
+    extended XYZ readers) treats them.
+    """
+    from molsystem.topology import IONIC_ELEMENTS
+
+    atoms = configuration.atoms
+    ions = [i for i, s in zip(atoms.ids, atoms.symbols) if s in IONIC_ELEMENTS]
+    if ions and configuration.bonds.n_bonds > 0:
+        configuration.bonds.delete(atoms=ions)
+
+
 @register_reader(".xyz")
 def load_xyz(
     file_name,
@@ -376,6 +392,7 @@ def load_xyz(
                             configuration = system.create_configuration()
 
                     configuration.from_OBMol(obMol)
+                    _unbond_ions(configuration)
                     configurations.append(configuration)
 
                 # Check any stderr information from obabel.
