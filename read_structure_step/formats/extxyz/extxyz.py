@@ -543,6 +543,16 @@ def _latest_property(properties, pattern):
     return matches[-1]
 
 
+def quoted(value):
+    """A value for the comment line of an extended XYZ file: in double quotes, with
+    any backslash or double quote in it escaped, so that a value with spaces, '=' or
+    quotes reads back as itself -- here and in ASE. (ASE does not quote a value that
+    only contains '=', and then reads 'a_toO= pbc="F F F"' as the one value
+    'a_toO=pbc=F F F'.)"""
+    text = str(value).replace("\\", "\\\\").replace('"', '\\"')
+    return f'"{text}"'
+
+
 @register_writer(".extxyz -- ASE style extended XYZ file")
 def write_extxyz(
     path,
@@ -703,10 +713,10 @@ def write_extxyz(
                     header += '"'
 
             if "model=" not in extra_attributes and model != "":
-                header += f' model="{model}"'
+                header += f" model={quoted(model)}"
 
-            header += f' SEAMM/system_name="{configuration.system.name}"'
-            header += f' SEAMM/configuration_name="{configuration.name}"'
+            header += f" SEAMM/system_name={quoted(configuration.system.name)}"
+            header += f" SEAMM/configuration_name={quoted(configuration.name)}"
 
             if extra_attributes != "":
                 header += " "
