@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.25 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.29 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=c006ead6"></script>
+    <script src="_static/documentation_options.js?v=1fe4c37e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.25" />
+  <meta name="docsearch:version" content="2026.10.29" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.29 – Bugfix: names with quotes in extended XYZ files</dt><dd><ul class="simple">
+<li><p>The system and configuration names and the model on the comment line of an
+extended XYZ file were quoted but not escaped, so a name with a double quote or
+a backslash in it broke the line. They are now escaped, so that any name –
+with spaces, ‘=’, quotes or backslashes – reads back as itself, here and in
+ASE. (ASE itself writes a value with ‘=’ but no space without quotes, and then
+reads ‘a_toO= pbc=”F F F”’ as the one value ‘a_toO=pbc=F F F’.)</p></li>
+</ul>
+</dd>
 <dt>2026.10.25 – Bugfix: one failed calculation stopped an extxyz file part way</dt><dd><ul class="simple">
 <li><p>When the structures had per-atom charges (e.g. DDEC6) and one structure’s
 calculation had failed, writing an extended XYZ file stopped with a TypeError at
