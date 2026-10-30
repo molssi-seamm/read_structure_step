@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.29.1 -- Bugfix: Li+ and other ions were bonded in plain XYZ files
+    * A plain XYZ file is read with Open Babel, which bonds atoms by their distances,
+      so an Li+ 1.9 Å from a carbonyl O was bonded to it, making an odd-electron
+      "molecule" that steps such as MBE refuse. Bonds to the alkali and alkaline-earth
+      metals are now removed, as SEAMM's own bond perception (used for extended XYZ
+      and periodic structures) already does: in molecular systems they are ions. A
+      salt molecule such as LiF read from an XYZ file is now two ions; read it from
+      SMILES or an SDF file with its bond to keep it bonded.
+
 2026.10.29 -- Bugfix: names with quotes in extended XYZ files
     * The system and configuration names and the model on the comment line of an
       extended XYZ file were quoted but not escaped, so a name with a double quote or
