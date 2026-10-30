@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.29 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.29.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=1fe4c37e"></script>
+    <script src="_static/documentation_options.js?v=923375ad"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.29" />
+  <meta name="docsearch:version" content="2026.10.29.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.29.1 – Bugfix: Li+ and other ions were bonded in plain XYZ files</dt><dd><ul class="simple">
+<li><p>A plain XYZ file is read with Open Babel, which bonds atoms by their distances,
+so an Li+ 1.9 Å from a carbonyl O was bonded to it, making an odd-electron
+“molecule” that steps such as MBE refuse. Bonds to the alkali and alkaline-earth
+metals are now removed, as SEAMM’s own bond perception (used for extended XYZ
+and periodic structures) already does: in molecular systems they are ions. A
+salt molecule such as LiF read from an XYZ file is now two ions; read it from
+SMILES or an SDF file with its bond to keep it bonded.</p></li>
+</ul>
+</dd>
 <dt>2026.10.29 – Bugfix: names with quotes in extended XYZ files</dt><dd><ul class="simple">
 <li><p>The system and configuration names and the model on the comment line of an
 extended XYZ file were quoted but not escaped, so a name with a double quote or
