@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.30 -- Bugfix: SDF files written by SEAMM put later structures in the first system
+    * An SDF file with several structures written by SEAMM, which carries the system
+      and configuration names, was read wrongly when the configuration name was not
+      taken from the file (the default, the canonical SMILES): every structure after
+      the first went into the first structure's configuration, overwriting it, and
+      the later systems were left empty, so a calculation ran on the wrong molecule
+      under the right name. Each structure now goes into a configuration of its own
+      system.
+
 2026.10.29.1 -- Bugfix: Li+ and other ions were bonded in plain XYZ files
     * A plain XYZ file is read with Open Babel, which bonds atoms by their distances,
       so an Li+ 1.9 Å from a carbonyl O was bonded to it, making an odd-electron

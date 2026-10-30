@@ -217,13 +217,22 @@ def load_sdf(
                     system = system_db.get_system(sysname)
                 elif structure_no > 1:
                     system = system_db.create_system()
-                if configuration_name.lower() in ("keep current name", "title"):
-                    names = system.configuration_names
-                    if confname in names:
-                        cid = system.get_configuration_id(confname)
-                        configuration = system.get_configuration(cid)
-                    elif structure_no > 1:
-                        configuration = system.create_configuration()
+                # The configuration must belong to that system: the one named in
+                # the file if it exists, else a new one. (With a configuration
+                # name not taken from the file, later records once went into the
+                # first record's configuration, leaving their own systems empty.)
+                if (
+                    configuration_name.lower()
+                    in (
+                        "keep current name",
+                        "title",
+                    )
+                    and confname in system.configuration_names
+                ):
+                    cid = system.get_configuration_id(confname)
+                    configuration = system.get_configuration(cid)
+                elif structure_no > 1 or configuration.system.id != system.id:
+                    configuration = system.create_configuration()
             elif structure_no > 1:
                 if subsequent_as_configurations:
                     sysname = system.name
