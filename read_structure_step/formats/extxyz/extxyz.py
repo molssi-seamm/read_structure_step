@@ -191,6 +191,8 @@ def load_extxyz(
     record_no = 0
     n_perceived = 0
     n_perceived_structures = 0
+    n_ordered = 0
+    n_unordered = 0
     structure_no = 0
     line_no = 0
     section = None
@@ -366,6 +368,17 @@ def load_extxyz(
                     if perceive_bonds and configuration.bonds.n_bonds == 0:
                         n_perceived += configuration.perceive_bonds()
                         n_perceived_structures += 1
+                        # The perceived bonds are single bonds: give the molecules
+                        # their bond orders, or ethylene reads as [CH2+][CH2-]
+                        if configuration.periodicity == 0:
+                            charge = header.get("charge", header.get("total_charge"))
+                            try:
+                                charge = None if charge is None else int(charge)
+                            except ValueError:
+                                charge = None
+                            ok, failed = configuration.assign_bond_orders(charge=charge)
+                            n_ordered += ok
+                            n_unordered += failed
                     if save_properties and "forces" in data:
                         factor = Q_("eV/Å").m_as("kJ/mol/Å")
                         g = -factor * np.array(data["forces"])
@@ -501,6 +514,14 @@ def load_extxyz(
                 f"    Perceived {n_perceived} bonds from the geometry in "
                 f"{n_perceived_structures} structures."
             )
+            if n_ordered + n_unordered > 0:
+                text = f"    Assigned bond orders to {n_ordered} molecules"
+                if n_unordered > 0:
+                    text += (
+                        f"; {n_unordered} could not be assigned (e.g. hypervalent "
+                        "ones such as PF6-) and have single bonds only"
+                    )
+                printer(text + ".")
 
         ns = len({c.system.name for c in configurations})
         nc = len({c.name for c in configurations})

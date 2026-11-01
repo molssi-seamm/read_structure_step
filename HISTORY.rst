@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.10.31 -- Bugfix: molecules read from extended XYZ had no bond orders
+    * With "perceive bonds", the bonds found from the geometry of an extended XYZ file
+      were all single bonds, so the molecules' SMILES were charge-separated (ethylene
+      ``[CH2+][CH2-]``, acetone ``C[C+](C)[O-]``) and steps that use them, such as the
+      Thermochemistry step's CBH fragments, silently worked with the wrong molecules.
+      The molecules now get their bond orders and formal charges (molsystem
+      2026.10.31); the output says how many, and how many could not be assigned (e.g.
+      hypervalent PF6-, which keeps its single bonds). A charge given in the file's
+      header is used to check the molecules' charges.
+
 2026.10.30 -- Bugfix: SDF files written by SEAMM put later structures in the first system
     * An SDF file with several structures written by SEAMM, which carries the system
       and configuration names, was read wrongly when the configuration name was not

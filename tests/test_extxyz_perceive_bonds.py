@@ -113,3 +113,36 @@ def test_summary_line(configuration, water_frames):
     assert any(
         "Perceived 10 bonds" in line and "2 structures" in line for line in lines
     )
+
+
+def test_perceived_bonds_get_bond_orders(configuration, tmp_path):
+    """Perceived bonds are single bonds; the molecules then get their bond orders,
+    or ethylene reads as [CH2+][CH2-] and the Thermochemistry step builds the wrong
+    CBH fragments (thermo, ChemAI 5585, 2026-10-31)."""
+    ethylene = [
+        ("C", (0.0, 0.0, 0.6685)),
+        ("C", (0.0, 0.0, -0.6685)),
+        ("H", (0.0, 0.9234, 1.2422)),
+        ("H", (0.0, -0.9234, 1.2422)),
+        ("H", (0.0, 0.9234, -1.2422)),
+        ("H", (0.0, -0.9234, -1.2422)),
+    ]
+    path = tmp_path / "ethylene.extxyz"
+    with open(path, "w") as fd:
+        fd.write(f"{len(ethylene)}\n")
+        fd.write('pbc="F F F" Properties=species:S:1:pos:R:3\n')
+        for sym, xyz in ethylene:
+            fd.write(f"{sym} {xyz[0]:.6f} {xyz[1]:.6f} {xyz[2]:.6f}\n")
+    lines = []
+    configurations = read_structure_step.read(
+        str(path),
+        configuration,
+        system_db=configuration.system_db,
+        system=configuration.system,
+        perceive_bonds=True,
+        printer=lines.append,
+        step=STEP,
+    )
+    (conf,) = configurations
+    assert conf.canonical_smiles == "C=C"
+    assert any("Assigned bond orders to 1 molecules" in line for line in lines)
