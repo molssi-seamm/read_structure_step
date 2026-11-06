@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.11.6 -- Says which structure is current after reading several
+    * When a file holds more than one structure, the step now says which one is the
+      current configuration afterwards: the last one read, which the following steps
+      work on. A file with an unexpected extra structure, for example an SDF file with
+      a second molecule appended, otherwise silently changes what the rest of the
+      flowchart computes. Set "Structures to read" to 1 to read only the first.
+    * Reading a tar file now ends with the same information, and its summary names
+      the tar file instead of printing an internal object.
+    * The user guide describes reading files with several structures.
+
 2026.10.31 -- Bugfix: molecules read from extended XYZ had no bond orders
     * With "perceive bonds", the bonds found from the geometry of an extended XYZ file
       were all single bonds, so the molecules' SMILES were charge-separated (ethylene

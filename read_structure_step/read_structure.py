@@ -37,6 +37,46 @@ job = printing.getPrinter()
 printer = printing.getPrinter("Read Structure")
 
 
+def current_configuration_text(configurations, system, configuration):
+    """Say which structure the following steps will use after several were read.
+
+    Each structure after the first goes into a new configuration, or a new system
+    and configuration, and the last one made becomes the current configuration,
+    which is the one the following steps work on. Without saying so, a file with an
+    unexpected extra structure silently changes what the rest of the flowchart
+    computes (2026-11-05: five VPT2 jobs ran on a stray second SDF record).
+
+    Parameters
+    ----------
+    configurations : [molsystem._Configuration]
+        The configurations read.
+    system : molsystem._System
+        The current system after reading.
+    configuration : molsystem._Configuration
+        The current configuration after reading.
+
+    Returns
+    -------
+    str
+    """
+    n = len(configurations)
+    position = None
+    for i, item in enumerate(configurations, start=1):
+        if item.id == configuration.id:
+            position = i
+    formula = configuration.formula[0]
+    if position is None:
+        which = f"{formula}"
+    else:
+        which = f"structure {position} of {n}, {formula}"
+    return (
+        "The current configuration, which the following steps use, is now "
+        f"{which}:"
+        f"\n           System name = {system.name}"
+        f"\n    Configuration name = {configuration.name}"
+    )
+
+
 def check_something_read(configurations, configuration, filename):
     """Stop if a file gave no structure.
 
@@ -337,6 +377,16 @@ class ReadStructure(seamm.Node):
                             indent=4 * " ",
                         )
                     )
+            else:
+                printer.important(
+                    __(
+                        "\n"
+                        + current_configuration_text(
+                            configurations, system, configuration
+                        ),
+                        indent=4 * " ",
+                    )
+                )
 
         printer.important("")
 
@@ -429,10 +479,21 @@ class ReadStructure(seamm.Node):
 
         printer.important(
             __(
-                f"\n    Created {n} structures from the tarfile {tarfile}",
+                f"\n    Created {n} structures from the tarfile {tarfile_path.name}",
                 indent=4 * " ",
             )
         )
+        if n > 1:
+            system, configuration = self.get_system_configuration()
+            printer.important(
+                __(
+                    "\n    The current configuration, which the following steps "
+                    f"use, is now the last structure read, {configuration.formula[0]}:"
+                    f"\n           System name = {system.name}"
+                    f"\n    Configuration name = {configuration.name}",
+                    indent=4 * " ",
+                )
+            )
 
     def run_mopac(self, files=None, return_files=["mopac.out"]):
         """Run MOPAC to parse the input file."""
