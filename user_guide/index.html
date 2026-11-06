@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.10.31 documentation</title>
+    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.6 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=58b82035"></script>
+    <script src="../_static/documentation_options.js?v=df937776"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.31" />
+  <meta name="docsearch:version" content="2026.11.6" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -507,6 +507,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="user-guide">
 <span id="id1"></span><h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
 <p>The Read Structure plug-in reads structures from a wide range of molecular file formats.</p>
+<section id="files-with-several-structures">
+<h2>Files with several structures<a class="headerlink" href="#files-with-several-structures" title="Link to this heading">#</a></h2>
+<p>Many formats, such as SDF and extended XYZ files, can hold more than
+one structure. By default the step reads all of them. <strong>Structures to read</strong>
+(<code class="docutils literal notranslate"><span class="pre">indices</span></code>) chooses which: a comma-separated list of indices and ranges
+<code class="docutils literal notranslate"><span class="pre">start:stop[:step]</span></code>, counting from 1 with the stop included, e.g. <code class="docutils literal notranslate"><span class="pre">1</span></code> for only the
+first structure, or <code class="docutils literal notranslate"><span class="pre">1:10:2,</span> <span class="pre">20:end</span></code>.</p>
+<p>The first structure read is handled as <strong>Structure handling</strong> says: by default it
+overwrites the current configuration. Each later structure is handled as <strong>Subsequent
+structure handling</strong> says: by default it goes into a new system and configuration.</p>
+<p>The last structure read becomes the current configuration, and the steps that follow
+work on it. When the step reads more than one structure, its output says which one is
+now current, e.g.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">current</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">which</span> <span class="n">the</span> <span class="n">following</span> <span class="n">steps</span> <span class="n">use</span><span class="p">,</span> <span class="ow">is</span> <span class="n">now</span> <span class="n">structure</span> <span class="mi">2</span>
+<span class="n">of</span> <span class="mi">2</span><span class="p">,</span> <span class="n">C4</span> <span class="n">H8</span> <span class="n">O</span><span class="p">:</span>
+           <span class="n">System</span> <span class="n">name</span> <span class="o">=</span> <span class="mi">109</span><span class="o">-</span><span class="mi">92</span><span class="o">-</span><span class="mi">2_0</span>
+    <span class="n">Configuration</span> <span class="n">name</span> <span class="o">=</span> <span class="n">C</span><span class="o">=</span><span class="n">COCC</span>
+</pre></div>
+</div>
+<p>Check this line when a file may hold more structures than you expect. If only the
+first is wanted, set <strong>Structures to read</strong> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+</section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -562,6 +584,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#files-with-several-structures">Files with several structures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>
   </nav></div>

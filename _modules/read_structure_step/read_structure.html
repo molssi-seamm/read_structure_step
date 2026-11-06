@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.10.31 documentation</title>
+    <title>read_structure_step.read_structure &#8212; SEAMM Read Structure Plug-in 2026.11.6 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=58b82035"></script>
+    <script src="../../_static/documentation_options.js?v=df937776"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.31" />
+  <meta name="docsearch:version" content="2026.11.6" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -525,6 +525,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"Read Structure"</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="current_configuration_text">
+<a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.read_structure.current_configuration_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">current_configuration_text</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Say which structure the following steps will use after several were read.</span>
+
+<span class="sd">    Each structure after the first goes into a new configuration, or a new system</span>
+<span class="sd">    and configuration, and the last one made becomes the current configuration,</span>
+<span class="sd">    which is the one the following steps work on. Without saying so, a file with an</span>
+<span class="sd">    unexpected extra structure silently changes what the rest of the flowchart</span>
+<span class="sd">    computes (2026-11-05: five VPT2 jobs ran on a stray second SDF record).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    configurations : [molsystem._Configuration]</span>
+<span class="sd">        The configurations read.</span>
+<span class="sd">    system : molsystem._System</span>
+<span class="sd">        The current system after reading.</span>
+<span class="sd">    configuration : molsystem._Configuration</span>
+<span class="sd">        The current configuration after reading.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">    """</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">configurations</span><span class="p">)</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">configuration</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">formula</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">formula</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"structure </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">formula</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="s2">"The current configuration, which the following steps use, is now "</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">which</span><span class="si">}</span><span class="s2">:"</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">           System name = </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Configuration name = </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="check_something_read">
 <a class="viewcode-back" href="../../api/read_structure_step.html#read_structure_step.read_structure.check_something_read">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_something_read</span><span class="p">(</span><span class="n">configurations</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
@@ -838,6 +881,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
                         <span class="p">)</span>
                     <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
+                    <span class="n">__</span><span class="p">(</span>
+                        <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+                        <span class="o">+</span> <span class="n">current_configuration_text</span><span class="p">(</span>
+                            <span class="n">configurations</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span>
+                        <span class="p">),</span>
+                        <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
 
         <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
@@ -933,10 +986,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
             <span class="n">__</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Created </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> structures from the tarfile </span><span class="si">{</span><span class="n">tarfile</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Created </span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> structures from the tarfile </span><span class="si">{</span><span class="n">tarfile_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="p">)</span></div>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
+            <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
+                <span class="n">__</span><span class="p">(</span>
+                    <span class="s2">"</span><span class="se">\n</span><span class="s2">    The current configuration, which the following steps "</span>
+                    <span class="sa">f</span><span class="s2">"use, is now the last structure read, </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">:"</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">           System name = </span><span class="si">{</span><span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">    Configuration name = </span><span class="si">{</span><span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ReadStructure.run_mopac">

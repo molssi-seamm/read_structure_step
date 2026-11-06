@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.10.31 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.6 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=58b82035"></script>
+    <script src="_static/documentation_options.js?v=df937776"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.31" />
+  <meta name="docsearch:version" content="2026.11.6" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.6 – Says which structure is current after reading several</dt><dd><ul class="simple">
+<li><p>When a file holds more than one structure, the step now says which one is the
+current configuration afterwards: the last one read, which the following steps
+work on. A file with an unexpected extra structure, for example an SDF file with
+a second molecule appended, otherwise silently changes what the rest of the
+flowchart computes. Set “Structures to read” to 1 to read only the first.</p></li>
+<li><p>Reading a tar file now ends with the same information, and its summary names
+the tar file instead of printing an internal object.</p></li>
+<li><p>The user guide describes reading files with several structures.</p></li>
+</ul>
+</dd>
 <dt>2026.10.31 – Bugfix: molecules read from extended XYZ had no bond orders</dt><dd><ul class="simple">
 <li><p>With “perceive bonds”, the bonds found from the geometry of an extended XYZ file
 were all single bonds, so the molecules’ SMILES were charge-separated (ethylene
