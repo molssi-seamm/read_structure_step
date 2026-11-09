@@ -29,6 +29,23 @@ now current, e.g.::
 Check this line when a file may hold more structures than you expect. If only the
 first is wanted, set **Structures to read** to ``1``.
 
+Plain XYZ files with several structures
+---------------------------------------
+Plain XYZ files come in several layouts, and the step reads each of them, one after
+another in the same file:
+
+* The standard one: the number of atoms on the first line, a comment (often the name)
+  on the second, then one line per atom. The structures may follow one another
+  directly or be separated by blank lines.
+* Without the number of atoms: a blank line in its place, or no line at all, then the
+  comment and the atoms. Here a blank line separates the structures.
+* The Minnesota Solvation Database's layout: the comment, a blank line, the charge and
+  spin multiplicity, then the atoms, with a blank line between structures. The charge
+  and multiplicity are kept.
+
+Set **System name** and **Configuration name** to ``title`` to name each structure
+after its comment line.
+
 ..
    The following sections cover accessing and controlling this functionality.
 

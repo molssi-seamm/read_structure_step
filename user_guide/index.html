@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.6 documentation</title>
+    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=df937776"></script>
+    <script src="../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.6" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -528,6 +528,23 @@ now current, e.g.:</p>
 </div>
 <p>Check this line when a file may hold more structures than you expect. If only the
 first is wanted, set <strong>Structures to read</strong> to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
+<section id="plain-xyz-files-with-several-structures">
+<h3>Plain XYZ files with several structures<a class="headerlink" href="#plain-xyz-files-with-several-structures" title="Link to this heading">#</a></h3>
+<p>Plain XYZ files come in several layouts, and the step reads each of them, one after
+another in the same file:</p>
+<ul class="simple">
+<li><p>The standard one: the number of atoms on the first line, a comment (often the name)
+on the second, then one line per atom. The structures may follow one another
+directly or be separated by blank lines.</p></li>
+<li><p>Without the number of atoms: a blank line in its place, or no line at all, then the
+comment and the atoms. Here a blank line separates the structures.</p></li>
+<li><p>The Minnesota Solvation Database’s layout: the comment, a blank line, the charge and
+spin multiplicity, then the atoms, with a blank line between structures. The charge
+and multiplicity are kept.</p></li>
+</ul>
+<p>Set <strong>System name</strong> and <strong>Configuration name</strong> to <code class="docutils literal notranslate"><span class="pre">title</span></code> to name each structure
+after its comment line.</p>
+</section>
 </section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
@@ -584,7 +601,10 @@ first is wanted, set <strong>Structures to read</strong> to <code class="docutil
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#files-with-several-structures">Files with several structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#files-with-several-structures">Files with several structures</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plain-xyz-files-with-several-structures">Plain XYZ files with several structures</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>
   </nav></div>

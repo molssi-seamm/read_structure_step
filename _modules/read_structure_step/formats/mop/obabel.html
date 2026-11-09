@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.11.6 documentation</title>
+    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=df937776"></script>
+    <script src="../../../../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.6" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -614,11 +614,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        Read the stream data (one byte at a time)</span>
 <span class="sd">        and save the text in `capturedtext`.</span>
 <span class="sd">        """</span>
+        <span class="c1"># Bytes, decoded at the end: a character outside ASCII is several bytes,</span>
+        <span class="c1"># and decoding them one at a time failed (UnicodeDecodeError)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        <span class="n">escape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">char</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">char</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">escape_char</span> <span class="ow">in</span> <span class="n">char</span><span class="p">:</span>
+            <span class="n">byte</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pipe_out</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">byte</span> <span class="ow">or</span> <span class="n">byte</span> <span class="o">==</span> <span class="n">escape</span><span class="p">:</span>
                 <span class="k">break</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">+=</span> <span class="n">char</span></div>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">byte</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">origstream</span><span class="p">,</span> <span class="s2">"encoding"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">"utf-8"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capturedtext</span> <span class="o">+=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">"replace"</span><span class="p">)</span></div>
 </div>
 
 
