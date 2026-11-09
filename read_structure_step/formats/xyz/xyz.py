@@ -90,11 +90,17 @@ class OutputGrabber(object):
         Read the stream data (one byte at a time)
         and save the text in `capturedtext`.
         """
+        # Bytes, decoded at the end: a character outside ASCII is several bytes,
+        # and decoding them one at a time failed (UnicodeDecodeError)
+        data = bytearray()
+        escape = self.escape_char.encode()
         while True:
-            char = os.read(self.pipe_out, 1).decode(self.origstream.encoding)
-            if not char or self.escape_char in char:
+            byte = os.read(self.pipe_out, 1)
+            if not byte or byte == escape:
                 break
-            self.capturedtext += char
+            data += byte
+        encoding = getattr(self.origstream, "encoding", None) or "utf-8"
+        self.capturedtext += data.decode(encoding, errors="replace")
 
 
 def _find_charge(regex, input_file):
@@ -117,6 +123,91 @@ def _unbond_ions(configuration):
     ions = [i for i, s in zip(atoms.ids, atoms.symbols) if s in IONIC_ELEMENTS]
     if ions and configuration.bonds.n_bonds > 0:
         configuration.bonds.delete(atoms=ions)
+
+
+def _atom_count(line):
+    """The atom count if `line` is just a positive integer, else None."""
+    fields = line.split()
+    if len(fields) != 1:
+        return None
+    try:
+        n = int(fields[0])
+    except ValueError:
+        return None
+    return n if n > 0 else None
+
+
+class _Lines:
+    """The lines of a file, with lines that can be pushed back."""
+
+    def __init__(self, fd):
+        self._lines = iter(fd)
+        self._pushed = []
+
+    def next(self):
+        if self._pushed:
+            return self._pushed.pop()
+        return next(self._lines, None)
+
+    def push(self, line):
+        self._pushed.append(line)
+
+
+def _records(fd):
+    """The structures in an XYZ file, each as its list of lines (with newlines).
+
+    Each structure's layout is decided by its first two lines that are not blank:
+
+    * an atom count (a positive integer) followed, two lines on, by an atom: a
+      standard structure -- the count line, the comment line and that many atom
+      lines -- whether or not blank lines separate the structures;
+    * a comment and then a blank line: the Minnesota variant (comment, blank line,
+      charge and multiplicity, atoms), running to the next blank line;
+    * a comment and then an atom: a structure without an atom count, whose blank
+      first line stands in for the count -- or is missing -- running to the next
+      blank line. The blank count line is put back, as the reader expects it.
+
+    Blank lines between structures are skipped.
+    """
+    lines = _Lines(fd)
+    while True:
+        line = lines.next()
+        while line is not None and line.strip() == "":
+            line = lines.next()
+        if line is None:
+            return
+
+        n_atoms = _atom_count(line)
+        if n_atoms is not None:
+            record = [line]
+            for _ in range(n_atoms + 1):
+                following = lines.next()
+                if following is None:
+                    break
+                record.append(following)
+            # A standard record has an atom (symbol x y z) on its third line
+            if len(record) == n_atoms + 2 and len(record[2].split()) >= 4:
+                yield record
+                continue
+            # Not a standard record after all: put back all but its first line
+            for following in reversed(record[1:]):
+                lines.push(following)
+
+        second = lines.next()
+        if second is None:
+            yield [line]
+            return
+        if second.strip() == "":
+            # Minnesota: comment, blank line, charge and multiplicity, atoms
+            record = [line, second]
+        else:
+            # No atom count: a blank count line, the comment, the atoms
+            record = ["\n", line, second]
+        following = lines.next()
+        while following is not None and following.strip() != "":
+            record.append(following)
+            following = lines.next()
+        yield record
 
 
 @register_reader(".xyz")
@@ -228,20 +319,12 @@ def load_xyz(
     path = path.expanduser().resolve()
 
     # Get the information for progress output, if requested.
-    n_records = 0
-    last_line = 0
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
         else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
-        for line in fd:
-            last_line += 1
-            if line.strip() == "":
-                n_records += 1
-    # may not have blank line at end
-    if line.strip() != "":
-        n_records += 1
+        n_records = sum(1 for _ in _records(fd))
     if printer is not None:
         printer("")
         printer(f"    The XYZ file contains {n_records} structures.")
@@ -254,7 +337,8 @@ def load_xyz(
     n_structures = len(indices)
     if n_structures == 0:
         return
-    stop = indices[-1]
+    stop = max(indices)
+    wanted = set(indices)
 
     obConversion = openbabel.OBConversion()
     obConversion.SetInFormat("xyz")
@@ -265,262 +349,251 @@ def load_xyz(
     n_errors = 0
     obMol = openbabel.OBMol()
 
-    total_lines = 0
     with (
         gzip.open(path, mode="rt")
         if path.suffix == ".gz"
         else bz2.open(path, mode="rt") if path.suffix == ".bz2" else open(path, "r")
     ) as fd:
-        lines = []
-        line_no = 0
-        for line in fd:
-            # lines have \n at end. It is not stripped as is more normal.
-            total_lines += 1
-            line_no += 1
-            lines.append(line)
-            if total_lines == last_line or line_no > 3 and line.strip() == "":
-                record_no += 1
-                if record_no > stop:
-                    break
-                if record_no not in indices:
-                    continue
+        for lines in _records(fd):
+            record_no += 1
+            if record_no > stop:
+                break
+            if record_no not in wanted:
+                continue
 
-                # End of block, so examine the first lines and see which format
-                file_type = "unknown"
-                n_lines = len(lines)
-                line1 = lines[0].strip()
-                fields1 = line1.split()
-                n_fields1 = len(fields1)
+            # End of block, so examine the first lines and see which format
+            file_type = "unknown"
+            n_lines = len(lines)
+            line1 = lines[0].strip()
+            fields1 = line1.split()
+            n_fields1 = len(fields1)
 
-                if n_lines <= 1:
-                    line2 = None
-                    fields2 = []
-                    n_fields2 = 0
+            if n_lines <= 1:
+                line2 = None
+                fields2 = []
+                n_fields2 = 0
+            else:
+                line2 = lines[1].strip()
+                fields2 = line2.split()
+                n_fields2 = len(fields2)
+
+            if n_lines <= 2:
+                line3 = None
+                fields3 = []
+                n_fields3 = 0
+            else:
+                line3 = lines[2].strip()
+                fields3 = line3.split()
+                n_fields3 = len(fields3)
+
+            # Check for "standard" file
+            if n_fields1 == 1:
+                try:
+                    n_atoms = int(fields1[0])
+                except Exception:
+                    pass
                 else:
-                    line2 = lines[1].strip()
-                    fields2 = line2.split()
-                    n_fields2 = len(fields2)
-
-                if n_lines <= 2:
-                    line3 = None
-                    fields3 = []
-                    n_fields3 = 0
-                else:
-                    line3 = lines[2].strip()
-                    fields3 = line3.split()
-                    n_fields3 = len(fields3)
-
-                # Check for "standard" file
-                if n_fields1 == 1:
-                    try:
-                        n_atoms = int(fields1[0])
-                    except Exception:
-                        pass
-                    else:
-                        # Might be traditional file. Check 3rd line for atom
-                        if n_fields3 == 4:
-                            file_type = "standard"
-                elif n_fields1 == 0:
-                    # Might be standard file without atom count.
+                    # Might be traditional file. Check 3rd line for atom
                     if n_fields3 == 4:
                         file_type = "standard"
-                        n_atoms = 0
-                        for line in lines[2:]:
-                            n_fields = len(line.split())
-                            if n_fields == 0:
-                                break
-                            else:
-                                n_atoms += 1
-                        # Put the count in line 1
-                        lines[0] = str(n_atoms)
-
-                # And Minnesota variant with three headers.
-                if n_lines > 3 and n_fields3 == 2:
-                    try:
-                        charge = int(fields3[0])
-                        multiplicity = int(fields3[1])
-                    except Exception:
-                        pass
-                    else:
-                        file_type = "Minnesota"
-                        if n_fields2 != 0:
-                            logger.warning(
-                                "Minnesota style XYZ file, 2nd line is not blank:"
-                                f"\n\t{lines[1]}"
-                            )
-                        # Count atoms
-                        n_atoms = 0
-                        for line in lines[3:]:
-                            n_fields = len(line.split())
-                            if n_fields == 0:
-                                break
-                            else:
-                                n_atoms += 1
-                        # Move comment to 2nd line
-                        lines[1] = lines[0]
-                        # Put the count in line 1
-                        lines[0] = str(n_atoms) + "\n"
-                        # Remove 3rd line with charge and multiplicity
-                        del lines[2]
-
-                # Reassemble an input file.
-                input_data = "".join(lines)
-
-                logger.info(f"Input data:\n\n{input_data}\n")
-
-                title = lines[1].strip()
-
-                lines = []
-                line_no = 0
-
-                # Now try to convert using OpenBabel
-                out = OutputGrabber(sys.stderr)
-                with out:
-                    success = obConversion.ReadString(obMol, input_data)
-                    if not success:
-                        raise RuntimeError("obConversion failed")
-
-                    if add_hydrogens:
-                        obMol.AddHydrogens()
-
-                    structure_no += 1
-                    if structure_no > 1:
-                        if subsequent_as_configurations:
-                            configuration = system.create_configuration()
+            elif n_fields1 == 0:
+                # Might be standard file without atom count.
+                if n_fields3 == 4:
+                    file_type = "standard"
+                    n_atoms = 0
+                    for line in lines[2:]:
+                        n_fields = len(line.split())
+                        if n_fields == 0:
+                            break
                         else:
-                            system = system_db.create_system()
-                            configuration = system.create_configuration()
+                            n_atoms += 1
+                    # Put the count in line 1
+                    lines[0] = str(n_atoms) + "\n"
 
-                    configuration.from_OBMol(obMol)
-                    _unbond_ions(configuration)
-                    configurations.append(configuration)
+            # And Minnesota variant with three headers.
+            if n_lines > 3 and n_fields3 == 2:
+                try:
+                    charge = int(fields3[0])
+                    multiplicity = int(fields3[1])
+                except Exception:
+                    pass
+                else:
+                    file_type = "Minnesota"
+                    if n_fields2 != 0:
+                        logger.warning(
+                            "Minnesota style XYZ file, 2nd line is not blank:"
+                            f"\n\t{lines[1]}"
+                        )
+                    # Count atoms
+                    n_atoms = 0
+                    for line in lines[3:]:
+                        n_fields = len(line.split())
+                        if n_fields == 0:
+                            break
+                        else:
+                            n_atoms += 1
+                    # Move comment to 2nd line
+                    lines[1] = lines[0]
+                    # Put the count in line 1
+                    lines[0] = str(n_atoms) + "\n"
+                    # Remove 3rd line with charge and multiplicity
+                    del lines[2]
 
-                # Check any stderr information from obabel.
-                if out.capturedtext != "":
-                    tmp = out.capturedtext
-                    if (
-                        "Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders"
-                        not in tmp
-                    ):
-                        logger.warning(f"{structure_no}: {tmp}")
+            # Reassemble an input file.
+            input_data = "".join(lines)
 
-                # Extract any additional information from the title
-                extra = {}
+            logger.info(f"Input data:\n\n{input_data}\n")
 
-                if file_type == "Minnesota":
-                    # Record the charge, and the spin state
-                    configuration.charge = charge
-                    configuration.spin_multiplicity = multiplicity
+            title = lines[1].strip()
 
-                    logger.info(f"{charge=} {multiplicity=}")
-                elif "|" in title:
-                    # Careful! Setting charge sets spin to 0, so remember if we set
-                    # spin first
-                    spin = None
-                    for tmp in title.split("|"):
-                        if "=" in tmp:
-                            key, val = tmp.split("=", maxsplit=1)
-                            key = key.strip()
-                            val = val.strip()
-                            if key == "q":
-                                try:
-                                    configuration.charge = int(val)
-                                    if spin is not None:
-                                        configuration.spin_multiplicity = spin
-                                except Exception:
-                                    pass
-                            elif key == "S":
-                                try:
-                                    spin = int(val)
+            # Now try to convert using OpenBabel
+            out = OutputGrabber(sys.stderr)
+            with out:
+                success = obConversion.ReadString(obMol, input_data)
+                if not success:
+                    raise RuntimeError("obConversion failed")
+
+                if add_hydrogens:
+                    obMol.AddHydrogens()
+
+                structure_no += 1
+                if structure_no > 1:
+                    if subsequent_as_configurations:
+                        configuration = system.create_configuration()
+                    else:
+                        system = system_db.create_system()
+                        configuration = system.create_configuration()
+
+                configuration.from_OBMol(obMol)
+                _unbond_ions(configuration)
+                configurations.append(configuration)
+
+            # Check any stderr information from obabel.
+            if out.capturedtext != "":
+                tmp = out.capturedtext
+                if (
+                    "Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders"
+                    not in tmp
+                ):
+                    logger.warning(f"{structure_no}: {tmp}")
+
+            # Extract any additional information from the title
+            extra = {}
+
+            if file_type == "Minnesota":
+                # Record the charge, and the spin state
+                configuration.charge = charge
+                configuration.spin_multiplicity = multiplicity
+
+                logger.info(f"{charge=} {multiplicity=}")
+            elif "|" in title:
+                # Careful! Setting charge sets spin to 0, so remember if we set
+                # spin first
+                spin = None
+                for tmp in title.split("|"):
+                    if "=" in tmp:
+                        key, val = tmp.split("=", maxsplit=1)
+                        key = key.strip()
+                        val = val.strip()
+                        if key == "q":
+                            try:
+                                configuration.charge = int(val)
+                                if spin is not None:
                                     configuration.spin_multiplicity = spin
-                                except Exception:
-                                    pass
-                            elif key in ("CSD_code", "title"):
-                                title = val
-                            elif key == "model":
-                                extra["model"] = val
-                            elif key == "name":
-                                extra["name"] = val
-                            elif key == "symmetry":
-                                extra["symmetry"] = val
-                        else:
-                            if tmp == "TS":
-                                extra["target"] = "TS"
-
-                # Set the system name
-                if system_name is not None and system_name != "":
-                    lower_name = system_name.lower()
-                    if lower_name == "keep current name" and system.name:
-                        pass  # keep it (one without a name takes the file's)
-                    elif lower_name in ("keep current name", "title"):
-                        if len(title) > 0:
-                            system.name = title
-                        else:
-                            system.name = path.stem
-                    elif "canonical smiles" in lower_name:
-                        system.name = configuration.canonical_smiles
-                    elif "smiles" in lower_name:
-                        system.name = configuration.smiles
-                    elif "iupac" in lower_name:
-                        system.name = configuration.PC_iupac_name
-                    elif "inchikey" in lower_name:
-                        system.name = configuration.inchikey
-                    elif "inchi" in lower_name:
-                        system.name = configuration.inchi
-                    elif "formula" in lower_name:
-                        system.name = configuration.formula[0]
-                    elif "name" in lower_name and "name" in extra:
-                        system.name = extra["name"]
-                    elif "model" in lower_name and "model" in extra:
-                        system.name = extra["model"]
+                            except Exception:
+                                pass
+                        elif key == "S":
+                            try:
+                                spin = int(val)
+                                configuration.spin_multiplicity = spin
+                            except Exception:
+                                pass
+                        elif key in ("CSD_code", "title"):
+                            title = val
+                        elif key == "model":
+                            extra["model"] = val
+                        elif key == "name":
+                            extra["name"] = val
+                        elif key == "symmetry":
+                            extra["symmetry"] = val
                     else:
-                        system.name = system_name
+                        if tmp == "TS":
+                            extra["target"] = "TS"
 
-                # And the configuration name
-                if configuration_name is not None and configuration_name != "":
-                    lower_name = configuration_name.lower()
-                    if lower_name == "keep current name" and configuration.name:
-                        pass  # keep it (one without a name takes the file's)
-                    elif lower_name in ("keep current name", "title"):
-                        if len(title) > 0:
-                            configuration.name = title
-                        else:
-                            configuration.name = path.stem
-                    elif "canonical smiles" in lower_name:
-                        configuration.name = configuration.canonical_smiles
-                    elif "smiles" in lower_name:
-                        configuration.name = configuration.smiles
-                    elif "iupac" in lower_name:
-                        configuration.name = configuration.PC_iupac_name
-                    elif "inchikey" in lower_name:
-                        configuration.name = configuration.inchikey
-                    elif "inchi" in lower_name:
-                        configuration.name = configuration.inchi
-                    elif lower_name == "sequential":
-                        configuration.name = str(structure_no)
-                    elif "formula" in lower_name:
-                        configuration.name = configuration.formula[0]
-                    elif "name" in lower_name and "name" in extra:
-                        configuration.name = extra["name"]
-                    elif "model" in lower_name and "model" in extra:
-                        configuration.name = extra["model"]
+            # Set the system name
+            if system_name is not None and system_name != "":
+                lower_name = system_name.lower()
+                if lower_name == "keep current name" and system.name:
+                    pass  # keep it (one without a name takes the file's)
+                elif lower_name in ("keep current name", "title"):
+                    if len(title) > 0:
+                        system.name = title
                     else:
-                        configuration.name = configuration_name
+                        system.name = path.stem
+                elif "canonical smiles" in lower_name:
+                    system.name = configuration.canonical_smiles
+                elif "smiles" in lower_name:
+                    system.name = configuration.smiles
+                elif "iupac" in lower_name:
+                    system.name = configuration.PC_iupac_name
+                elif "inchikey" in lower_name:
+                    system.name = configuration.inchikey
+                elif "inchi" in lower_name:
+                    system.name = configuration.inchi
+                elif "formula" in lower_name:
+                    system.name = configuration.formula[0]
+                elif "name" in lower_name and "name" in extra:
+                    system.name = extra["name"]
+                elif "model" in lower_name and "model" in extra:
+                    system.name = extra["model"]
+                else:
+                    system.name = system_name
 
-                if printer:
-                    percent = int(100 * structure_no / n_structures)
-                    if percent > last_percent:
-                        t1 = time.time()
-                        if t1 - last_t >= 60:
-                            t = int(t1 - t0)
-                            rate = structure_no / (t1 - t0)
-                            t_left = int((n_structures - structure_no) / rate)
-                            printer(
-                                f"\t{structure_no:6} ({percent}%) structures read in "
-                                f"{t} seconds. About {t_left} seconds remaining."
-                            )
-                            last_t = t1
-                            last_percent = percent
+            # And the configuration name
+            if configuration_name is not None and configuration_name != "":
+                lower_name = configuration_name.lower()
+                if lower_name == "keep current name" and configuration.name:
+                    pass  # keep it (one without a name takes the file's)
+                elif lower_name in ("keep current name", "title"):
+                    if len(title) > 0:
+                        configuration.name = title
+                    else:
+                        configuration.name = path.stem
+                elif "canonical smiles" in lower_name:
+                    configuration.name = configuration.canonical_smiles
+                elif "smiles" in lower_name:
+                    configuration.name = configuration.smiles
+                elif "iupac" in lower_name:
+                    configuration.name = configuration.PC_iupac_name
+                elif "inchikey" in lower_name:
+                    configuration.name = configuration.inchikey
+                elif "inchi" in lower_name:
+                    configuration.name = configuration.inchi
+                elif lower_name == "sequential":
+                    configuration.name = str(structure_no)
+                elif "formula" in lower_name:
+                    configuration.name = configuration.formula[0]
+                elif "name" in lower_name and "name" in extra:
+                    configuration.name = extra["name"]
+                elif "model" in lower_name and "model" in extra:
+                    configuration.name = extra["model"]
+                else:
+                    configuration.name = configuration_name
+
+            if printer:
+                percent = int(100 * structure_no / n_structures)
+                if percent > last_percent:
+                    t1 = time.time()
+                    if t1 - last_t >= 60:
+                        t = int(t1 - t0)
+                        rate = structure_no / (t1 - t0)
+                        t_left = int((n_structures - structure_no) / rate)
+                        printer(
+                            f"\t{structure_no:6} ({percent}%) structures read in "
+                            f"{t} seconds. About {t_left} seconds remaining."
+                        )
+                        last_t = t1
+                        last_percent = percent
 
     if printer:
         t1 = time.time()

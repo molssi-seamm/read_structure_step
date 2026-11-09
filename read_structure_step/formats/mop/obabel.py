@@ -116,11 +116,17 @@ class OutputGrabber(object):
         Read the stream data (one byte at a time)
         and save the text in `capturedtext`.
         """
+        # Bytes, decoded at the end: a character outside ASCII is several bytes,
+        # and decoding them one at a time failed (UnicodeDecodeError)
+        data = bytearray()
+        escape = self.escape_char.encode()
         while True:
-            char = os.read(self.pipe_out, 1).decode(self.origstream.encoding)
-            if not char or self.escape_char in char:
+            byte = os.read(self.pipe_out, 1)
+            if not byte or byte == escape:
                 break
-            self.capturedtext += char
+            data += byte
+        encoding = getattr(self.origstream, "encoding", None) or "utf-8"
+        self.capturedtext += data.decode(encoding, errors="replace")
 
 
 def _find_charge(regex, input_file):

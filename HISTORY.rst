@@ -1,6 +1,20 @@
 =======
 History
 =======
+2026.11.9 -- Bugfix: XYZ files with several structures and no blank lines between them
+    * An XYZ file with several structures, each starting with its number of atoms but
+      with no blank line between them, was read as one structure: the first, with the
+      rest lost. The step now reads the number of atoms and takes that many, so such
+      files read in full (a 1694-structure thermochemistry set now gives 1694
+      structures). Files without atom counts, where blank lines separate the
+      structures, and the Minnesota layout read as before; each structure's layout is
+      decided from its own first lines.
+    * Structures to read now counts structures rather than blank lines.
+    * A message from Open Babel with a character outside ASCII stopped the reading
+      with a UnicodeDecodeError; such messages are now read whole.
+    * A structure without an atom count lost its comment line, which was joined to the
+      count put in its place.
+
 2026.11.6 -- Says which structure is current after reading several
     * When a file holds more than one structure, the step now says which one is the
       current configuration afterwards: the last one read, which the following steps
