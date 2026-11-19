@@ -308,5 +308,8 @@ def reference_properties(path, n_atoms):
         geometry = parts["geometry"]
         if parts["trailing"]:
             geometry = geometry + [""] + parts["trailing"]
+        # A data item of an SDF file cannot hold an empty line, so blank lines
+        # are written as "." (as the PM-8 SDF records have them)
+        geometry = [line if line.strip() else "." for line in geometry]
         properties.append(("MOPAC geometry", "str", "", "\n".join(geometry)))
     return properties, notes

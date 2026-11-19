@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.11.19.2 -- MOPAC files: blank lines of the geometry kept as "."
+    * The verbatim geometry of a MOPAC file (``MOPAC geometry``) had empty lines, which
+      a data item of an SDF file cannot hold; they are now written as ".", as in the
+      PM-8 reference set's SDF records.
+    * Needs molsystem 2026.11.19.1, whose bond orders give species with no
+      closed-shell Lewis structure radicals, lone-atom ligands of metals their anions,
+      and leave Open Babel's own data out of the properties.
+
 2026.11.19.1 -- The reference data of MOPAC files are kept
     * MOPAC parameterization files (.mop) carry reference data on their reference line:
       experimental or calculated enthalpies of formation, entropies, heat capacities,
