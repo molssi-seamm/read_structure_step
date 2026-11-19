@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.19.1 documentation</title>
+    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.19.2 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=3a3ba519"></script>
+    <script src="../_static/documentation_options.js?v=0dc32f73"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.19.1" />
+  <meta name="docsearch:version" content="2026.11.19.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -582,7 +582,8 @@ reference (<code class="docutils literal notranslate"><span class="pre">GR=</spa
 <li><p><code class="docutils literal notranslate"><span class="pre">enthalpy</span> <span class="pre">of</span> <span class="pre">formation#MOPAC#PM7</span></code> for the heat of formation in the comment lines;</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">keywords</span></code>, <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">reference</span> <span class="pre">line</span></code>, <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">file</span></code>, and <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">geometry</span></code>
 when Cartesian coordinates would not keep everything the geometry block holds, so
-that the file can be written again as it was.</p></li>
+that the file can be written again as it was. Its blank lines are written as <code class="docutils literal notranslate"><span class="pre">.</span></code>,
+since a data item of an SDF file cannot hold an empty line.</p></li>
 </ul>
 <p>The sources’ keys refer to a BibTeX bibliography, <code class="docutils literal notranslate"><span class="pre">references.bib</span></code>. If there is one in
 the file’s directory or a parent directory, each value also gets <code class="docutils literal notranslate"><span class="pre">,locator</span></code> (where in

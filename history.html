@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.19.1 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.19.2 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=3a3ba519"></script>
+    <script src="_static/documentation_options.js?v=0dc32f73"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.19.1" />
+  <meta name="docsearch:version" content="2026.11.19.2" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.19.2 – MOPAC files: blank lines of the geometry kept as “.”</dt><dd><ul class="simple">
+<li><p>The verbatim geometry of a MOPAC file (<code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">geometry</span></code>) had empty lines, which
+a data item of an SDF file cannot hold; they are now written as “.”, as in the
+PM-8 reference set’s SDF records.</p></li>
+<li><p>Needs molsystem 2026.11.19.1, whose bond orders give species with no
+closed-shell Lewis structure radicals, lone-atom ligands of metals their anions,
+and leave Open Babel’s own data out of the properties.</p></li>
+</ul>
+</dd>
 <dt>2026.11.19.1 – The reference data of MOPAC files are kept</dt><dd><ul class="simple">
 <li><p>MOPAC parameterization files (.mop) carry reference data on their reference line:
 experimental or calculated enthalpies of formation, entropies, heat capacities,

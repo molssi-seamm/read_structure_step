@@ -84,7 +84,8 @@ units, with the names of the PM-8 reference set's SDF records:
 * ``enthalpy of formation#MOPAC#PM7`` for the heat of formation in the comment lines;
 * ``MOPAC keywords``, ``MOPAC reference line``, ``MOPAC file``, and ``MOPAC geometry``
   when Cartesian coordinates would not keep everything the geometry block holds, so
-  that the file can be written again as it was.
+  that the file can be written again as it was. Its blank lines are written as ``.``,
+  since a data item of an SDF file cannot hold an empty line.
 
 The sources' keys refer to a BibTeX bibliography, ``references.bib``. If there is one in
 the file's directory or a parent directory, each value also gets ``,locator`` (where in
