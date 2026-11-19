@@ -1,6 +1,20 @@
 =======
 History
 =======
+2026.11.19 -- MOPAC files: geometries read without MOPAC, and metal complexes bonded correctly
+    * The bonds of MOPAC (.mop) files came from Open Babel's perception, which gets
+      metal complexes wrong: CO as [C+2][O-], acetates with charged carbons, Cp as
+      sigma-bonded radicals. They are now perceived from the distances and assigned
+      as molsystem does, with metal complexes ionic + dative: every metal-ligand bond
+      is a dative bond from the ligand's donor atom to the metal, each ligand has its
+      closed-shell Lewis structure, metal-metal bonds are single bonds, and the metals
+      carry the rest of the charge.
+    * The geometry is converted as MOPAC reads it (Cartesians, Z-matrices with dummy
+      atoms, or both mixed) without running MOPAC. Files with dummy atoms needed a
+      MOPAC run before, and reading one outside a Read Structure step failed.
+      Geometries with translation vectors are still read with Open Babel.
+    * Needs molsystem 2026.11.19.
+
 2026.11.9 -- Bugfix: XYZ files with several structures and no blank lines between them
     * An XYZ file with several structures, each starting with its number of atoms but
       with no blank line between them, was read as one structure: the first, with the

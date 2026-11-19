@@ -16,6 +16,7 @@ from openbabel import openbabel
 import molsystem
 from read_structure_step.formats.registries import register_reader
 from .find_mopac import find_mopac  # noqa: F401
+from .geometry import mopac_geometry, UnsupportedGeometry
 
 logger = logging.getLogger("read_structure_step.read_structure")
 
@@ -222,7 +223,6 @@ def load_mop(
     lines = iter(path.read_text().splitlines())
 
     # Work through the file capturing data and also reformatting as needed.
-    text = []
     # The file may have comments at the beginning or interspersed. The first non-comment
     # line is keywords, followed by two lines of description. Conventionally the first
     # line of description is a title.
@@ -282,6 +282,178 @@ def load_mop(
                     run_mopac = True
                 geometry_lines.append(line)
 
+    # The geometry: converted here, as MOPAC reads it, with the bonds perceived
+    # from the distances and the metal complexes ionic + dative (molsystem's
+    # assign_bond_orders). Open Babel (with MOPAC's help) is the fallback for what
+    # mopac_geometry does not convert, e.g. translation vectors.
+    title = description_lines[0] if len(description_lines) > 0 else str(path)
+    if len(raw_geometry_lines) == 0:
+        raise RuntimeError(f"{file_name} has no geometry")
+    try:
+        symbols, xyz = mopac_geometry(raw_geometry_lines)
+    except UnsupportedGeometry as e:
+        logger.info(f"Reading the geometry of {file_name} with Open Babel: {e}")
+        symbols = None
+    if symbols is not None:
+        configuration.clear()
+        configuration.atoms.append(
+            x=xyz[:, 0].tolist(),
+            y=xyz[:, 1].tolist(),
+            z=xyz[:, 2].tolist(),
+            symbol=symbols,
+        )
+    else:
+        title = _read_with_openbabel(
+            file_name,
+            geometry_lines,
+            raw_geometry_lines,
+            run_mopac,
+            add_hydrogens,
+            configuration,
+            step,
+        )
+
+    # Record the charge, and the spin state
+    charge = 0
+    for keyword in keywords:
+        if "CHARGE=" in keyword:
+            charge = int(float(keyword.split("=")[1].strip()))
+            break
+    configuration.charge = charge
+
+    n_active_electrons = None
+    n_active_orbitals = None
+
+    multiplicity = None
+    for keyword in keywords:
+        if keyword in multiplicities:
+            multiplicity = multiplicities[keyword]
+        elif "MS=" in keyword:
+            try:
+                multiplicity = int(2 * float(keyword.split("=")[1].strip())) + 1
+            except Exception:
+                ValueError(f"Error with multiplicity: '{keyword}'")
+        elif keyword == "BIRADICAL":
+            multiplicity = 1
+            n_active_electrons = 2
+            n_active_orbitals = 2
+        elif "OPEN(" in keyword or "OPEN=(" in keyword:
+            tmp = keyword.split("(")[1].rstrip(")")
+            n_active_electrons, n_active_orbitals = tmp.split(",")
+        elif "ROOT=" in keyword:
+            tmp = keyword.split("=")
+            configuration.state = tmp[1]
+
+    if multiplicity is None:
+        n_electrons = sum(configuration.atoms.atomic_numbers) - charge
+        if n_electrons % 2 == 0:
+            multiplicity = 1
+        else:
+            multiplicity = 2
+    configuration.spin_multiplicity = multiplicity
+
+    if n_active_electrons is not None:
+        configuration.n_active_electrons = n_active_electrons
+        configuration.n_active_orbitals = n_active_orbitals
+
+    logger.info(f"{charge=} {multiplicity=}")
+
+    if symbols is not None:
+        configuration.perceive_bonds()
+        configuration.assign_bond_orders(charge=charge)
+    logger.info(
+        f"open({n_active_electrons},{n_active_orbitals}) {configuration.state=}"
+    )
+
+    # Set the system name
+    if system_name is not None and system_name != "":
+        lower_name = system_name.lower()
+        if lower_name == "keep current name" and system.name:
+            pass  # keep it (one without a name takes the file's)
+        elif lower_name in ("keep current name", "title"):
+            if len(description_lines) > 0:
+                system.name = description_lines[0]
+            else:
+                system.name = str(path)
+        elif "canonical smiles" in lower_name:
+            system.name = configuration.canonical_smiles
+        elif "smiles" in lower_name:
+            system.name = configuration.smiles
+        elif "iupac" in lower_name:
+            system.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            system.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            system.name = configuration.inchi
+        elif "formula" in lower_name:
+            system.name = configuration.formula[0]
+        else:
+            system.name = system_name
+
+    # And the configuration name
+    if configuration_name is not None and configuration_name != "":
+        lower_name = configuration_name.lower()
+        if lower_name == "keep current name" and configuration.name:
+            pass  # keep it (one without a name takes the file's)
+        elif lower_name in ("keep current name", "title"):
+            configuration.name = title
+        elif "canonical smiles" in lower_name:
+            configuration.name = configuration.canonical_smiles
+        elif "smiles" in lower_name:
+            configuration.name = configuration.smiles
+        elif "iupac" in lower_name:
+            configuration.name = configuration.PC_iupac_name
+        elif "inchikey" in lower_name:
+            configuration.name = configuration.inchikey
+        elif "inchi" in lower_name:
+            configuration.name = configuration.inchi
+        elif lower_name == "sequential":
+            configuration.name = "1"
+        elif "formula" in lower_name:
+            configuration.name = configuration.formula[0]
+        else:
+            configuration.name = configuration_name
+
+    if references:
+        if symbols is None:
+            # Add the citations for Open Babel
+            citations = molsystem.openbabel_citations()
+            for i, citation in enumerate(citations, start=1):
+                references.cite(
+                    raw=citation,
+                    alias=f"openbabel_{i}",
+                    module="read_structure_step",
+                    level=1,
+                    note=f"The principal citation #{i} for OpenBabel.",
+                )
+        else:
+            # RDKit assigned the bond orders
+            citations = molsystem.rdkit_citations()
+            for i, citation in enumerate(citations, start=1):
+                references.cite(
+                    raw=citation,
+                    alias=f"rdkit_{i}",
+                    module="read_structure_step",
+                    level=1,
+                    note=f"The principal citation #{i} for RDKit.",
+                )
+
+    return [configuration]
+
+
+def _read_with_openbabel(
+    file_name,
+    geometry_lines,
+    raw_geometry_lines,
+    run_mopac,
+    add_hydrogens,
+    configuration,
+    step,
+):
+    """Read the geometry with Open Babel, or with MOPAC's help when Open Babel
+    cannot (e.g. dummy atoms); Open Babel then perceives the bonds. Used for the
+    geometries mopac_geometry does not convert. Returns the title Open Babel
+    found."""
     # Sort out if the geometry looks like internals. Note that there may be a charge at
     # the end of each line.
     n_atoms = len(geometry_lines)
@@ -403,6 +575,11 @@ def load_mop(
 
             logger.debug(f"MOPAC input file:\n\n{files['mopac.dat']}\n")
 
+            if step is None:
+                raise RuntimeError(
+                    f"Reading {file_name} needs MOPAC, which can only be run from "
+                    "a Read Structure step."
+                )
             result = step.run_mopac(files=files, return_files=["mopac.out"])
 
             # The executor leaves the returned files on disk
@@ -432,113 +609,4 @@ def load_mop(
         if "Failed to kekulize aromatic bonds in OBMol::PerceiveBondOrders" not in tmp:
             logger.warning(tmp)
 
-    # Record the charge, and the spin state
-    charge = 0
-    for keyword in keywords:
-        if "CHARGE=" in keyword:
-            charge = int(float(keyword.split("=")[1].strip()))
-            break
-    configuration.charge = charge
-
-    n_active_electrons = None
-    n_active_orbitals = None
-
-    multiplicity = None
-    for keyword in keywords:
-        if keyword in multiplicities:
-            multiplicity = multiplicities[keyword]
-        elif "MS=" in keyword:
-            try:
-                multiplicity = int(2 * float(keyword.split("=")[1].strip())) + 1
-            except Exception:
-                ValueError(f"Error with multiplicity: '{keyword}'")
-        elif keyword == "BIRADICAL":
-            multiplicity = 1
-            n_active_electrons = 2
-            n_active_orbitals = 2
-        elif "OPEN(" in keyword or "OPEN=(" in keyword:
-            tmp = keyword.split("(")[1].rstrip(")")
-            n_active_electrons, n_active_orbitals = tmp.split(",")
-        elif "ROOT=" in keyword:
-            tmp = keyword.split("=")
-            configuration.state = tmp[1]
-
-    if multiplicity is None:
-        n_electrons = sum(configuration.atoms.atomic_numbers) - charge
-        if n_electrons % 2 == 0:
-            multiplicity = 1
-        else:
-            multiplicity = 2
-    configuration.spin_multiplicity = multiplicity
-
-    if n_active_electrons is not None:
-        configuration.n_active_electrons = n_active_electrons
-        configuration.n_active_orbitals = n_active_orbitals
-
-    logger.info(f"{charge=} {multiplicity=}")
-    logger.info(
-        f"open({n_active_electrons},{n_active_orbitals}) {configuration.state=}"
-    )
-
-    # Set the system name
-    if system_name is not None and system_name != "":
-        lower_name = system_name.lower()
-        if lower_name == "keep current name" and system.name:
-            pass  # keep it (one without a name takes the file's)
-        elif lower_name in ("keep current name", "title"):
-            if len(description_lines) > 0:
-                system.name = description_lines[0]
-            else:
-                system.name = str(path)
-        elif "canonical smiles" in lower_name:
-            system.name = configuration.canonical_smiles
-        elif "smiles" in lower_name:
-            system.name = configuration.smiles
-        elif "iupac" in lower_name:
-            system.name = configuration.PC_iupac_name
-        elif "inchikey" in lower_name:
-            system.name = configuration.inchikey
-        elif "inchi" in lower_name:
-            system.name = configuration.inchi
-        elif "formula" in lower_name:
-            system.name = configuration.formula[0]
-        else:
-            system.name = system_name
-
-    # And the configuration name
-    if configuration_name is not None and configuration_name != "":
-        lower_name = configuration_name.lower()
-        if lower_name == "keep current name" and configuration.name:
-            pass  # keep it (one without a name takes the file's)
-        elif lower_name in ("keep current name", "title"):
-            configuration.name = obMol.GetTitle()
-        elif "canonical smiles" in lower_name:
-            configuration.name = configuration.canonical_smiles
-        elif "smiles" in lower_name:
-            configuration.name = configuration.smiles
-        elif "iupac" in lower_name:
-            configuration.name = configuration.PC_iupac_name
-        elif "inchikey" in lower_name:
-            configuration.name = configuration.inchikey
-        elif "inchi" in lower_name:
-            configuration.name = configuration.inchi
-        elif lower_name == "sequential":
-            configuration.name = "1"
-        elif "formula" in lower_name:
-            configuration.name = configuration.formula[0]
-        else:
-            configuration.name = configuration_name
-
-    if references:
-        # Add the citations for Open Babel
-        citations = molsystem.openbabel_citations()
-        for i, citation in enumerate(citations, start=1):
-            references.cite(
-                raw=citation,
-                alias=f"openbabel_{i}",
-                module="read_structure_step",
-                level=1,
-                note=f"The principal citation #{i} for OpenBabel.",
-            )
-
-    return [configuration]
+    return obMol.GetTitle()
