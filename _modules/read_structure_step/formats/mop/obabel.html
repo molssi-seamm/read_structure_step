@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.11.19 documentation</title>
+    <title>read_structure_step.formats.mop.obabel &#8212; SEAMM Read Structure Plug-in 2026.11.19.1 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../../_static/documentation_options.js?v=a0728fa8"></script>
+    <script src="../../../../_static/documentation_options.js?v=3a3ba519"></script>
     <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.19" />
+  <meta name="docsearch:version" content="2026.11.19.1" />
   
     
     <script src="../../../../_static/searchtools.js"></script>
@@ -505,24 +505,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">read_structure_step.formats.registries</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_reader</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.find_mopac</span><span class="w"> </span><span class="kn">import</span> <span class="n">find_mopac</span>  <span class="c1"># noqa: F401</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">mopac_geometry</span><span class="p">,</span> <span class="n">UnsupportedGeometry</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reference</span><span class="w"> </span><span class="kn">import</span> <span class="n">reference_properties</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"read_structure_step.read_structure"</span><span class="p">)</span>
 
-<span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"CP"</span><span class="p">:</span> <span class="s2">"constant pressure heat capacity#experiment"</span><span class="p">,</span>
-    <span class="s2">"CPR"</span><span class="p">:</span> <span class="s2">"constant pressure heat capacity,reference#experiment"</span><span class="p">,</span>
-    <span class="s2">"D"</span><span class="p">:</span> <span class="s2">"dipole moment#experiment"</span><span class="p">,</span>
-    <span class="s2">"DR"</span><span class="p">:</span> <span class="s2">"dipole moment,reference#experiment"</span><span class="p">,</span>
-    <span class="s2">"H"</span><span class="p">:</span> <span class="s2">"enthalpy of formation#experiment"</span><span class="p">,</span>
-    <span class="s2">"HR"</span><span class="p">:</span> <span class="s2">"enthalpy of formation,reference#experiment"</span><span class="p">,</span>
-    <span class="s2">"S"</span><span class="p">:</span> <span class="s2">"entropy#experiment"</span><span class="p">,</span>
-    <span class="s2">"SR"</span><span class="p">:</span> <span class="s2">"entropy,reference#experiment"</span><span class="p">,</span>
-    <span class="s2">"I"</span><span class="p">:</span> <span class="s2">"ionization energy#experiment"</span><span class="p">,</span>
-    <span class="s2">"IE"</span><span class="p">:</span> <span class="s2">"ionization energy#experiment"</span><span class="p">,</span>
-    <span class="s2">"IA"</span><span class="p">:</span> <span class="s2">"ionization energy#experiment"</span><span class="p">,</span>
-    <span class="s2">"IR"</span><span class="p">:</span> <span class="s2">"ionization energy,reference#experiment"</span><span class="p">,</span>
-    <span class="s2">"GR"</span><span class="p">:</span> <span class="s2">"geometry,reference#experiment"</span><span class="p">,</span>
-<span class="p">}</span>
+
 <span class="n">multiplicities</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"SINGLET"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="s2">"DOUBLET"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
@@ -913,6 +900,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">formula</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">configuration</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">configuration_name</span>
+
+    <span class="c1"># The reference data: experimental or calculated values and their sources</span>
+    <span class="k">if</span> <span class="n">save_data</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">properties</span><span class="p">,</span> <span class="n">notes</span> <span class="o">=</span> <span class="n">reference_properties</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Could not read the reference data of </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">properties</span><span class="p">,</span> <span class="n">notes</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">_type</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">properties</span><span class="p">:</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">name</span><span class="p">,</span> <span class="n">_type</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span> <span class="k">if</span> <span class="n">units</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">noerror</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="n">configuration</span><span class="o">.</span><span class="n">properties</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">notes</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">note</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">references</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">symbols</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

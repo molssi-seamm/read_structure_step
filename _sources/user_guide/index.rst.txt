@@ -64,6 +64,37 @@ perception can be wrong for long metal-ligand contacts, agostic hydrogens, ion p
 clusters, so check such structures. A geometry with translation vectors (``Tv``) is
 read with Open Babel, as before, and needs MOPAC when it has dummy atoms.
 
+Reference data
+--------------
+The reference data of a MOPAC parameterization file -- the values on its reference
+line and their sources -- are stored as properties of the configuration, in SEAMM's
+units, with the names of the PM-8 reference set's SDF records:
+
+* ``H=``, ``S=``, ``CP=``, ``D=`` and ``I=`` (or ``IA=``, ``IE=``, ``IP=``, ``I1=``) as
+  ``enthalpy of formation``, ``entropy``, ``constant pressure heat capacity``,
+  ``dipole moment`` and ``ionization energy``, in kJ/mol, J/mol/K, D and eV, followed
+  by ``#experiment`` -- or ``#<source>`` for a calculated source such as PW91D, or
+  ``#estimate``;
+* for each, ``,uncertainty`` (from ``H=value,uncertainty``), ``,reference`` (the
+  source's key, from ``HR=``, ``DR=``, ``IR=``), ``,weight`` (``HWT=`` ...) and
+  ``,relative to`` (the species of a relative value), e.g. ``enthalpy of
+  formation,reference#experiment``;
+* ``geometry,reference``, ``geometry,labels`` and ``geometry,weight`` for a geometric
+  reference (``GR=``);
+* ``enthalpy of formation#MOPAC#PM7`` for the heat of formation in the comment lines;
+* ``MOPAC keywords``, ``MOPAC reference line``, ``MOPAC file``, and ``MOPAC geometry``
+  when Cartesian coordinates would not keep everything the geometry block holds, so
+  that the file can be written again as it was.
+
+The sources' keys refer to a BibTeX bibliography, ``references.bib``. If there is one in
+the file's directory or a parent directory, each value also gets ``,locator`` (where in
+the source it is) and ``,note`` (how it was derived) from the entry's
+``mopac_locator`` and ``mopac_derivation`` fields; the cited entries are kept, as
+written, in the ``bibliography`` property; and a source whose entry has
+``mopac_kind = {calculated}`` tags its values with its key rather than ``experiment``
+(``{estimate}``: ``estimate``). Without a bibliography every source counts as
+experimental.
+
 ..
    The following sections cover accessing and controlling this functionality.
 

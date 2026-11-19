@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.19 documentation</title>
+    <title>User Guide &#8212; SEAMM Read Structure Plug-in 2026.11.19.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=a0728fa8"></script>
+    <script src="../_static/documentation_options.js?v=3a3ba519"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.19" />
+  <meta name="docsearch:version" content="2026.11.19.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -562,6 +562,37 @@ Ti4+. The alkali and alkaline-earth metals are left unbonded, as ions. Distance-
 perception can be wrong for long metal-ligand contacts, agostic hydrogens, ion pairs and
 clusters, so check such structures. A geometry with translation vectors (<code class="docutils literal notranslate"><span class="pre">Tv</span></code>) is
 read with Open Babel, as before, and needs MOPAC when it has dummy atoms.</p>
+<section id="reference-data">
+<h3>Reference data<a class="headerlink" href="#reference-data" title="Link to this heading">#</a></h3>
+<p>The reference data of a MOPAC parameterization file – the values on its reference
+line and their sources – are stored as properties of the configuration, in SEAMM’s
+units, with the names of the PM-8 reference set’s SDF records:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">H=</span></code>, <code class="docutils literal notranslate"><span class="pre">S=</span></code>, <code class="docutils literal notranslate"><span class="pre">CP=</span></code>, <code class="docutils literal notranslate"><span class="pre">D=</span></code> and <code class="docutils literal notranslate"><span class="pre">I=</span></code> (or <code class="docutils literal notranslate"><span class="pre">IA=</span></code>, <code class="docutils literal notranslate"><span class="pre">IE=</span></code>, <code class="docutils literal notranslate"><span class="pre">IP=</span></code>, <code class="docutils literal notranslate"><span class="pre">I1=</span></code>) as
+<code class="docutils literal notranslate"><span class="pre">enthalpy</span> <span class="pre">of</span> <span class="pre">formation</span></code>, <code class="docutils literal notranslate"><span class="pre">entropy</span></code>, <code class="docutils literal notranslate"><span class="pre">constant</span> <span class="pre">pressure</span> <span class="pre">heat</span> <span class="pre">capacity</span></code>,
+<code class="docutils literal notranslate"><span class="pre">dipole</span> <span class="pre">moment</span></code> and <code class="docutils literal notranslate"><span class="pre">ionization</span> <span class="pre">energy</span></code>, in kJ/mol, J/mol/K, D and eV, followed
+by <code class="docutils literal notranslate"><span class="pre">#experiment</span></code> – or <code class="docutils literal notranslate"><span class="pre">#&lt;source&gt;</span></code> for a calculated source such as PW91D, or
+<code class="docutils literal notranslate"><span class="pre">#estimate</span></code>;</p></li>
+<li><p>for each, <code class="docutils literal notranslate"><span class="pre">,uncertainty</span></code> (from <code class="docutils literal notranslate"><span class="pre">H=value,uncertainty</span></code>), <code class="docutils literal notranslate"><span class="pre">,reference</span></code> (the
+source’s key, from <code class="docutils literal notranslate"><span class="pre">HR=</span></code>, <code class="docutils literal notranslate"><span class="pre">DR=</span></code>, <code class="docutils literal notranslate"><span class="pre">IR=</span></code>), <code class="docutils literal notranslate"><span class="pre">,weight</span></code> (<code class="docutils literal notranslate"><span class="pre">HWT=</span></code> …) and
+<code class="docutils literal notranslate"><span class="pre">,relative</span> <span class="pre">to</span></code> (the species of a relative value), e.g. <code class="docutils literal notranslate"><span class="pre">enthalpy</span> <span class="pre">of</span>
+<span class="pre">formation,reference#experiment</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geometry,reference</span></code>, <code class="docutils literal notranslate"><span class="pre">geometry,labels</span></code> and <code class="docutils literal notranslate"><span class="pre">geometry,weight</span></code> for a geometric
+reference (<code class="docutils literal notranslate"><span class="pre">GR=</span></code>);</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">enthalpy</span> <span class="pre">of</span> <span class="pre">formation#MOPAC#PM7</span></code> for the heat of formation in the comment lines;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">keywords</span></code>, <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">reference</span> <span class="pre">line</span></code>, <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">file</span></code>, and <code class="docutils literal notranslate"><span class="pre">MOPAC</span> <span class="pre">geometry</span></code>
+when Cartesian coordinates would not keep everything the geometry block holds, so
+that the file can be written again as it was.</p></li>
+</ul>
+<p>The sources’ keys refer to a BibTeX bibliography, <code class="docutils literal notranslate"><span class="pre">references.bib</span></code>. If there is one in
+the file’s directory or a parent directory, each value also gets <code class="docutils literal notranslate"><span class="pre">,locator</span></code> (where in
+the source it is) and <code class="docutils literal notranslate"><span class="pre">,note</span></code> (how it was derived) from the entry’s
+<code class="docutils literal notranslate"><span class="pre">mopac_locator</span></code> and <code class="docutils literal notranslate"><span class="pre">mopac_derivation</span></code> fields; the cited entries are kept, as
+written, in the <code class="docutils literal notranslate"><span class="pre">bibliography</span></code> property; and a source whose entry has
+<code class="docutils literal notranslate"><span class="pre">mopac_kind</span> <span class="pre">=</span> <span class="pre">{calculated}</span></code> tags its values with its key rather than <code class="docutils literal notranslate"><span class="pre">experiment</span></code>
+(<code class="docutils literal notranslate"><span class="pre">{estimate}</span></code>: <code class="docutils literal notranslate"><span class="pre">estimate</span></code>). Without a bibliography every source counts as
+experimental.</p>
+</section>
 </section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
@@ -622,7 +653,10 @@ read with Open Babel, as before, and needs MOPAC when it has dummy atoms.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plain-xyz-files-with-several-structures">Plain XYZ files with several structures</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac-files">MOPAC files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mopac-files">MOPAC files</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-data">Reference data</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>
   </nav></div>

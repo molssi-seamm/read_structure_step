@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.19 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.19.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=a0728fa8"></script>
+    <script src="_static/documentation_options.js?v=3a3ba519"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.19" />
+  <meta name="docsearch:version" content="2026.11.19.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.19.1 – The reference data of MOPAC files are kept</dt><dd><ul class="simple">
+<li><p>MOPAC parameterization files (.mop) carry reference data on their reference line:
+experimental or calculated enthalpies of formation, entropies, heat capacities,
+dipole moments, ionization energies and geometries, with their sources. They
+were dropped; they are now stored as properties, in SEAMM’s units and with the
+names of the PM-8 reference set’s SDF records, as are the MOPAC heat of
+formation in the comment lines and the keyword and reference lines themselves.</p></li>
+<li><p>The sources are keys into a BibTeX bibliography. With a references.bib in the
+file’s directory or a parent, each value also says where in the source it is and
+how it was derived, the cited BibTeX entries are kept with the structure, and
+values from calculated sources are tagged with the source rather than as
+experimental.</p></li>
+</ul>
+</dd>
 <dt>2026.11.19 – MOPAC files: geometries read without MOPAC, and metal complexes bonded correctly</dt><dd><ul class="simple">
 <li><p>The bonds of MOPAC (.mop) files came from Open Babel’s perception, which gets
 metal complexes wrong: CO as [C+2][O-], acetates with charged carbons, Cp as
