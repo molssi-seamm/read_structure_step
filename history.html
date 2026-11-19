@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.9 documentation</title>
+    <title>History &#8212; SEAMM Read Structure Plug-in 2026.11.19 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -48,12 +48,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="_static/documentation_options.js?v=a0728fa8"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'history';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.19" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.19 – MOPAC files: geometries read without MOPAC, and metal complexes bonded correctly</dt><dd><ul class="simple">
+<li><p>The bonds of MOPAC (.mop) files came from Open Babel’s perception, which gets
+metal complexes wrong: CO as [C+2][O-], acetates with charged carbons, Cp as
+sigma-bonded radicals. They are now perceived from the distances and assigned
+as molsystem does, with metal complexes ionic + dative: every metal-ligand bond
+is a dative bond from the ligand’s donor atom to the metal, each ligand has its
+closed-shell Lewis structure, metal-metal bonds are single bonds, and the metals
+carry the rest of the charge.</p></li>
+<li><p>The geometry is converted as MOPAC reads it (Cartesians, Z-matrices with dummy
+atoms, or both mixed) without running MOPAC. Files with dummy atoms needed a
+MOPAC run before, and reading one outside a Read Structure step failed.
+Geometries with translation vectors are still read with Open Babel.</p></li>
+<li><p>Needs molsystem 2026.11.19.</p></li>
+</ul>
+</dd>
 <dt>2026.11.9 – Bugfix: XYZ files with several structures and no blank lines between them</dt><dd><ul class="simple">
 <li><p>An XYZ file with several structures, each starting with its number of atoms but
 with no blank line between them, was read as one structure: the first, with the

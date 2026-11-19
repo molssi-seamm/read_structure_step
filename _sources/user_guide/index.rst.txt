@@ -46,6 +46,24 @@ another in the same file:
 Set **System name** and **Configuration name** to ``title`` to name each structure
 after its comment line.
 
+MOPAC files
+===========
+A MOPAC input file (``.mop``) is read as MOPAC itself reads its geometry: Cartesian
+coordinates, internal coordinates (a Z-matrix, with dummy atoms), or a mix of the two.
+MOPAC is not needed. The charge and spin multiplicity come from the keywords
+(``CHARGE=``, ``SINGLET`` ... ``NONET``, ``MS=``), and the title line can name the
+system and configuration.
+
+The bonds are perceived from the distances, and their orders and the formal charges are
+assigned molecule by molecule. Metal complexes are ionic + dative: every metal-ligand
+bond is a dative bond from the ligand's donor atom to the metal, each ligand has its
+closed-shell Lewis structure (CO neutral, Cp-, Cl-, acetate), metal-metal bonds are
+single bonds, and the metals carry the rest of the charge: Fe(CO)5 is Fe(0), Cp2TiCl2
+Ti4+. The alkali and alkaline-earth metals are left unbonded, as ions. Distance-based
+perception can be wrong for long metal-ligand contacts, agostic hydrogens, ion pairs and
+clusters, so check such structures. A geometry with translation vectors (``Tv``) is
+read with Open Babel, as before, and needs MOPAC when it has dummy atoms.
+
 ..
    The following sections cover accessing and controlling this functionality.
 
