@@ -8,6 +8,7 @@ rest of the charge (Paul, 2026-11-19). Before, Open Babel's bond perception gave
 e.g. CO as [C+2][O-], and files with dummy atoms needed a MOPAC run."""
 
 from collections import Counter
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -182,3 +183,93 @@ def test_copper_bromide_cluster(configuration):
     bonds = _bonds(configuration)
     assert _datives(configuration)[("Br", "Cu")] == bonds[("Br", "Cu")] == 15
     assert sum(configuration.atoms.get_column_data("formal_charge")) == -2
+
+
+# -- the reference data ---------------------------------------------------------
+
+BIB = """\
+@misc{NIST,
+  title = {NIST Chemistry WebBook},
+  mopac_text = {NIST WebBook},
+}
+
+@article{LLNBS82,
+  author = {Lias, S. G.},
+  title = {Ionization energies},
+  year = {1982},
+  mopac_locator = {Table 2},
+  mopac_text = {Lias et al.},
+}
+
+@misc{NLM1967,
+  title = {Dipole moments},
+  mopac_derivation = {from the Stark effect},
+  mopac_text = {Nelson, Lide and Maryott},
+}
+
+@misc{PW91D,
+  title = {PW91 density functional},
+  mopac_kind = {calculated},
+  mopac_text = {PW91 calculations},
+}
+"""
+
+
+def _copy(tmp_path, name, bib=True):
+    """The test file in tmp_path/set/normal, with references.bib in tmp_path/set."""
+    directory = tmp_path / "set" / "normal"
+    directory.mkdir(parents=True)
+    target = directory / name
+    target.write_bytes(Path(build_filenames.build_data_filename(name)).read_bytes())
+    if bib:
+        (tmp_path / "set" / "references.bib").write_text(BIB)
+    return target
+
+
+def test_reference_data_with_the_bibliography(configuration, tmp_path):
+    """Acetonitrile: D=3.92 I=12.21 IR=LLNBS82 HR=NIST DR=NLM1967 H=17.7 S=58.17
+    CP=12.48, in SEAMM's units, with the bibliography in a parent directory."""
+    path = _copy(tmp_path, "acetonitrile.mop")
+    read_structure_step.read(str(path), configuration)
+    got = {k: v["value"] for k, v in configuration.properties.get().items()}
+    assert got["enthalpy of formation#experiment"] == pytest.approx(17.7 * 4.184)
+    assert got["enthalpy of formation,reference#experiment"] == "NIST"
+    assert got["entropy#experiment"] == pytest.approx(58.17 * 4.184)
+    assert got["constant pressure heat capacity#experiment"] == pytest.approx(
+        12.48 * 4.184
+    )
+    assert got["dipole moment#experiment"] == pytest.approx(3.92)
+    assert got["dipole moment,note#experiment"] == "from the Stark effect"
+    assert got["ionization energy#experiment"] == pytest.approx(12.21)
+    assert got["ionization energy,locator#experiment"] == "Table 2"
+    assert got["MOPAC reference line"].split() == (
+        "D=3.92 I=12.21 IR=LLNBS82 HR=NIST DR=NLM1967 H=17.7 S=58.17 CP=12.48".split()
+    )
+    assert got["MOPAC keywords"].split() == ["SYMMETRY", "PM7"]
+    assert got["MOPAC geometry"].startswith("  C ")  # a Z-matrix, kept verbatim
+    cited = got["bibliography"]
+    assert "@article{LLNBS82," in cited and "@misc{NIST," in cited
+    assert "@misc{NLM1967," in cited and "PW91D" not in cited
+
+
+def test_a_calculated_source_tags_the_values(configuration, tmp_path):
+    """[Cu4Br10]2-: H=-248.8 HR=PW91D, which the bibliography marks calculated;
+    the MOPAC heat of formation of its comment lines is PM7's."""
+    path = _copy(tmp_path, "Cu(II)4Br10(2-) (CIVNAW10).mop")
+    read_structure_step.read(str(path), configuration)
+    got = {k: v["value"] for k, v in configuration.properties.get().items()}
+    assert got["enthalpy of formation#PW91D"] == pytest.approx(-248.8 * 4.184)
+    assert got["enthalpy of formation,reference#PW91D"] == "PW91D"
+    assert "enthalpy of formation#experiment" not in got
+    assert got["enthalpy of formation#MOPAC#PM7"] == pytest.approx(-179.345 * 4.184)
+
+
+def test_reference_data_without_a_bibliography(configuration, tmp_path):
+    """Without references.bib the values and keys are stored, but no locators,
+    notes or bibliography, and every source counts as experimental."""
+    path = _copy(tmp_path, "Cu(II)4Br10(2-) (CIVNAW10).mop", bib=False)
+    read_structure_step.read(str(path), configuration)
+    got = {k: v["value"] for k, v in configuration.properties.get().items()}
+    assert got["enthalpy of formation,reference#experiment"] == "PW91D"
+    assert "bibliography" not in got
+    assert not any(",locator#" in k or ",note#" in k for k in got)

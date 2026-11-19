@@ -17,24 +17,11 @@ import molsystem
 from read_structure_step.formats.registries import register_reader
 from .find_mopac import find_mopac  # noqa: F401
 from .geometry import mopac_geometry, UnsupportedGeometry
+from .reference import reference_properties
 
 logger = logging.getLogger("read_structure_step.read_structure")
 
-metadata = {
-    "CP": "constant pressure heat capacity#experiment",
-    "CPR": "constant pressure heat capacity,reference#experiment",
-    "D": "dipole moment#experiment",
-    "DR": "dipole moment,reference#experiment",
-    "H": "enthalpy of formation#experiment",
-    "HR": "enthalpy of formation,reference#experiment",
-    "S": "entropy#experiment",
-    "SR": "entropy,reference#experiment",
-    "I": "ionization energy#experiment",
-    "IE": "ionization energy#experiment",
-    "IA": "ionization energy#experiment",
-    "IR": "ionization energy,reference#experiment",
-    "GR": "geometry,reference#experiment",
-}
+
 multiplicities = {
     "SINGLET": 1,
     "DOUBLET": 2,
@@ -413,6 +400,21 @@ def load_mop(
             configuration.name = configuration.formula[0]
         else:
             configuration.name = configuration_name
+
+    # The reference data: experimental or calculated values and their sources
+    if save_data:
+        try:
+            properties, notes = reference_properties(path, configuration.n_atoms)
+        except Exception as e:
+            logger.warning(f"Could not read the reference data of {file_name}: {e}")
+            properties, notes = [], []
+        for name, _type, units, value in properties:
+            configuration.properties.add(
+                name, _type, units=units if units else None, noerror=True
+            )
+            configuration.properties.put(name, value)
+        for note in notes:
+            logger.info(note)
 
     if references:
         if symbols is None:

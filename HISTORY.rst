@@ -1,6 +1,19 @@
 =======
 History
 =======
+2026.11.19.1 -- The reference data of MOPAC files are kept
+    * MOPAC parameterization files (.mop) carry reference data on their reference line:
+      experimental or calculated enthalpies of formation, entropies, heat capacities,
+      dipole moments, ionization energies and geometries, with their sources. They
+      were dropped; they are now stored as properties, in SEAMM's units and with the
+      names of the PM-8 reference set's SDF records, as are the MOPAC heat of
+      formation in the comment lines and the keyword and reference lines themselves.
+    * The sources are keys into a BibTeX bibliography. With a references.bib in the
+      file's directory or a parent, each value also says where in the source it is and
+      how it was derived, the cited BibTeX entries are kept with the structure, and
+      values from calculated sources are tagged with the source rather than as
+      experimental.
+
 2026.11.19 -- MOPAC files: geometries read without MOPAC, and metal complexes bonded correctly
     * The bonds of MOPAC (.mop) files came from Open Babel's perception, which gets
       metal complexes wrong: CO as [C+2][O-], acetates with charged carbons, Cp as
